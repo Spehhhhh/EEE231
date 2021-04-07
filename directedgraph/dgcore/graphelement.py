@@ -1,17 +1,45 @@
+from collections import UserList
 import uuid
 
 
 class GraphElement:
-    def __init__(self, uid=None, name="Untitled", colour="#000000"):
-        if uid == None:
-            self.uid = self.generate_uid()
-        else:
-            self.uid = uid
-        self.name = name
-        self.colour = colour
+    def __init__(self, parent_graph=None, uid=None, name=None, colour=None):
+        self.parent_graph = parent_graph
+        self.uid = None
+        self.generate_uid(uid)
+        self.name = "Untitled" if name == None else name
+        self.colour = "#000000" if colour == None else colour
 
-    def generate_uid(self):
-        return uuid.uuid4().hex[:10]
+    def generate_uid(self, old_uid=None):
+        if __name__ == "__main__":
+            self.uid = uuid.uuid4().hex[:12]
+        else:
+            if old_uid == None:
+                new_uid = uuid.uuid4().hex[:12]
+                while new_uid in self.parent_graph.elements:
+                    new_uid = uuid.uuid4().hex[:12]
+                    self.uid = new_uid
+                self.uid = new_uid
+                return new_uid
+            else:
+                if old_uid not in self.parent_graph.elements:
+                    self.uid = old_uid
+                    return old_uid
+                else:
+                    print("Error: Duplicate uid occurs:", old_uid)
+                    print("Try to reassign UID...")
+                    new_uid = uuid.uuid4().hex[:12]
+                    while new_uid in self.parent_graph.elements:
+                        new_uid = uuid.uuid4().hex[:12]
+                        self.uid = new_uid
+                    self.uid = new_uid
+                    return new_uid
+
+    def get_parent_graph(self):
+        return self.parent_graph
+
+    def get(self, a):
+        return vars(self).get(a, None)
 
     def get_uid(self):
         return self.uid
@@ -22,20 +50,21 @@ class GraphElement:
     def get_colour(self):
         return self.colour
 
-    def get_info(self):
-        return dir(self)
+    def get_all(self):
+        return vars(self)
 
 
 class Node(GraphElement):
     def __init__(
         self,
+        parent_graph=None,
         uid=None,
-        name="Untitled",
-        colour="#000000",
-        position=[0, 0],
+        name=None,
+        colour=None,
+        position=None,
     ):
-        super().__init__(uid, name, colour)
-        self.position = position
+        super().__init__(parent_graph, uid, name, colour)
+        self.position = [0, 0] if position == None else position
 
     def get_position(self):
         return self.position
@@ -45,25 +74,11 @@ class Node(GraphElement):
         self.position[1] = position_y
 
 
-class GroundNode(Node):
-    def __init__(
-        self,
-        uid=None,
-        name="Untitled",
-        colour="#000000",
-        position=[0, 0],
-    ):
-        super().__init__(uid, name, colour, position)
-
-
 if __name__ == "__main__":
-
-    # a = GraphElement()
-    # print(a.get_uid())
-    # print(a.get_name())
-    # print(a.get_colour())
-    b = Node("b911b4f553", 13, 14, [1, 2])
-    print(b.get_uid())
-    print(b.get_name())
-    print(b.get_position())
-    # print(b.get_position())
+    a = GraphElement()
+    print(vars(a))
+    print(a.get("name"))
+    # b = Node(None, None, None, None, [1, 2])
+    b = Node()
+    print(b.get_all())
+    print(b.get("position"))
