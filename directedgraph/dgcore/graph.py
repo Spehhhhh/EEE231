@@ -11,11 +11,10 @@ from directedgraph.dgcore.graphelement import GraphElement, Node
 
 class Graph:
     def __init__(self, name=None):
-        self.name = name
-        self.name = "Untitled" if name == None else name
+        self.name = name if name else "Untitled"
         self.elements = {}
 
-    def create_graph():
+    def create_graph(self):
         return Graph()
 
     def rename_graph(self, name):
@@ -24,7 +23,7 @@ class Graph:
     def verify_graph_integrity(self):
         return True
 
-    def get_all():
+    def get_all(self):
         return True
 
     def print_graph_details(self):
@@ -90,6 +89,7 @@ def init_graph(graph_name, graph_raw_data):
 
 
 if __name__ == "__main__":
+    import timeit
 
     def test_insert_element():
         my_graph = Graph("MyGraph")
@@ -111,33 +111,35 @@ if __name__ == "__main__":
 
     def test_query_and_delete():
         print("---Init---")
-        MyGraph = Graph("MyGraph")
-        MyGraph.create_element({"type": "Node", "name": "No UID 1"})
-        MyGraph.create_element({"type": "Node", "name": "No UID 2"})
-        MyGraph.create_element({"type": "Node", "name": "Fooo", "uid": "7778da0a0a0a"})
-        MyGraph.create_element({"type": "Node", "name": "Foooo", "uid": "32a24bfcfefe"})
-        MyGraph.print_graph_details()
+        my_graph = Graph("MyGraph")
+        my_graph.create_element({"type": "Node", "name": "No UID 1"})
+        my_graph.create_element({"type": "Node", "name": "No UID 2"})
+        my_graph.create_element({"type": "Node", "name": "Fooo", "uid": "7778da0a0a0a"})
+        my_graph.create_element(
+            {"type": "Node", "name": "Foooo", "uid": "32a24bfcfefe"}
+        )
+        my_graph.print_graph_details()
         print("---Try Get Node---")
-        print(MyGraph.get_element("7778da0a0a0a"))
-        print(MyGraph.get_element("32a24bfcfefe"))
+        print(my_graph.get_element("7778da0a0a0a"))
+        print(my_graph.get_element("32a24bfcfefe"))
         print("---Try Delete---")
-        print(MyGraph.delete_element("32a24bfcfefe"))
-        print(MyGraph.delete_element("31233"))
-        MyGraph.print_graph_details()
-        print(MyGraph)
+        print(my_graph.delete_element("32a24bfcfefe"))
+        print(my_graph.delete_element("31233"))
+        my_graph.print_graph_details()
+        print(my_graph)
         print("---Try Node---")
-        Node1 = Node(MyGraph, "b911b4f553")
-        print(Node1.get_parent_graph())
+        node1 = Node(my_graph, "b911b4f553")
+        print(node1.get_parent_graph())
 
     def test_duplicate_key():
-        MyGraph = Graph("MyGraph")
-        MyGraph.create_element({"type": "Node", "name": "No UID 1"})
-        MyGraph.create_element({"type": "Node", "name": "No UID 2"})
-        MyGraph.create_element({"type": "Node", "name": "Foo", "uid": "7778da0a0a0a"})
-        MyGraph.create_element({"type": "Node", "name": "Fooo", "uid": "7778da0a0a0a"})
-        MyGraph.create_element({"type": "Arc", "name": "Fooo", "uid": "7778da0a0a0a"})
-        MyGraph.create_element({"name": "Fooo", "uid": "7778da0a0a0a"})
-        MyGraph.print_graph_details()
+        my_graph = Graph("MyGraph")
+        my_graph.create_element({"type": "Node", "name": "No UID 1"})
+        my_graph.create_element({"type": "Node", "name": "No UID 2"})
+        my_graph.create_element({"type": "Node", "name": "Foo", "uid": "7778da0a0a0a"})
+        my_graph.create_element({"type": "Node", "name": "Fooo", "uid": "7778da0a0a0a"})
+        my_graph.create_element({"type": "Arc", "name": "Fooo", "uid": "7778da0a0a0a"})
+        my_graph.create_element({"name": "Fooo", "uid": "7778da0a0a0a"})
+        my_graph.print_graph_details()
         # MyGraph.get_element("7778da0a0a0a")
 
     def test_init_graph():
@@ -145,8 +147,16 @@ if __name__ == "__main__":
         data = [
             {"type": "Node", "name": "Node1", "uid": "7778da0a0a0a"},
             {"type": "Node", "name": "Node2", "uid": "32a24bfcfefe"},
+            {"type": "Node", "name": "Node2", "uid": "32a24bfcfefe"},
+            {"type": "Node", "uid": "32a24bfcfefe"},
         ]
         my_graph = init_graph(name, data)
         my_graph.print_graph_details()
 
-    test_init_graph()
+    print(
+        timeit.timeit(
+            "test_query_and_delete()",
+            setup="from __main__ import test_query_and_delete",
+            number=1000,
+        )
+    )
