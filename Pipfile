@@ -8,6 +8,7 @@ pyside6 = "*"
 
 [dev-packages]
 autopep8 = "*"
+black = "*"
 
 [requires]
 python_version = "3.7"
