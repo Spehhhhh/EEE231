@@ -1,4 +1,12 @@
-from graphelement import GraphElement, Node
+import sys
+from pathlib import Path
+
+print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
+current_folder = Path(__file__).absolute().parent.parent
+father_folder = str(current_folder.parent)
+sys.path.append(father_folder)
+
+from directedgraph.dgcore.graphelement import GraphElement, Node
 
 
 class Graph:
@@ -106,10 +114,8 @@ if __name__ == "__main__":
         MyGraph = Graph("MyGraph")
         MyGraph.create_element({"type": "Node", "name": "No UID 1"})
         MyGraph.create_element({"type": "Node", "name": "No UID 2"})
-        MyGraph.create_element(
-            {"type": "Node", "name": "Fooo", "uid": "7778da0a0a0a"})
-        MyGraph.create_element(
-            {"type": "Node", "name": "Foooo", "uid": "32a24bfcfefe"})
+        MyGraph.create_element({"type": "Node", "name": "Fooo", "uid": "7778da0a0a0a"})
+        MyGraph.create_element({"type": "Node", "name": "Foooo", "uid": "32a24bfcfefe"})
         MyGraph.print_graph_details()
         print("---Try Get Node---")
         print(MyGraph.get_element("7778da0a0a0a"))
@@ -127,12 +133,9 @@ if __name__ == "__main__":
         MyGraph = Graph("MyGraph")
         MyGraph.create_element({"type": "Node", "name": "No UID 1"})
         MyGraph.create_element({"type": "Node", "name": "No UID 2"})
-        MyGraph.create_element(
-            {"type": "Node", "name": "Foo", "uid": "7778da0a0a0a"})
-        MyGraph.create_element(
-            {"type": "Node", "name": "Fooo", "uid": "7778da0a0a0a"})
-        MyGraph.create_element(
-            {"type": "Arc", "name": "Fooo", "uid": "7778da0a0a0a"})
+        MyGraph.create_element({"type": "Node", "name": "Foo", "uid": "7778da0a0a0a"})
+        MyGraph.create_element({"type": "Node", "name": "Fooo", "uid": "7778da0a0a0a"})
+        MyGraph.create_element({"type": "Arc", "name": "Fooo", "uid": "7778da0a0a0a"})
         MyGraph.create_element({"name": "Fooo", "uid": "7778da0a0a0a"})
         MyGraph.print_graph_details()
         # MyGraph.get_element("7778da0a0a0a")
@@ -145,3 +148,5 @@ if __name__ == "__main__":
         ]
         my_graph = init_graph(name, data)
         my_graph.print_graph_details()
+
+    test_init_graph()
