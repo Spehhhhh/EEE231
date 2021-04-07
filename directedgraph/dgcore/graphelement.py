@@ -9,8 +9,8 @@ class GraphElement:
         self.parent_graph = parent_graph
         self.uid = None
         self.generate_uid(uid)
-        self.name = "Untitled" if name == None else name
-        self.colour = "#000000" if colour == None else colour
+        self.name = name if name else "Untitled"
+        self.colour = colour if colour else "#000000"
 
     def generate_uid(self, old_uid=None):
         if __name__ == "__main__":
@@ -66,7 +66,7 @@ class Node(GraphElement):
         position=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
-        self.position = [0, 0] if position == None else position
+        self.position = position if position else [0, 0]
 
     def get_position(self):
         return self.position
@@ -101,7 +101,7 @@ class SourceNode(Node):
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = (
-            "0" if user_defined_attribute == None else user_defined_attribute
+            user_defined_attribute if user_defined_attribute else "0"
         )
 
 
