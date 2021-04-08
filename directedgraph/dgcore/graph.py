@@ -6,7 +6,8 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore.graphelement import GraphElement, Node
+# from directedgraph.dgcore.graphelement import GraphElement, Node
+from directedgraph.dgcore import GraphElement, Node
 
 
 class Graph:
@@ -157,6 +158,6 @@ if __name__ == "__main__":
         timeit.timeit(
             "test_query_and_delete()",
             setup="from __main__ import test_query_and_delete",
-            number=1000,
+            number=1,
         )
     )
