@@ -5,9 +5,9 @@ name = "pypi"
 
 [packages]
 pyside6 = "*"
+loguru = "*"
 
 [dev-packages]
-autopep8 = "*"
 black = "*"
 
 [requires]
