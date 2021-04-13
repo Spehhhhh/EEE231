@@ -77,6 +77,7 @@ class Node(GraphElement):
 
 
 class GroundNode(Node):
+    number_ground_node=0
     def __init__(
         self,
         parent_graph=None,
@@ -87,6 +88,7 @@ class GroundNode(Node):
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
+        GroundNode.number_ground_node+=1
 
 
 class SourceNode(Node):
@@ -114,7 +116,10 @@ class Arc(GraphElement):
         colour=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
-
+    def get_source_pos(self,node):
+        return node.get_position()
+    def get_destin_pos(self,node):
+        return node.get_position()
 
 if __name__ == "__main__":
     element1 = GraphElement()
