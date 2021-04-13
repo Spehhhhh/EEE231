@@ -6,7 +6,7 @@ current_folder = Path(__file__).absolute().parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-import directedgraph
+from directedgraph.dgcore import Graph
 
 logger.add(
     "logs/test_dgcore.py.log",
@@ -19,8 +19,8 @@ logger.info("Start Log")
 
 @logger.catch
 def test_id():
-    graph1 = directedgraph.dgcore.Graph("graph1")
-    graph2 = directedgraph.dgcore.Graph("graph2")
+    graph1 = Graph("graph1")
+    graph2 = Graph("graph2")
     graph1.create_element({"type": "Node", "name": "No UID 1"})
     graph1.create_element({"type": "Node", "name": "Foo", "uid": "7778da0a0a0a"})
     graph1.print_graph_details()
