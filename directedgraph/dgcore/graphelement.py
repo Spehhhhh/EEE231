@@ -37,8 +37,8 @@ class GraphElement:
                     self.uid = new_uid
                     return new_uid
 
-    def get(self, a):
-        return vars(self).get(a, None)
+    def get(self, element_attribute):
+        return vars(self).get(element_attribute, None)
 
     def get_all(self):
         return vars(self)
