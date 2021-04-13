@@ -15,9 +15,6 @@ class Graph:
         self.name = name if name else "Untitled"
         self.elements = {}
 
-    def create_graph(self):
-        return Graph()
-
     def rename_graph(self, name):
         self.name = name
 
@@ -62,7 +59,7 @@ class Graph:
     def update_element_name(self, uid, name):
         self.elements[uid].name = name
 
-    def update_element_name(self, uid, colour):
+    def update_element_colour(self, uid, colour):
         self.elements[uid].colour = colour
 
     def get_name(self):
