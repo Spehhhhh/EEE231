@@ -79,13 +79,6 @@ class Graph:
             return False
 
 
-def init_graph(graph_name, graph_raw_data):
-    new_graph = Graph(graph_name)
-    for item in graph_raw_data:
-        new_graph.create_element(item)
-    return new_graph
-
-
 if __name__ == "__main__":
     from tests.test_dgcore import test_id
 

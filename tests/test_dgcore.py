@@ -7,7 +7,7 @@ current_folder = Path(__file__).absolute().parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import Graph, Node, init_graph
+from directedgraph.dgcore import Graph, Node, create_graph
 
 logger.add(
     "logs/test_dgcore.py.log",
@@ -84,7 +84,7 @@ def test_duplicate_key():
 
 
 @logger.catch
-def test_init_graph():
+def test_create_graph():
     name = "my_graph"
     data = [
         {"type": "Node", "name": "Node1", "uid": "7778da0a0a0a"},
@@ -92,15 +92,15 @@ def test_init_graph():
         {"type": "Node", "name": "Node2", "uid": "32a24bfcfefe"},
         {"type": "Node", "uid": "32a24bfcfefe"},
     ]
-    my_graph = init_graph(name, data)
+    my_graph = create_graph(name, data)
     my_graph.print_graph_details()
 
 
 if __name__ == "__main__":
     print(
         timeit.timeit(
-            "test_init_graph()",
-            setup="from __main__ import test_init_graph",
+            "test_create_graph()",
+            setup="from __main__ import test_create_graph",
             number=1,
         )
     )

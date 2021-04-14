@@ -9,7 +9,8 @@ from directedgraph.dgcore.graphelement import (
     SourceNode,
     Arc,
 )
-from directedgraph.dgcore.graph import Graph, init_graph
+from directedgraph.dgcore.graph import Graph
+from directedgraph.dgcore.graphapplication import create_graph
 
 # import directedgraph.dgcore.graphelement
 # import directedgraph.dgcore.graph
