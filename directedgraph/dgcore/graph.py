@@ -6,7 +6,6 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-# from directedgraph.dgcore.graphelement import GraphElement, Node
 from directedgraph.dgcore import GraphElement, Node
 
 
