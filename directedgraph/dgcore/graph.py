@@ -14,6 +14,7 @@ class Graph:
     def __init__(self, name=None):
         self.name = name if name else "Untitled"
         self.elements = {}
+        # #TODO 可以优化速度，除了 UID 之外，还有什么经常调用的可以放到外层。
 
     def rename_graph(self, name):
         self.name = name
@@ -28,7 +29,7 @@ class Graph:
         print("vars(self):", vars(self))
         # attrs = vars(self)
         # print(", ".join("%s: %s" % item for item in attrs.items()))
-        for element in self.elements:
+        for element in self.elements:  # #TODO 改成从 Value 遍历，不然性能损耗很大。
             print(
                 "       UID:",
                 self.elements[element].uid,
@@ -37,7 +38,7 @@ class Graph:
                 self.elements[element].name,
             )
 
-    def create_element(self, parameters):  # #Todo 按参数里的字典新建组件
+    def create_element(self, parameters):  # #TODO 按参数里的字典新建组件
         if parameters.get("type", None) == "Node":
             element = Node(
                 self, parameters.get("uid", None), parameters.get("name", None)
@@ -71,7 +72,7 @@ class Graph:
         # print(vars(self.elements[uid])) # 可以返回对象也可以返回字典
         return self.elements[uid]
 
-    def delete_element(self, uid):  # 需要写误删除逻辑
+    def delete_element(self, uid):  # #TODO 需要写误删除逻辑
         if uid in self.elements:
             self.elements.pop(uid)
             return True
@@ -153,8 +154,8 @@ if __name__ == "__main__":
 
     print(
         timeit.timeit(
-            "test_query_and_delete()",
-            setup="from __main__ import test_query_and_delete",
+            "test_init_graph()",
+            setup="from __main__ import test_init_graph",
             number=1,
         )
     )
