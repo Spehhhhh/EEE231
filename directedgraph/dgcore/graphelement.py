@@ -1,7 +1,11 @@
 import uuid
+import sys
 from pathlib import Path
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
+current_folder = Path(__file__).absolute().parent.parent
+father_folder = str(current_folder.parent)
+sys.path.append(father_folder)
 
 
 class GraphElement:
@@ -13,7 +17,7 @@ class GraphElement:
         self.colour = colour if colour else "#000000"
 
     def generate_uid(self, old_uid=None):
-        if __name__ == "__main__":
+        if self.parent_graph == None:
             self.uid = uuid.uuid4().hex[:12]
         else:
             if old_uid == None:
@@ -138,19 +142,12 @@ class Arc(GraphElement):
 
 
 if __name__ == "__main__":
-    element1 = GraphElement()
-    print(vars(element1))
-    print(element1.get())
-    print(element1.get("name"))
+    from tests.test_dgcore_graphelement import (
+        test_get,
+        test_groundnode,
+        test_node_position,
+    )
 
-    node1 = Node(None, None, None, None, [1, 2])
-    # node1 = Node()
-    print(node1.get())
-    node1.update_position([0, 9])
-    print(node1.get("position"))
-    print(node1.get_position())
-
-    groundnode1 = GroundNode()
-    print(groundnode1.get())
-    sourcenode1 = SourceNode(None, None, "sourcenode1", None, [2, 3], "abc")
-    print(sourcenode1.get())
+    test_get()
+    test_groundnode()
+    test_node_position()
