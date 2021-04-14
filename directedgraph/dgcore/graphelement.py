@@ -32,8 +32,11 @@ class GraphElement:
                     self.uid = old_uid
                     return old_uid
                 else:
-                    print("Error: Duplicate uid occurs:", old_uid)
-                    print("Try to reassign UID...")
+                    print(
+                        "Error: Duplicate uid occurs",
+                        old_uid,
+                        "Try to reassign UID...",
+                    )
                     new_uid = uuid.uuid4().hex[:12]
                     while new_uid in self.parent_graph.elements:
                         new_uid = uuid.uuid4().hex[:12]
@@ -142,12 +145,13 @@ class Arc(GraphElement):
 
 
 if __name__ == "__main__":
-    from tests.test_dgcore_graphelement import (
-        test_get,
-        test_groundnode,
-        test_node_position,
-    )
+    # from tests.test_dgcore_graphelement import (
+    #     test_get,
+    #     test_groundnode,
+    #     test_node_position,
+    # )
 
-    test_get()
-    test_groundnode()
-    test_node_position()
+    # test_get()
+    # test_groundnode()
+    # test_node_position()
+    pass

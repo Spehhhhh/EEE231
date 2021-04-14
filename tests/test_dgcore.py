@@ -20,6 +20,7 @@ from directedgraph.dgcore import (
     create_graph,
 )
 
+
 logger.add(
     "logs/test_dgcore.py.log",
     level="DEBUG",
@@ -30,6 +31,21 @@ logger.info("Start Log")
 
 
 class GraphUsage(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        pass
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+    def setUp(self):
+        self.xml = "TODO"
+        pass
+
+    def tearDown(self):
+        pass
+
     @logger.catch
     def test_id(self):
         graph1 = Graph("graph1")
@@ -61,7 +77,8 @@ class GraphUsage(unittest.TestCase):
         graph1.create_element({"type": "Node", "name": "node1", "uid": "b911b214f553"})
 
         self.assertEqual(graph1.get_element("b911b214f553").name, "node1")
-        self.assertEqual(type(graph1.get_element("b911b214f553")), Node)
+        # self.assertEqual(type(graph1.get_element("b911b214f553")), Node)
+        self.assertIsInstance(graph1.get_element("b911b214f553"), Node)
 
     @logger.catch
     def test_create_graph(self):
@@ -93,9 +110,9 @@ class GraphUsage(unittest.TestCase):
 
     @logger.catch
     def test_error(self):
-        graph1 = Graph("graph1")
         # graph1.create_element({"type": "Arc", "name": "Arc 1", "uid": "7778da0a0a0a"})
         # graph1.create_element({"name": "Fooo", "uid": "7778da0a0a0a"})
+        pass
 
     @logger.catch
     def test_query_and_delete(self):
@@ -112,18 +129,23 @@ class GraphUsage(unittest.TestCase):
         self.assertEqual(graph1.get_element("32a24bfcfefe").name, "Untitled")
 
         # print("---Try Delete---")
-        self.assertEqual(graph1.delete_element("32a24bfcfefe"), True)
-        self.assertEqual(graph1.delete_element("32a24bfcfefe"), False)
-        self.assertEqual(graph1.delete_element("31233"), False)
+        self.assertTrue(graph1.delete_element("32a24bfcfefe"))
+        self.assertFalse(graph1.delete_element("32a24bfcfefe"))
+        self.assertFalse(graph1.delete_element("31233"))
         self.assertEqual(len(graph1.elements), 3)
 
+    @logger.catch
     def test_graph_efficiency(self):
         start_time = time.time()
         for _ in itertools.repeat(None, 100):
             self.test_query_and_delete()
         end_time = time.time()
-        print("Elapsed time was %g seconds" % (end_time - start_time))
+        print(
+            "test_graph_efficiency() Elapsed time was %g seconds"
+            % (end_time - start_time)
+        )
 
 
 if __name__ == "__main__":
-    unittest.main()
+    print()
+    # unittest.main()
