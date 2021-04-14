@@ -37,11 +37,13 @@ class GraphElement:
                     self.uid = new_uid
                     return new_uid
 
-    def get(self, element_attribute):
-        return vars(self).get(element_attribute, None)
-
-    def get_all(self):
-        return vars(self)
+    # .get(): return all
+    # .get("name") return name
+    def get(self, element_attribute=None):
+        if element_attribute == None:
+            return vars(self)
+        else:
+            return vars(self).get(element_attribute, None)
 
     def get_parent_graph(self):
         return self.parent_graph
@@ -54,6 +56,10 @@ class GraphElement:
 
     def get_colour(self):
         return self.colour
+
+    # #TODO 需要设计 Trace Back 捕捉
+    def update(self, element_attribute, element_attribute_new):
+        self.element_attribute = element_attribute_new
 
 
 class Node(GraphElement):
@@ -71,9 +77,9 @@ class Node(GraphElement):
     def get_position(self):
         return self.position
 
-    def update_node_position(self, position_x, position_y):
-        self.position[0] = position_x
-        self.position[1] = position_y
+    def update_position(self, position):
+        self.position[0] = position[0]
+        self.position[1] = position[1]
 
 
 class GroundNode(Node):
@@ -91,6 +97,9 @@ class GroundNode(Node):
         self.user_defined_attribute = "0"
         GroundNode.number_ground_node += 1
 
+    def get_user_defined_attribute(self):
+        return self.user_defined_attribute
+
 
 class SourceNode(Node):
     def __init__(
@@ -106,6 +115,9 @@ class SourceNode(Node):
         self.user_defined_attribute = (
             user_defined_attribute if user_defined_attribute else "0"
         )
+
+    def get_user_defined_attribute(self):
+        return self.user_defined_attribute
 
 
 class Arc(GraphElement):
@@ -128,14 +140,17 @@ class Arc(GraphElement):
 if __name__ == "__main__":
     element1 = GraphElement()
     print(vars(element1))
+    print(element1.get())
     print(element1.get("name"))
-    # node1 = Node(None, None, None, None, [1, 2])
-    node1 = Node()
-    print(node1.get_all())
-    node1.update_node_position(0, 9)
+
+    node1 = Node(None, None, None, None, [1, 2])
+    # node1 = Node()
+    print(node1.get())
+    node1.update_position([0, 9])
     print(node1.get("position"))
     print(node1.get_position())
+
     groundnode1 = GroundNode()
-    print(groundnode1.get_all())
+    print(groundnode1.get())
     sourcenode1 = SourceNode(None, None, "sourcenode1", None, [2, 3], "abc")
-    print(sourcenode1.get_all())
+    print(sourcenode1.get())
