@@ -6,8 +6,8 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import GraphElement, Node
-from Exception import Check_ground_node_Exception
+from directedgraph.dgcore import GraphElement, Node,Arc,GroundNode,SourceNode
+from Self_Exception import Check_ground_node_Exception
 
 class Graph:
     def __init__(self, name=None):
@@ -56,11 +56,23 @@ class Graph:
             self.insert_element(element)
             return element
         elif parameters.get("type", None) == "Arc":
-            print("Error: Todo")
+            element = Arc(
+                self, parameters.get("uid", None), parameters.get("name", None)
+            )
+            self.insert_element(element)
+            return element
         elif parameters.get("type", None) == "GroundNode":
-            print("Error: Todo")
+            element = GroundNode(
+                self, parameters.get("uid", None), parameters.get("name", None)
+            )
+            self.insert_element(element)
+            return element
         elif parameters.get("type", None) == "SourceNode":
-            print("Error: Todo")
+            element = SourceNode(
+                self, parameters.get("uid", None), parameters.get("name", None)
+            )
+            self.insert_element(element)
+            return element
         else:
             print("Error: Element Type")
 
