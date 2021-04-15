@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DirectedGraph>
+    <Graph>
+        <name>graph1</name>
+    </Graph>
+    <Element>
+        <Node uid="7778da0a0a0a">
+            <name>node1</name>
+        </Node>
+        <Node uid="32a24bfcfefe">
+            <name>node2</name>
+        </Node>
+        <Node uid="32a24bfcfefe">
+            <name>node3</name>
+        </Node>
+        <Arc uid="32a24bfcfefe">
+            <name>arc1</name>
+        </Arc>
+    </Element>
+</DirectedGraph>
