@@ -106,6 +106,8 @@ class GroundNode(Node):
 
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
+    def check_number_ground_node(self):
+        return GroundNode.number_ground_node
 
 
 class SourceNode(Node):
@@ -145,13 +147,13 @@ class Arc(GraphElement):
 
 
 if __name__ == "__main__":
-    # from tests.test_dgcore_graphelement import (
-    #     test_get,
-    #     test_groundnode,
-    #     test_node_position,
-    # )
+    from tests.test_dgcore_graphelement import (
+        test_get,
+        test_groundnode,
+        test_node_position,
+    )
 
-    # test_get()
-    # test_groundnode()
-    # test_node_position()
+    test_get()
+    test_groundnode()
+    test_node_position()
     pass

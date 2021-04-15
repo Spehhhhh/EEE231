@@ -52,6 +52,7 @@ class GraphUsage(unittest.TestCase):
         graph1.create_element({"type": "Node", "name": "Node without UID"})
         graph1.create_element({"type": "Node", "name": "Node 1", "uid": "7778da0a0a0a"})
 
+
         graph2 = Graph("graph2")
 
         self.assertEqual(graph2.elements, {})
