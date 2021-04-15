@@ -25,12 +25,16 @@ class Graph:
         return True
 
     def print_graph_details(self):
-        print("vars(self):", vars(self))
+        print("------------------")
+        print("Graph vars(self):")
+        print(vars(self))
         # attrs = vars(self)
         # print(", ".join("%s: %s" % item for item in attrs.items()))
+        print("------------------")
+        print("Graph Elements:")
         for element in self.elements:  # #TODO 改成从 Value 遍历，不然性能损耗很大。
             print(
-                "       UID:",
+                "UID:",
                 self.elements[element].uid,
                 "|",
                 "Name:",
