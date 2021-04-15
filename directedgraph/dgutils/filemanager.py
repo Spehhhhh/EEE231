@@ -16,9 +16,6 @@ class FileManager:
         # self.link_graph = None
         pass
 
-    def read_file(self, filepath):
-        pass
-
     def read_graph(self, filepath):
         dom1 = minidom.parse(filepath)
         graph_attribute = []
@@ -31,7 +28,7 @@ class FileManager:
             .childNodes[0]
             .data
         )
-        graph_attribute.append({"name", graph_name})
+        graph_attribute.append({"name": graph_name})
 
         for element_type in type_list:
             elements = dom1.getElementsByTagName(element_type)
@@ -55,13 +52,13 @@ class FileManager:
         graph = (graph_attribute, graph_elements)
         return graph
 
-    def save_graph(self, graph, filepath):
+    def save_graph(self, filepath, graph):
         pass
 
-    def export_graph_png(self, graph):
+    def export_graph_png(self, filepath, graph):
         pass
 
-    def export_graph_pdf(self, graph):
+    def export_graph_pdf(self, filepath, graph):
         pass
 
 

@@ -82,13 +82,16 @@ class GraphUsage(unittest.TestCase):
 
     @logger.catch
     def test_create_graph(self):
-        name = "graph1"
-        data = [
-            {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
-            {"type": "Node", "name": "node2", "uid": "32a24bfcfefe"},
-            {"type": "Node", "uid": "32a24bfcfefe"},
-        ]
-        graph1 = create_graph(name, data)
+        graph1 = create_graph(
+            (
+                [{"name": "graph1"}],
+                [
+                    {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
+                    {"type": "Node", "name": "node2", "uid": "32a24bfcfefe"},
+                    {"type": "Node", "uid": "32a24bfcfefe"},
+                ],
+            )
+        )
 
         self.assertEqual(graph1.name, "graph1")
         self.assertEqual(graph1.get_element("32a24bfcfefe").name, "node2")
@@ -147,5 +150,4 @@ class GraphUsage(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    print()
-    # unittest.main()
+    unittest.main()

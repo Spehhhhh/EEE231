@@ -43,7 +43,7 @@ class FileManagerUsage(unittest.TestCase):
     def test_read_graph(self):
         filemanager1 = FileManager()
         data1 = filemanager1.read_graph(str(self.path))
-        list1 = [{"graph1", "name"}]
+        list1 = [{"name": "graph1"}]
         list2 = [
             {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
             {"type": "Node", "name": "node2", "uid": "32a24bfcfefe"},
