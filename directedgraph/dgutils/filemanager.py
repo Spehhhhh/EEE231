@@ -51,6 +51,7 @@ class FileManager:
         return graph
 
     def save_graph(self, filepath, graph):
+        dom1 = minidom.Document()
         pass
 
     def export_graph_png(self, filepath, graph):
