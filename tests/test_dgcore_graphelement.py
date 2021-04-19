@@ -55,7 +55,8 @@ def test_arc_init_case_1():
         "859e4b2ec309",
         "7778da0a0a0a",
     )
-    print(arc1.nodes)
+    print(arc1.get())
+    # print(arc1.nodes)
     print(arc1.get_position())
 
 
@@ -70,9 +71,11 @@ def test_arc_init_case_2():
         node1,
         node2,
     )
-    print(arc1.nodes)
+    print(arc1.get())
+    # print(arc1.nodes)
     print(arc1.get_position())
 
 
 if __name__ == "__main__":
+    test_arc_init_case_2()
     pass
