@@ -106,6 +106,7 @@ class GroundNode(Node):
 
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
+
     def check_number_ground_node(self):
         return GroundNode.number_ground_node
 
