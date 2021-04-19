@@ -37,8 +37,17 @@ def test_groundnode():
     sourcenode1 = SourceNode(None, None, "sourcenode1", None, [2, 3], "abc")
     print(sourcenode1.get())
 
+def test_arc():
+    node1=Node()
+    node2=Node()
+    arc1=Arc(None,None,'arc1',None,node1,node2)
+    print(node1)
+    print(arc1.get())
+    print(arc1.get_position(node1,node2))
 
-test_get()
-test_get()
-test_groundnode()
-test_node_position()
+test_arc()
+
+# test_get()
+# test_get()
+# test_groundnode()
+# test_node_position()

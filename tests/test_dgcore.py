@@ -20,7 +20,6 @@ from directedgraph.dgcore import (
     create_graph,
 )
 
-
 logger.add(
     "logs/test_dgcore.py.log",
     level="DEBUG",
