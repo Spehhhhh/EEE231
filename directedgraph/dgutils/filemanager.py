@@ -7,8 +7,6 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import Graph, graph
-
 
 class FileManager:
     def __init__(self):
@@ -41,11 +39,11 @@ class FileManager:
                 temp["uid"] = element.getAttribute("uid")
                 if element_type == "Node":
                     pass
-                elif element_type == "GroundNode":
+                elif element_type == "Arc":
                     pass
                 elif element_type == "SourceNode":
                     pass
-                elif element_type == "Arc":
+                elif element_type == "GroundNode":
                     pass
                 graph_elements.append(temp)
 

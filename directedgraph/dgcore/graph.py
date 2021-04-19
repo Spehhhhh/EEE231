@@ -6,8 +6,9 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import GraphElement, Node,Arc,GroundNode,SourceNode
-from Self_Exception import Check_ground_node_Exception
+from directedgraph.dgcore import GraphElement, Node, Arc, GroundNode, SourceNode
+from directedgraph.dgcore import excp
+
 
 class Graph:
     def __init__(self, name=None):
@@ -19,11 +20,11 @@ class Graph:
         self.name = name
 
     def verify_graph_integrity(self):
-        number_ground_node=0
+        number_ground_node = 0
         for key in self.elements:
-            if self.elements[key]['type']=='GroundNode':
-                number_ground_node+=1
-        if number_ground_node!=1:
+            if self.elements[key]["type"] == "GroundNode":
+                number_ground_node += 1
+        if number_ground_node != 1:
             return False
         else:
             return True
