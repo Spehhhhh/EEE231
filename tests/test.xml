@@ -6,15 +6,48 @@
     <Element>
         <Node uid="7778da0a0a0a">
             <name>node1</name>
+            <colour>#000000</colour>
+            <position_1>100</position_1>
+            <position_2>100</position_2>
         </Node>
         <Node uid="32a24bfcfefe">
             <name>node2</name>
+            <colour>#000000</colour>
+            <position_1>30</position_1>
+            <position_2>30</position_2>
         </Node>
         <Node uid="32a24bfcfefe">
             <name>node3</name>
         </Node>
+        <SourceNode uid="25502d2ac388">
+            <name>sourcenode1</name>
+            <colour>#000000</colour>
+            <position_1>40</position_1>
+            <position_2>40</position_2>
+            <user_defined_attribute>0</user_defined_attribute>
+        </SourceNode>
+        <SourceNode uid="32a24bfcfefe">
+            <name>sourcenode2</name>
+            <colour>#000000</colour>
+            <position_1>200</position_1>
+            <position_2>200</position_2>
+            <user_defined_attribute>Test</user_defined_attribute>
+        </SourceNode>
+        <SourceNode uid="32a24bfcfefe">
+            <name>sourcenode3</name>
+            <colour>#000000</colour>
+            <position_1>500</position_1>
+            <position_2>500</position_2>
+            <user_defined_attribute>Foo</user_defined_attribute>
+        </SourceNode>
+        <GroundNode uid="32a24bfcfefe">
+            <name>groundnode</name>
+        </GroundNode>
         <Arc uid="32a24bfcfefe">
             <name>arc1</name>
+            <colour>#000000</colour>
+            <node1>7778da0a0a0a</node1>
+            <node2>25502d2ac388</node2>
         </Arc>
     </Element>
 </DirectedGraph>
