@@ -14,8 +14,8 @@ from directedgraph.dgcore import (
     GraphElement,
     Graph,
     Node,
-    GroundNode,
     SourceNode,
+    GroundNode,
     Arc,
     create_graph,
 )
@@ -51,7 +51,6 @@ class GraphUsage(unittest.TestCase):
         graph1 = Graph("graph1")
         graph1.create_element({"type": "Node", "name": "Node without UID"})
         graph1.create_element({"type": "Node", "name": "Node 1", "uid": "7778da0a0a0a"})
-
 
         graph2 = Graph("graph2")
 
