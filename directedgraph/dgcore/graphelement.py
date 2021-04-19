@@ -16,6 +16,8 @@ class GraphElement:
         self.name = name if name else "Untitled"
         self.colour = colour if colour else "#000000"
 
+    # If the instance does not have a UID, a UID is generated.
+    # If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
     def generate_uid(self, old_uid=None):
         UID_LENGTH = 12
         if self.parent_graph == None:
@@ -65,8 +67,8 @@ class GraphElement:
     def get_colour(self):
         return self.colour
 
-    # #TODO 需要设计 Trace Back 捕捉
     # .update(name)
+    # #TODO 需要设计 Trace Back 捕捉
     def update(self, element_attribute, element_attribute_new):
         self.element_attribute = element_attribute_new
 
@@ -157,11 +159,13 @@ class Arc(GraphElement):
         self.update_position(node1, node2)
 
     # get_position() get positions of two objects connected by the arc
+    # #TODO 需要设计 Trace Back 捕捉
     def get_position(self):
         return (self.nodes[0].get_position(), self.nodes[1].get_position())
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
+    # #TODO 需要设计 Trace Back 捕捉
     def update_position(self, node1=None, node2=None):
         if node1 is not None:
             if isinstance(node1, str):
