@@ -136,14 +136,25 @@ class Arc(GraphElement):
         uid=None,
         name=None,
         colour=None,
+        node1=None,
+        node2=None
     ):
         super().__init__(parent_graph, uid, name, colour)
+        self.nodes=[]
+        self.update_position(node1,node2)
+    def update_position(self, node1=None, node2=None):
+        if node1 is not None: self.nodes.append(node1)
+        if node2 is not None: self.nodes.append(node2)
 
-    def get_source_pos(self, node):
-        return node.get_position()
+    # get positions of two objects connected by the arc
+    def get_position(self, node1, node2):
+        return (node1.get_position(), node2.get_position())
 
-    def get_destin_pos(self, node):
-        return node.get_position()
+    def update_name(self,name):
+        self.name=name
+
+
+
 
 
 if __name__ == "__main__":
