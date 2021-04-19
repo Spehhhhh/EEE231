@@ -51,7 +51,7 @@ class FileManager:
         return graph
 
     def save_graph(self, filepath, graph):
-        a=1
+        b = 1
         pass
 
     def export_graph_png(self, filepath, graph):
