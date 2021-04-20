@@ -113,7 +113,7 @@ else:
 This class can be used to create Node object it was inherited by the Graphelement class.Except all of the attributes inherited from GraphElement.It also has an extra attribute called position which is the corrindate of a Node which can be stored in the list.
 A Node object have `get_position()` method to get the position of the Node.Also the name of a  Node can also be updated by using the method `update()`.
 
-## `Node()`Methods
+## `Node()` Methods
 - `get_position()`
    - return position of a Node, its a list
 - `update(self, element_attribute, element_attribute_new)`
@@ -128,10 +128,10 @@ A Node object have `get_position()` method to get the position of the Node.Also 
   ```
 ## `Arc()`
 
-## `Arc()`Purposee   
+## `Arc()` Purpose   
    This class will be used to create an Arc object which can be used to connect two Node object.It can store two Node objects by either storing uid or just storing object with the method `update_position()`
 
-## `Arc()`Methods
+## `Arc()` Methods
 - `get_position()`
 
    return two nodes' positions in tuple type
