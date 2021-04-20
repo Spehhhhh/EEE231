@@ -13,6 +13,17 @@ from directedgraph.dgcore import Graph
 from directedgraph.dgutils import FileManager
 
 
+class DirectedGraphApplication:
+    def __init__(self):
+        pass
+
+    def main(self):
+        pass
+
+    def quit(self):
+        pass
+
+
 def create_graph(graph_raw_data):
     new_graph = Graph(graph_raw_data[0][0].get("name"))
     for item in graph_raw_data[1]:

@@ -45,10 +45,67 @@ class FileManagerUsage(unittest.TestCase):
         data1 = filemanager1.read_graph(str(self.path))
         list1 = [{"name": "graph1"}]
         list2 = [
-            {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
-            {"type": "Node", "name": "node2", "uid": "32a24bfcfefe"},
-            {"type": "Node", "name": "node3", "uid": "32a24bfcfefe"},
-            {"type": "Arc", "name": "arc1", "uid": "32a24bfcfefe"},
+            {
+                "type": "Node",
+                "uid": "7778da0a0a0a",
+                "name": "node1",
+                "colour": "#FFFFFF",
+                "position_x": "100",
+                "position_y": "105",
+            },
+            {
+                "type": "Node",
+                "uid": "32a24bfcfefe",
+                "name": "node2",
+                "colour": "#000000",
+                "position_x": "30",
+                "position_y": "30",
+            },
+            {
+                "type": "Node",
+                "uid": "9a2812943a39",
+                "name": "node3",
+            },
+            {
+                "type": "SourceNode",
+                "uid": "b203507d9ef3",
+                "name": "sourcenode1",
+                "colour": "#000000",
+                "position_x": "40",
+                "position_y": "40",
+                "user_defined_attribute": "0",
+            },
+            {
+                "type": "SourceNode",
+                "uid": "e26c0487a31f",
+                "name": "sourcenode2",
+                "colour": "#000000",
+                "position_x": "200",
+                "position_y": "200",
+                "user_defined_attribute": "Test",
+            },
+            {
+                "type": "SourceNode",
+                "uid": "3d8cc5a3ce64",
+                "name": "sourcenode3",
+                "colour": "#000000",
+                "position_x": "500",
+                "position_y": "500",
+                "user_defined_attribute": "Foo",
+            },
+            {
+                "type": "GroundNode",
+                "uid": "365bb94004f2",
+                "name": "groundnode",
+            },
+            {
+                "type": "Arc",
+                "uid": "b7c567add4ff",
+                "name": "arc1",
+                "colour": "#000000",
+                "node1": "365bb94004f2",
+                "node2": "3d8cc5a3ce64",
+            },
         ]
         self.assertEqual(data1[0], list1)
         self.assertEqual(data1[1], list2)

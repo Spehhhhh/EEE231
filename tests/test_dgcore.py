@@ -14,12 +14,11 @@ from directedgraph.dgcore import (
     GraphElement,
     Graph,
     Node,
-    GroundNode,
     SourceNode,
+    GroundNode,
     Arc,
     create_graph,
 )
-
 
 logger.add(
     "logs/test_dgcore.py.log",
@@ -30,7 +29,7 @@ logger.add(
 logger.info("Start Log")
 
 
-class GraphUsage(unittest.TestCase):
+class TestGraph(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         pass
@@ -51,7 +50,6 @@ class GraphUsage(unittest.TestCase):
         graph1 = Graph("graph1")
         graph1.create_element({"type": "Node", "name": "Node without UID"})
         graph1.create_element({"type": "Node", "name": "Node 1", "uid": "7778da0a0a0a"})
-
 
         graph2 = Graph("graph2")
 
@@ -75,11 +73,35 @@ class GraphUsage(unittest.TestCase):
     @logger.catch
     def test_create_element(self):
         graph1 = Graph("graph1")
-        graph1.create_element({"type": "Node", "name": "node1", "uid": "b911b214f553"})
+        graph1.create_element(
+            {
+                "type": "Node",
+                "name": "node1",
+                "uid": "b911b214f553",
+                "position_x": "10",
+                "position_y": "5",
+            }
+        )
 
         self.assertEqual(graph1.get_element("b911b214f553").name, "node1")
         # self.assertEqual(type(graph1.get_element("b911b214f553")), Node)
         self.assertIsInstance(graph1.get_element("b911b214f553"), Node)
+
+        graph1.create_element(
+            {"type": "GroundNode", "name": "groundnode", "uid": "9a2812943a39"}
+        )
+        graph1.create_element(
+            {
+                "type": "Arc",
+                "name": "arc1",
+                "node1": "b911b214f553",
+                "node2": "9a2812943a39",
+                "uid": "7778da0a0a0a",
+            }
+        )
+        self.assertEqual(
+            graph1.get_element("7778da0a0a0a").get_position(), ([10, 5], [0, 0])
+        )
 
     @logger.catch
     def test_create_graph(self):
@@ -87,16 +109,72 @@ class GraphUsage(unittest.TestCase):
             (
                 [{"name": "graph1"}],
                 [
-                    {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
-                    {"type": "Node", "name": "node2", "uid": "32a24bfcfefe"},
-                    {"type": "Node", "uid": "32a24bfcfefe"},
+                    {
+                        "type": "Node",
+                        "uid": "7778da0a0a0a",
+                        "name": "node1",
+                        "colour": "#FFFFFF",
+                        "position_x": "100",
+                        "position_y": "105",
+                    },
+                    {
+                        "type": "Node",
+                        "uid": "32a24bfcfefe",
+                        "name": "node2",
+                        "colour": "#000000",
+                        "position_x": "30",
+                        "position_y": "30",
+                    },
+                    {
+                        "type": "Node",
+                        "uid": "9a2812943a39",
+                        "name": "node3",
+                    },
+                    {
+                        "type": "SourceNode",
+                        "uid": "b203507d9ef3",
+                        "name": "sourcenode1",
+                        "colour": "#000000",
+                        "position_x": "40",
+                        "position_y": "40",
+                        "user_defined_attribute": "0",
+                    },
+                    {
+                        "type": "SourceNode",
+                        "uid": "e26c0487a31f",
+                        "name": "sourcenode2",
+                        "colour": "#000000",
+                        "position_x": "200",
+                        "position_y": "200",
+                        "user_defined_attribute": "Test",
+                    },
+                    {
+                        "type": "SourceNode",
+                        "uid": "3d8cc5a3ce64",
+                        "name": "sourcenode3",
+                        "colour": "#000000",
+                        "position_x": "500",
+                        "position_y": "500",
+                        "user_defined_attribute": "Foo",
+                    },
+                    {
+                        "type": "GroundNode",
+                        "uid": "365bb94004f2",
+                        "name": "groundnode",
+                    },
+                    {
+                        "type": "Arc",
+                        "uid": "b7c567add4ff",
+                        "name": "arc1",
+                        "node1": "365bb94004f2",
+                        "node2": "3d8cc5a3ce64",
+                    },
                 ],
             )
         )
-
         self.assertEqual(graph1.name, "graph1")
-        self.assertEqual(graph1.get_element("32a24bfcfefe").name, "node2")
-        self.assertEqual(len(graph1.elements), 3)
+        self.assertEqual(graph1.get_element("b7c567add4ff").name, "arc1")
+        self.assertEqual(len(graph1.elements), 8)
 
     @logger.catch
     def test_generate_element_uid(self):
