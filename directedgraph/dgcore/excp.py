@@ -1,3 +1,3 @@
 class GroundNodeNumberException(Exception):
-    def __init__(self,number_ground_node=None):
-        self.number_ground_node=number_ground_node
+    def __init__(self, groundnode_counter=None):
+        self.groundnode_counter = groundnode_counter

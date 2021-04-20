@@ -6,12 +6,14 @@ current_folder = Path(__file__).absolute().parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore.graphelement import (
+from directedgraph.dgcore import (
     GraphElement,
+    Graph,
     Node,
     GroundNode,
     SourceNode,
     Arc,
+    create_graph,
 )
 
 
@@ -37,17 +39,43 @@ def test_groundnode():
     sourcenode1 = SourceNode(None, None, "sourcenode1", None, [2, 3], "abc")
     print(sourcenode1.get())
 
-def test_arc():
-    node1=Node()
-    node2=Node()
-    arc1=Arc(None,None,'arc1',None,node1,node2)
-    print(node1)
+
+def test_arc_init_case_1():
+    from directedgraph.dgcore.graph import Graph
+
+    graph1 = Graph("graph1")
+    graph1.create_element({"type": "Node", "name": "Node 1", "uid": "859e4b2ec309"})
+    graph1.create_element({"type": "Node", "name": "Node 2", "uid": "7778da0a0a0a"})
+    # graph1.print_graph_details()
+    arc1 = Arc(
+        graph1,
+        "123",
+        None,
+        "arc1",
+        "859e4b2ec309",
+        "7778da0a0a0a",
+    )
     print(arc1.get())
-    print(arc1.get_position(node1,node2))
+    # print(arc1.nodes)
+    print(arc1.get_position())
 
-test_arc()
 
-# test_get()
-# test_get()
-# test_groundnode()
-# test_node_position()
+def test_arc_init_case_2():
+    node1 = Node(None, None, "node1", None, None)
+    node2 = GroundNode(None, None, "node2", None, [10, 10])
+    arc1 = Arc(
+        None,
+        "123",
+        None,
+        "arc1",
+        node1,
+        node2,
+    )
+    print(arc1.get())
+    # print(arc1.nodes)
+    print(arc1.get_position())
+
+
+if __name__ == "__main__":
+    test_arc_init_case_2()
+    pass
