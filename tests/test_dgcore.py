@@ -29,7 +29,7 @@ logger.add(
 logger.info("Start Log")
 
 
-class GraphUsage(unittest.TestCase):
+class TestGraph(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         pass
