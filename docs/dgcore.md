@@ -16,7 +16,7 @@
     - [`GraphElement()` Pseudocode Implementation](#graphelement-pseudocode-implementation)
   - [`Node()`](#Node-purpose)
     - [`Node()`Purpose](#Node-purpose)
-    - [`Node()`Methods](#Node-Mehods)
+    - [`Node()`Methods](#Node-Methods)
   - [`Arc()`](#Arc-purpose)
     - [`Arc()`Purpose](#Arc-purpose)
     - [`Arc()`Methods](#Arc-Methods)
