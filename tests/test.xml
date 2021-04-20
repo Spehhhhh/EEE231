@@ -6,48 +6,48 @@
     <Element>
         <Node uid="7778da0a0a0a">
             <name>node1</name>
-            <colour>#000000</colour>
-            <position_1>100</position_1>
-            <position_2>100</position_2>
+            <colour>#FFFFFF</colour>
+            <position_x>100</position_x>
+            <position_y>105</position_y>
         </Node>
         <Node uid="32a24bfcfefe">
             <name>node2</name>
             <colour>#000000</colour>
-            <position_1>30</position_1>
-            <position_2>30</position_2>
+            <position_x>30</position_x>
+            <position_y>30</position_y>
         </Node>
-        <Node uid="32a24bfcfefe">
+        <Node uid="9a2812943a39">
             <name>node3</name>
         </Node>
-        <SourceNode uid="25502d2ac388">
+        <SourceNode uid="b203507d9ef3">
             <name>sourcenode1</name>
             <colour>#000000</colour>
-            <position_1>40</position_1>
-            <position_2>40</position_2>
+            <position_x>40</position_x>
+            <position_y>40</position_y>
             <user_defined_attribute>0</user_defined_attribute>
         </SourceNode>
-        <SourceNode uid="32a24bfcfefe">
+        <SourceNode uid="e26c0487a31f">
             <name>sourcenode2</name>
             <colour>#000000</colour>
-            <position_1>200</position_1>
-            <position_2>200</position_2>
+            <position_x>200</position_x>
+            <position_y>200</position_y>
             <user_defined_attribute>Test</user_defined_attribute>
         </SourceNode>
-        <SourceNode uid="32a24bfcfefe">
+        <SourceNode uid="3d8cc5a3ce64">
             <name>sourcenode3</name>
             <colour>#000000</colour>
-            <position_1>500</position_1>
-            <position_2>500</position_2>
+            <position_x>500</position_x>
+            <position_y>500</position_y>
             <user_defined_attribute>Foo</user_defined_attribute>
         </SourceNode>
-        <GroundNode uid="32a24bfcfefe">
+        <GroundNode uid="365bb94004f2">
             <name>groundnode</name>
         </GroundNode>
-        <Arc uid="32a24bfcfefe">
+        <Arc uid="b7c567add4ff">
             <name>arc1</name>
             <colour>#000000</colour>
-            <node1>7778da0a0a0a</node1>
-            <node2>25502d2ac388</node2>
+            <node1>365bb94004f2</node1>
+            <node2>3d8cc5a3ce64</node2>
         </Arc>
     </Element>
 </DirectedGraph>

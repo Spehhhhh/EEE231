@@ -88,6 +88,7 @@ class Node(GraphElement):
     def get_position(self):
         return self.position
 
+    # .update(position, [10, 10])
     def update(self, element_attribute, element_attribute_new):
         if element_attribute == "position":
             self.position[0] = element_attribute_new[0]
@@ -95,6 +96,7 @@ class Node(GraphElement):
         else:
             return super().update(element_attribute, element_attribute_new)
 
+    # .update_position([10, 10])
     def update_position(self, position):
         self.position[0] = position[0]
         self.position[1] = position[1]

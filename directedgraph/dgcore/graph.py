@@ -16,22 +16,6 @@ class Graph:
         self.elements = {}
         # #TODO 可以优化速度，除了 UID 之外，还有什么经常调用的可以放到外层。
 
-    def rename_graph(self, name):
-        self.name = name
-
-    def verify_graph_integrity(self):
-        groundnode_counter = 0
-        for key in self.elements:
-            if self.elements[key]["type"] == "GroundNode":
-                groundnode_counter += 1
-        if groundnode_counter != 1:
-            return False
-        else:
-            return True
-
-    def get_all(self):
-        return True
-
     def print_graph_details(self):
         print("------------------")
         print("Graph vars(self):")
@@ -49,28 +33,70 @@ class Graph:
                 self.elements[element].name,
             )
 
+    def get(self):
+        return True
+
+    def get_name(self):
+        return self.name
+
+    def update_name(self, name):
+        self.name = name
+
+    def get_element(self, uid):
+        # print(self.elements[uid].get_name())
+        # print("parent_graph:", self.elements[uid].get_parent_graph())
+        # print(vars(self.elements[uid])) # 可以返回对象也可以返回字典
+        return self.elements[uid]
+
     def create_element(self, parameters):  # #TODO 按参数里的字典新建组件
         if parameters.get("type", None) == "Node":
             element = Node(
-                self, parameters.get("uid", None), parameters.get("name", None)
-            )
-            self.insert_element(element)
-            return element
-        elif parameters.get("type", None) == "Arc":
-            element = Arc(
-                self, parameters.get("uid", None), parameters.get("name", None)
-            )
-            self.insert_element(element)
-            return element
-        elif parameters.get("type", None) == "GroundNode":
-            element = GroundNode(
-                self, parameters.get("uid", None), parameters.get("name", None)
+                self,
+                parameters.get("uid", None),
+                parameters.get("name", None),
+                parameters.get("colour", None),
+                [
+                    int(parameters.get("position_x", 0)),
+                    int(parameters.get("position_y", 0)),
+                ],
             )
             self.insert_element(element)
             return element
         elif parameters.get("type", None) == "SourceNode":
             element = SourceNode(
-                self, parameters.get("uid", None), parameters.get("name", None)
+                self,
+                parameters.get("uid", None),
+                parameters.get("name", None),
+                parameters.get("colour", None),
+                [
+                    int(parameters.get("position_x", 0)),
+                    int(parameters.get("position_y", 0)),
+                ],
+                parameters.get("user_defined_attribute", None),
+            )
+            self.insert_element(element)
+            return element
+        elif parameters.get("type", None) == "GroundNode":
+            element = GroundNode(
+                self,
+                parameters.get("uid", None),
+                parameters.get("name", None),
+                [
+                    int(parameters.get("position_x", 0)),
+                    int(parameters.get("position_y", 0)),
+                ],
+                parameters.get("position", None),
+            )
+            self.insert_element(element)
+            return element
+        elif parameters.get("type", None) == "Arc":
+            element = Arc(
+                self,
+                parameters.get("uid", None),
+                parameters.get("name", None),
+                parameters.get("colour", None),
+                parameters.get("node1", None),
+                parameters.get("node2", None),
             )
             self.insert_element(element)
             return element
@@ -86,14 +112,15 @@ class Graph:
     def update_element_colour(self, uid, colour):
         self.elements[uid].colour = colour
 
-    def get_name(self):
-        return self.name
-
-    def get_element(self, uid):
-        # print(self.elements[uid].get_name())
-        # print("parent_graph:", self.elements[uid].get_parent_graph())
-        # print(vars(self.elements[uid])) # 可以返回对象也可以返回字典
-        return self.elements[uid]
+    # update_arc_position(uid, uid, uid)
+    # update_arc_position(uid, node1, node2)
+    # update_arc_position(arc, node1, node2)
+    def update_arc_position(self, arc1, node1, node2):
+        if isinstance(arc1, Arc):
+            arc1.update_position(node1, node2)
+        elif isinstance(arc1, str):
+            if len(node2) == 12 and self.parent_graph == self:
+                self.get_element["arc1"].update_position(node1, node2)
 
     def delete_element(self, uid):  # #TODO 需要写误删除逻辑
         if uid in self.elements:
@@ -102,8 +129,16 @@ class Graph:
         else:
             return False
 
+    def verify_graph_integrity(self):
+        groundnode_counter = 0
+        for key in self.elements:
+            if self.elements[key]["type"] == "GroundNode":
+                groundnode_counter += 1
+        if groundnode_counter != 1:
+            return False
+        else:
+            return True
+
 
 if __name__ == "__main__":
-    from tests.test_dgcore import test_id
-
-    test_id()
+    pass
