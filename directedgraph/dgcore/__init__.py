@@ -11,7 +11,7 @@ from directedgraph.dgcore.graphelement import (
     Arc,
 )
 from directedgraph.dgcore.graph import Graph
-from directedgraph.dgcore.graphapplication import create_graph
+from directedgraph.dgcore.graphapplication import DirectedGraphApplication, create_graph
 
 # import directedgraph.dgcore.graphelement
 # import directedgraph.dgcore.graph
