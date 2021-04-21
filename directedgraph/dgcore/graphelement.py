@@ -155,10 +155,12 @@ class Arc(GraphElement):
         colour=None,
         node1=None,
         node2=None,
+        user_define_attribute=None
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
         self.update_position(node1, node2)
+        self.user_define_attribute=user_define_attribute
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
@@ -182,6 +184,8 @@ class Arc(GraphElement):
                     self.nodes.append(self.parent_graph.get_element(node2))
             elif isinstance(node2, Node) or issubclass(node2, Node):
                 self.nodes.append(node2)
+    def update_user_define_attribute(self,new_user_define_attribute):
+        self.user_define_attribute=new_user_define_attribute
 
 
 if __name__ == "__main__":
