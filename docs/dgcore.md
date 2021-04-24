@@ -14,13 +14,13 @@
     - [`GraphElement()` Dependencies](#graphelement-dependencies)
     - [`GraphElement()` Methods](#graphelement-methods)
     - [`GraphElement()` Pseudocode Implementation](#graphelement-pseudocode-implementation)
-  - [`Node()`](#Node-purpose)
-    - [`Node()`Purpose](#Node-purpose)
-    - [`Node()`Methods](#Node-Methods)
-  - [`Arc()`](#Arc-purpose)
-    - [`Arc()`Purpose](#Arc-purpose)
-    - [`Arc()`Methods](#Arc-Methods)
-    - [`Arc()`Pseudocode Implementation](#Arc-pseudocode-implementation)
+  - [`Node()`](#node)
+  - [`Node()` Purpose](#node-purpose)
+  - [`Node()` Methods](#node-methods)
+  - [`Arc()`](#arc)
+  - [`Arc()` Purpose](#arc-purpose)
+  - [`Arc()` Methods](#arc-methods)
+  - [`Arc()` Pseudocode Implementation](#arc-pseudocode-implementation)
   - [`directedgraph.dgcore` Module Usage](#directedgraphdgcore-module-usage)
 
 
@@ -110,10 +110,13 @@ else:
 ## `Node()`
 
 ## `Node()` Purpose
+
 This class can be used to create Node object it was inherited by the Graphelement class.Except all of the attributes inherited from GraphElement.It also has an extra attribute called position which is the corrindate of a Node which can be stored in the list.
+
 A Node object have `get_position()` method to get the position of the Node.Also the name of a  Node can also be updated by using the method `update()`.
 
 ## `Node()` Methods
+
 - `get_position()`
    - return position of a Node, its a list
 - `update(self, element_attribute, element_attribute_new)`
@@ -144,19 +147,19 @@ A Node object have `get_position()` method to get the position of the Node.Also 
 
 check whether the passing node is a string or an object
 ``` Python
-        if node1 is not None:
-            if isinstance(node1, str):
-                if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_element(node1))
-            elif isinstance(node1, Node) or issubclass(node1, Node):
-                 self.nodes.append(node1)
+if node1 is not None:
+    if isinstance(node1, str):
+        if len(node2) == 12 and self.parent_graph != None:
+            self.nodes.append(self.parent_graph.get_element(node1))
+    elif isinstance(node1, Node) or issubclass(node1, Node):
+          self.nodes.append(node1)
 
-        if node2 is not None:
-            if isinstance(node2, str) and self.parent_graph != None:
-                if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_element(node2))
-            elif isinstance(node2, Node) or issubclass(node2, Node):
-                self.nodes.append(node2)
+if node2 is not None:
+    if isinstance(node2, str) and self.parent_graph != None:
+        if len(node2) == 12 and self.parent_graph != None:
+            self.nodes.append(self.parent_graph.get_element(node2))
+    elif isinstance(node2, Node) or issubclass(node2, Node):
+        self.nodes.append(node2)
 ```
 ## `directedgraph.dgcore` Module Usage
 
@@ -226,4 +229,3 @@ graph1 = Graph("graph1")
 graph1.create_element({"type": "Node", "name": "Node without UID"})
 graph1.create_element({"type": "Node", "name": "Node 1", "uid": "7778da0a0a0a"})
 ```
->>>>>>> 6e34d2ad6e0fb6ae500ed194c36d13c42d958f66
