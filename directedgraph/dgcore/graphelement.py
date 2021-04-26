@@ -161,6 +161,7 @@ class Arc(GraphElement):
         self.nodes = []
         self.update_position(node1, node2)
         self.user_define_attribute=user_define_attribute
+        self.function={}
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
@@ -186,6 +187,21 @@ class Arc(GraphElement):
                 self.nodes.append(node2)
     def update_user_define_attribute(self,new_user_define_attribute):
         self.user_define_attribute=new_user_define_attribute
+
+    # get editable function,eg: if Take a resistance.
+    # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
+    # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
+    def get_function(self):
+         if self.user_define_attribute=="Resistance":
+             pass
+         elif self.user_define_attribute=="diode":
+             pass
+
+    # function['resistance']=(V_i - V)j) / R.
+    def update_function(self,name):
+        function_update = self.get_function()
+        self.function[name] = function_update
+
 
 
 if __name__ == "__main__":
