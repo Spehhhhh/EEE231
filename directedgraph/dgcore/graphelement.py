@@ -84,6 +84,8 @@ class Node(GraphElement):
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.position = position if position else [0, 0]
+        # it won't get any value which can be obtained from the simulator
+        self.value=None
 
     def get_position(self):
         return self.position
@@ -193,7 +195,14 @@ class Arc(GraphElement):
     # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
     def get_function(self):
          if self.user_define_attribute=="Resistance":
-             pass
+             voltage=[]
+             for node in self.nodes:
+                 if isinstance(node,Node):
+                     voltage.append(node.value)
+                 elif isinstance(node,SourceNode) or isinstance(node,GroundNode):
+                     voltage.append(node.user_defined_attribute)
+             return ((voltage[0]-voltage[1])/self.user_define_attribute)
+
          elif self.user_define_attribute=="diode":
              pass
 
