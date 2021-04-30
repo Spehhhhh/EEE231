@@ -4,17 +4,7 @@
 # https://github.com/cclauss/autoblack
 
 name: autoblack
-on:
-  push:
-    branches:
-      - main;
-      - dgutils;
-      - dggui;
-      - dgapp;
-      - dgcore;
-  pull_request:
-    branches:
-      - main;
+on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
