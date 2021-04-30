@@ -85,7 +85,7 @@ class Node(GraphElement):
         super().__init__(parent_graph, uid, name, colour)
         self.position = position if position else [0, 0]
         # it won't get any value which can be obtained from the simulator
-        self.value=None
+        self.value = None
 
     def get_position(self):
         return self.position
@@ -157,13 +157,13 @@ class Arc(GraphElement):
         colour=None,
         node1=None,
         node2=None,
-        user_define_attribute=None
+        user_define_attribute=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
         self.update_position(node1, node2)
-        self.user_define_attribute=user_define_attribute
-        self.function={}
+        self.user_define_attribute = user_define_attribute
+        self.function = {}
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
@@ -187,30 +187,30 @@ class Arc(GraphElement):
                     self.nodes.append(self.parent_graph.get_element(node2))
             elif isinstance(node2, Node) or issubclass(node2, Node):
                 self.nodes.append(node2)
-    def update_user_define_attribute(self,new_user_define_attribute):
-        self.user_define_attribute=new_user_define_attribute
+
+    def update_user_define_attribute(self, new_user_define_attribute):
+        self.user_define_attribute = new_user_define_attribute
 
     # get editable function,eg: if Take a resistance.
     # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
     # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
     def get_function(self):
-         if self.user_define_attribute=="Resistance":
-             voltage=[]
-             for node in self.nodes:
-                 if isinstance(node,Node):
-                     voltage.append(node.value)
-                 elif isinstance(node,SourceNode) or isinstance(node,GroundNode):
-                     voltage.append(node.user_defined_attribute)
-             return ((voltage[0]-voltage[1])/self.user_define_attribute)
+        if self.user_define_attribute == "Resistance":
+            voltage = []
+            for node in self.nodes:
+                if isinstance(node, Node):
+                    voltage.append(node.value)
+                elif isinstance(node, SourceNode) or isinstance(node, GroundNode):
+                    voltage.append(node.user_defined_attribute)
+            return (voltage[0] - voltage[1]) / self.user_define_attribute
 
-         elif self.user_define_attribute=="diode":
-             pass
+        elif self.user_define_attribute == "diode":
+            pass
 
     # function['resistance']=(V_i - V)j) / R.
-    def update_function(self,name):
+    def update_function(self, name):
         function_update = self.get_function()
         self.function[name] = function_update
-
 
 
 if __name__ == "__main__":
