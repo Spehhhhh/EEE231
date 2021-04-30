@@ -8,6 +8,10 @@ on:
   push:
     branches:
       - main;
+      - dgutils;
+      - dggui;
+      - dgapp;
+      - dgcore;
   pull_request:
     branches:
       - main;
