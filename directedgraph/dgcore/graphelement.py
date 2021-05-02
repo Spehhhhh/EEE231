@@ -1,6 +1,7 @@
 import uuid
 import sys
 from pathlib import Path
+from directedgraph.dgcore.excp import ArcfunctionError
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
@@ -75,17 +76,17 @@ class GraphElement:
 
 class Node(GraphElement):
     def __init__(
-        self,
-        parent_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        position=None,
+            self,
+            parent_graph=None,
+            uid=None,
+            name=None,
+            colour=None,
+            position=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.position = position if position else [0, 0]
         # it won't get any value which can be obtained from the simulator
-        self.value=None
+        self.value = 0
 
     def get_position(self):
         return self.position
@@ -103,16 +104,19 @@ class Node(GraphElement):
         self.position[0] = position[0]
         self.position[1] = position[1]
 
+    def get_value(self):
+        return self.value
+
 
 class SourceNode(Node):
     def __init__(
-        self,
-        parent_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        position=None,
-        user_defined_attribute=None,
+            self,
+            parent_graph=None,
+            uid=None,
+            name=None,
+            colour=None,
+            position=None,
+            user_defined_attribute=None,
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = (
@@ -127,12 +131,12 @@ class GroundNode(Node):
     groundnode_counter = 0
 
     def __init__(
-        self,
-        parent_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        position=None,
+            self,
+            parent_graph=None,
+            uid=None,
+            name=None,
+            colour=None,
+            position=None,
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
@@ -150,25 +154,32 @@ class GroundNode(Node):
 
 class Arc(GraphElement):
     def __init__(
-        self,
-        parent_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        node1=None,
-        node2=None,
-        user_define_attribute=None
+            self,
+            parent_graph=None,
+            uid=None,
+            name=None,
+            colour=None,
+            node1=None,
+            node2=None,
+            user_define_attribute=None,
+            value=None
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
+        self.node1 = node1
+        self.node2 = node2
         self.update_position(node1, node2)
-        self.user_define_attribute=user_define_attribute
-        self.function={}
+        self.user_define_attribute = user_define_attribute
+        self.function = {}
+        self.value = value
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
     def get_position(self):
         return (self.nodes[0].get_position(), self.nodes[1].get_position())
+
+    def update_value(self, data):
+        self.attribute_value = data
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
@@ -187,30 +198,38 @@ class Arc(GraphElement):
                     self.nodes.append(self.parent_graph.get_element(node2))
             elif isinstance(node2, Node) or issubclass(node2, Node):
                 self.nodes.append(node2)
-    def update_user_define_attribute(self,new_user_define_attribute):
-        self.user_define_attribute=new_user_define_attribute
+
+    def update_user_define_attribute(self, new_user_define_attribute):
+        self.user_define_attribute = new_user_define_attribute
 
     # get editable function,eg: if Take a resistance.
     # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
     # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
     def get_function(self):
-         if self.user_define_attribute=="Resistance":
-             voltage=[]
-             for node in self.nodes:
-                 if isinstance(node,Node):
-                     voltage.append(node.value)
-                 elif isinstance(node,SourceNode) or isinstance(node,GroundNode):
-                     voltage.append(node.user_defined_attribute)
-             return ((voltage[0]-voltage[1])/self.user_define_attribute)
+        if self.user_define_attribute.lower() == "resistance":
+            if isinstance(self.node1, str) or isinstance(self.node2, str):
+                raise ArcfunctionError("You must enter an Object!!")
 
-         elif self.user_define_attribute=="diode":
-             pass
+            elif isinstance(self.node1, Node) and isinstance(self.node2, SourceNode) or isinstance(self.node2,
+                                                                                                   GroundNode):
+                return abs(self.node1.value - int(self.node2.user_defined_attribute)) / self.value
+
+            elif isinstance(self.node1, SourceNode) or isinstance(self.node1, GroundNode) and isinstance(self.node2,
+                                                                                                         Node):
+                return abs(int(self.node1.user_defined_attribute) - int(self.node2.value)) / self.value
+
+            elif isinstance(self.node1, SourceNode) or isinstance(self.node1, GroundNode) and isinstance(self.node2,
+                                                                                                         GroundNode) or isinstance(
+                    self.node2, SourceNode):
+                return abs(int(self.node1.user_defined_attribute) - int(self.node2.user_defined_attribute)) / self.value
+
+        elif self.user_define_attribute.lower() == "diode":
+            pass
 
     # function['resistance']=(V_i - V)j) / R.
-    def update_function(self,name):
+    def update_function(self, name):
         function_update = self.get_function()
         self.function[name] = function_update
-
 
 
 if __name__ == "__main__":
