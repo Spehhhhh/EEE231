@@ -11,7 +11,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import (
-    graphcomponent,
+    GraphComponent,
     Graph,
     Node,
     SourceNode,
@@ -29,7 +29,7 @@ logger.add(
 logger.info("Start Log")
 
 
-class TestGraph(unittest.TestCase):
+class TestGraphComponent(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         pass
@@ -46,7 +46,7 @@ class TestGraph(unittest.TestCase):
 
     @logger.catch
     def test_get(self):
-        component1 = graphcomponent()
+        component1 = GraphComponent()
         self.assertEqual(vars(component1), component1.get())
         self.assertEqual(component1.get("name"), "Untitled")
 
@@ -128,8 +128,8 @@ def test_arc_function():
     print(arc2.get())
 
 
-# if __name__ == "__main__":
-#     # test_arc_init_case_1()
-#     # test_arc_init_case_2()
-#     test_arc_function()
-# unittest.main()
+if __name__ == "__main__":
+    unittest.main()
+    # test_arc_init_case_1()
+    # test_arc_init_case_2()
+    # test_arc_function()
