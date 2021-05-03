@@ -7,8 +7,6 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import ArcfunctionError
-
 
 class GraphComponent:
     def __init__(self, parent_graph=None, uid=None, name=None, colour=None):
@@ -51,11 +49,11 @@ class GraphComponent:
 
     # .get(): return all
     # .get("name") return name
-    def get(self, component_attribute=None):
-        if component_attribute == None:
+    def get(self, element_attribute=None):
+        if element_attribute == None:
             return vars(self)
         else:
-            return vars(self).get(component_attribute, None)
+            return vars(self).get(element_attribute, None)
 
     def get_parent_graph(self):
         return self.parent_graph
@@ -71,8 +69,8 @@ class GraphComponent:
 
     # .update(name)
     # #TODO 需要设计 Trace Back 捕捉
-    def update(self, component_attribute, component_attribute_new):
-        self.component_attribute = component_attribute_new
+    def update(self, element_attribute, element_attribute_new):
+        self.element_attribute = element_attribute_new
 
 
 class Node(GraphComponent):
@@ -93,12 +91,12 @@ class Node(GraphComponent):
         return self.position
 
     # .update(position, [10, 10])
-    def update(self, component_attribute, component_attribute_new):
-        if component_attribute == "position":
-            self.position[0] = component_attribute_new[0]
-            self.position[1] = component_attribute_new[1]
+    def update(self, element_attribute, element_attribute_new):
+        if element_attribute == "position":
+            self.position[0] = element_attribute_new[0]
+            self.position[1] = element_attribute_new[1]
         else:
-            return super().update(component_attribute, component_attribute_new)
+            return super().update(element_attribute, element_attribute_new)
 
     # .update_position([10, 10])
     def update_position(self, position):
@@ -207,11 +205,10 @@ class Arc(GraphComponent):
     # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
     # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
     def get_function(self):
-        if self.user_define_attribute.lower() == "resistance":
-            if isinstance(self.node1, str) or isinstance(self.node2, str):
-                raise ArcfunctionError("You must enter an Object!!")
-
-            elif (
+        if self.user_define_attribute == None:
+            return
+        elif self.user_define_attribute.lower() == "resistance":
+            if (
                 isinstance(self.node1, Node)
                 and isinstance(self.node2, SourceNode)
                 or isinstance(self.node2, GroundNode)
