@@ -1,5 +1,3 @@
-import sys
-
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QApplication,
@@ -26,6 +24,7 @@ from PySide6.QtWidgets import (
 
 from PySide6.QtGui import QFontMetrics
 
+import sys
 from pathlib import Path
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
@@ -41,8 +40,6 @@ class NodeItem(QGraphicsEllipseItem):
 
     def __init__(self, node_instance):
         self.node = node_instance
-        # self.x = self.node.position[0] # X
-        # self.y = self.node.position[1] # Y
 
         self.node_radius = 25.0
         self.node_fill_colour = QColor(226, 170, 243)
@@ -70,15 +67,6 @@ class NodeItem(QGraphicsEllipseItem):
         self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
         self.selectionRectangle.setVisible(False)
 
-    # def update_node_radius(self, node_radius_new):
-    #     self.prepareGeometryChange()
-    #     return
-
-    # def update_node_name(self, node_name_new):
-    #     self.prepareGeometryChange()
-    #     self.node.update("name", node_name_new)
-    #     return
-
     def paint(self, painter, option, parent):
         # Paint the node instance - called by QGraphicView instance
         boundingRect = self.boundingRect()
@@ -99,49 +87,42 @@ class NodeItem(QGraphicsEllipseItem):
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
 
         print("paint called")
-
         return
-
-    def itemChange(self, change, value):
-        # Called by scene when item changes
-
-        # if change == self.ItemPositionHasChanged:
-        # Redraw all arcs connected to node
-
-        return super().itemChange(change, value)
 
     def mousePressEvent(self, event):
         # Handler for mousePressEvent
+        self.prepareGeometryChange()
         mousePos = event.pos()
         self.selectionRectangle.setVisible(True)
         print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        self.update()
+        # self.update()
         return
 
     def mouseReleaseEvent(self, event):
         # Handler for mouseReleaseEvent
+        self.prepareGeometryChange()
         mousePos = event.pos()
         self.selectionRectangle.setVisible(False)
         print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        self.update()
+        # self.update()
         return
 
     def mouseMoveEvent(self, event):
         # Handler for mouseMoveEvent
+        self.prepareGeometryChange()
         scenePosition = event.scenePos()
         self.node.position[0] = scenePosition.x()
         self.node.position[1] = scenePosition.y()
-
-        self.prepareGeometryChange()
         self.setPos(scenePosition)
         print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-        self.update()
+        # self.update()
         return
 
     def mouseDoubleClickEvent(self, event):
         # Handler for mouseDoubleClickEvent
+        self.prepareGeometryChange()
         print("node item double clicked")
-        self.update()
+        # self.update()
         return
 
     def setPos(self, pos):
@@ -157,9 +138,7 @@ class DirectedGraphMainWindow(QMainWindow):
 
         self.scene = QGraphicsScene(0, 0, 500, 500, self)
 
-        node1 = Node(None, None, "node1", None, [200, 200])
-        nodeitem1 = NodeItem(node1)
-        self.scene.addItem(nodeitem1)
+        self.scene.addItem(NodeItem(Node(None, None, "node1", None, [200, 200])))
         self.scene.addItem(NodeItem(Node(None, None, None, None, [100, 100])))
 
         self.view = QGraphicsView(self.scene)
