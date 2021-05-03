@@ -9,7 +9,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 
-class GraphElement:
+class GraphComponent:
     def __init__(self, parent_graph=None, uid=None, name=None, colour=None):
         self.parent_graph = parent_graph
         self.uid = None
@@ -26,13 +26,13 @@ class GraphElement:
         else:
             if old_uid == None:
                 new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                while new_uid in self.parent_graph.elements:
+                while new_uid in self.parent_graph.components:
                     new_uid = uuid.uuid4().hex[:UID_LENGTH]
                     self.uid = new_uid
                 self.uid = new_uid
                 return new_uid
             else:
-                if old_uid not in self.parent_graph.elements:
+                if old_uid not in self.parent_graph.components:
                     self.uid = old_uid
                     return old_uid
                 else:
@@ -42,7 +42,7 @@ class GraphElement:
                         "Try to reassign UID...",
                     )
                     new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                    while new_uid in self.parent_graph.elements:
+                    while new_uid in self.parent_graph.components:
                         new_uid = uuid.uuid4().hex[:UID_LENGTH]
                         self.uid = new_uid
                     self.uid = new_uid
@@ -50,11 +50,11 @@ class GraphElement:
 
     # .get(): return all
     # .get("name") return name
-    def get(self, element_attribute=None):
-        if element_attribute == None:
+    def get(self, component_attribute=None):
+        if component_attribute == None:
             return vars(self)
         else:
-            return vars(self).get(element_attribute, None)
+            return vars(self).get(component_attribute, None)
 
     def get_parent_graph(self):
         return self.parent_graph
@@ -70,11 +70,11 @@ class GraphElement:
 
     # .update(name)
     # #TODO 需要设计 Trace Back 捕捉
-    def update(self, element_attribute, element_attribute_new):
-        self.element_attribute = element_attribute_new
+    def update(self, component_attribute, component_attribute_new):
+        self.component_attribute = component_attribute_new
 
 
-class Node(GraphElement):
+class Node(GraphComponent):
     def __init__(
         self,
         parent_graph=None,
@@ -92,12 +92,12 @@ class Node(GraphElement):
         return self.position
 
     # .update(position, [10, 10])
-    def update(self, element_attribute, element_attribute_new):
-        if element_attribute == "position":
-            self.position[0] = element_attribute_new[0]
-            self.position[1] = element_attribute_new[1]
+    def update(self, component_attribute, component_attribute_new):
+        if component_attribute == "position":
+            self.position[0] = component_attribute_new[0]
+            self.position[1] = component_attribute_new[1]
         else:
-            return super().update(element_attribute, element_attribute_new)
+            return super().update(component_attribute, component_attribute_new)
 
     # .update_position([10, 10])
     def update_position(self, position):
@@ -152,7 +152,7 @@ class GroundNode(Node):
         return GroundNode.groundnode_counter
 
 
-class Arc(GraphElement):
+class Arc(GraphComponent):
     def __init__(
         self,
         parent_graph=None,
@@ -188,14 +188,14 @@ class Arc(GraphElement):
         if node1 is not None:
             if isinstance(node1, str):
                 if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_element(node1))
+                    self.nodes.append(self.parent_graph.get_component(node1))
             elif isinstance(node1, Node) or issubclass(node1, Node):
                 self.nodes.append(node1)
 
         if node2 is not None:
             if isinstance(node2, str) and self.parent_graph != None:
                 if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_element(node2))
+                    self.nodes.append(self.parent_graph.get_component(node2))
             elif isinstance(node2, Node) or issubclass(node2, Node):
                 self.nodes.append(node2)
 
@@ -254,7 +254,7 @@ class Arc(GraphElement):
 
 
 if __name__ == "__main__":
-    from tests.test_dgcore_graphelement import *  # import Test Case
+    from tests.test_dgcore_graphcomponent import *  # import Test Case
 
     test_arc_init_case_1()
     test_arc_init_case_2()
