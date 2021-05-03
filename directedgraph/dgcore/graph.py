@@ -25,7 +25,8 @@ class Graph:
     def update_name(self, name):
         self.name = name
 
-    def verify_graph_integrity(self):  # #TODO
+    # #TODO
+    def verify_graph_integrity(self):
         groundnode_counter = 0
         for key in self.components:
             if self.components[key]["type"] == "GroundNode":
@@ -61,7 +62,8 @@ class Graph:
         # print(vars(self.components[uid])) # 可以返回对象也可以返回字典
         return self.components[uid]
 
-    def create_component(self, parameters):  # #TODO 按参数里的字典新建组件
+    # #TODO 按参数里的字典新建组件
+    def create_component(self, parameters):
         if parameters.get("type", None) == "Node":
             component = Node(
                 self,
@@ -135,7 +137,8 @@ class Graph:
             if len(node2) == 12 and self.parent_graph == self:
                 self.get_component["arc1"].update_position(node1, node2)
 
-    def delete_component(self, uid):  # #TODO 需要写误删除逻辑
+    # #TODO 需要写误删除逻辑
+    def delete_component(self, uid):
         if uid in self.components:
             self.components.pop(uid)
             return True
@@ -147,4 +150,4 @@ if __name__ == "__main__":
     import unittest
     from tests.test_dgcore import TestGraph
 
-    unittest.main()
+    unittest.main()  # Run Unit tests
