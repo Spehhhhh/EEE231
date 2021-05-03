@@ -206,11 +206,10 @@ class Arc(GraphElement):
     # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
     # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
     def get_function(self):
-        if self.user_define_attribute.lower() == "resistance":
-            if isinstance(self.node1, str) or isinstance(self.node2, str):
-                raise ArcfunctionError("You must enter an Object!!")
-
-            elif isinstance(self.node1, Node) and isinstance(self.node2, SourceNode) or isinstance(self.node2,
+        if self.user_define_attribute==None:
+            return
+        elif self.user_define_attribute.lower() == "resistance":
+            if isinstance(self.node1, Node) and isinstance(self.node2, SourceNode) or isinstance(self.node2,
                                                                                                    GroundNode):
                 return abs(self.node1.value - int(self.node2.user_defined_attribute)) / self.value
 
@@ -225,6 +224,7 @@ class Arc(GraphElement):
 
         elif self.user_define_attribute.lower() == "diode":
             pass
+
 
     # function['resistance']=(V_i - V)j) / R.
     def update_function(self, name):
