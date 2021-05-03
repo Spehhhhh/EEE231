@@ -10,7 +10,7 @@ from PySide6.QtWidgets import QMenuBar, QMenu
 from PySide6.QtWidgets import QToolBar, QStatusBar
 from PySide6.QtWidgets import QFileDialog, QMessageBox
 
-from PySide6.QtCore import Qt, QPointF, QRectF
+from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush
 from PySide6.QtWidgets import (
     QGraphicsScene,
@@ -98,6 +98,23 @@ class NodeItem(QGraphicsEllipseItem):
         # self.update()
         return
 
+    # def eventFilter(self, source, event):
+
+    #     if event.type() == QEvent.MouseButtonPress:
+    #         print(source)
+    #     # if QMouseEvent.button() == Qt.LeftButton:
+    #     #     mousePos = QMouseEvent.pos()
+    #     #     self.selectionRectangle.setVisible(True)
+    #     #     print("Left Button Clicked")
+    #     #     print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
+    #     #     # self.update()
+    #     #     return
+    #     # elif QMouseEvent.button() == Qt.RightButton:
+    #     #     print("Right Button Clicked")
+    #     #     QMenu
+    #     #     return
+    #     return super().eventFilter(source, event)
+
     def mouseReleaseEvent(self, event):
         # Handler for mouseReleaseEvent
         self.prepareGeometryChange()
@@ -121,7 +138,8 @@ class NodeItem(QGraphicsEllipseItem):
     def mouseDoubleClickEvent(self, event):
         # Handler for mouseDoubleClickEvent
         self.prepareGeometryChange()
-        print("node item double clicked")
+        # self.setVisible(False)
+        print("mouseDoubleClickEvent")
         # self.update()
         return
 
@@ -138,9 +156,6 @@ class DirectedGraphMainWindow(QMainWindow):
 
         self.scene = QGraphicsScene(0, 0, 500, 500, self)
 
-        self.scene.addItem(NodeItem(Node(None, None, "node1", None, [200, 200])))
-        self.scene.addItem(NodeItem(Node(None, None, None, None, [100, 100])))
-
         self.view = QGraphicsView(self.scene)
         self.view.resize(1000, 1000)
         self.view.setRenderHints(QPainter.Antialiasing)
@@ -152,11 +167,38 @@ class DirectedGraphMainWindow(QMainWindow):
         self.widget.setLayout(self.layout)
         self.setCentralWidget(self.widget)
 
+        self.init_graph()
+
+    def init_graph(self):
+        self.scene.addItem(NodeItem(Node(None, None, "node1", None, [200, 200])))
+        self.scene.addItem(NodeItem(Node(None, None, None, None, [100, 100])))
+        test = NodeItem(Node(None, None, None, None, [300, 300]))
+        self.scene.addItem(test)
+
+        menu = QMenu()
+        menu.addAction("Action 1")
+        menu.addAction("Action 2")
+        menu.addAction("Action 3")
+        menu.exec_()
+        self.scene.addItem(menu)
+
+    def event_filter(self, source, event):
+        pass
+
+
+class DirectedGraphApplication:
+    def __init__(self):
+        app = QApplication([])
+        mainwindow = DirectedGraphMainWindow()
+        mainwindow.show()
+        sys.exit(app.exec_())
+
+    def main(self):
+        pass
+
+    def quit(self):
+        pass
+
 
 if __name__ == "__main__":
-    app = QApplication([])
-
-    mainwindow = DirectedGraphMainWindow()
-    mainwindow.show()
-
-    sys.exit(app.exec_())
+    app = DirectedGraphApplication()
