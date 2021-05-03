@@ -1,12 +1,13 @@
 import uuid
 import sys
 from pathlib import Path
-from directedgraph.dgcore.excp import ArcfunctionError
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
+
+from directedgraph.dgcore import excp
 
 
 class GraphComponent:
