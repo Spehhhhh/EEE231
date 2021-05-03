@@ -1,7 +1,6 @@
 import uuid
 import sys
 from pathlib import Path
-from directedgraph.dgcore.excp import ArcfunctionError
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
@@ -253,7 +252,7 @@ class Arc(GraphComponent):
 
 
 if __name__ == "__main__":
-    from tests.test_dgcore_graphelement import *  # import Test Case
+    from tests.test_dgcore_graphcomponent import *  # import Test Case
 
     test_arc_init_case_1()
     test_arc_init_case_2()
