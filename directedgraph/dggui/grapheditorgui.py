@@ -26,21 +26,32 @@ from PySide6.QtWidgets import (
 
 from PySide6.QtGui import QFontMetrics
 
+from pathlib import Path
+
+print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
+current_folder = Path(__file__).absolute().parent.parent
+father_folder = str(current_folder.parent)
+sys.path.append(father_folder)
+
+from directedgraph.dgcore import Node
+
 
 class NodeItem(QGraphicsEllipseItem):
     # Global Config
-    # Naughty! Should not embed magic constants
-    node_radius = 25.0
-    node_fill_colour = QColor(226, 170, 243)
-    node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-    node_fill_brush.setColor(node_fill_colour)
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self, node_instance):
+        self.node = node_instance
+        self.x = self.node.position[0]
+        self.y = self.node.position[1]
+
+        self.node_radius = 25.0
+        self.node_fill_colour = QColor(226, 170, 243)
+        self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
+        self.node_fill_brush.setColor(self.node_fill_colour)
+
         bounding_shape = QRectF(
-            x - self.node_radius,
-            y - self.node_radius,
+            self.x - self.node_radius,
+            self.y - self.node_radius,
             2.0 * self.node_radius,
             2.0 * self.node_radius,
         )
@@ -59,6 +70,9 @@ class NodeItem(QGraphicsEllipseItem):
         self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
         self.selectionRectangle.setVisible(False)
 
+    def update_node_radius(self, node_radius_new):
+        self.n
+
 
 class DirectedGraphMainWindow(QMainWindow):
     def __init__(self):
@@ -66,8 +80,11 @@ class DirectedGraphMainWindow(QMainWindow):
         self.setWindowTitle("EEE231 Group B Program")
 
         self.scene = QGraphicsScene(0, 0, 500, 500, self)
-        node1 = NodeItem(200, 200)
-        self.scene.addItem(node1)
+
+        node1 = Node(None, None, "node1", None, [10, 10])
+        node1.update_position([100, 100])
+        nodeitem1 = NodeItem(node1)
+        self.scene.addItem(nodeitem1)
 
         self.view = QGraphicsView(self.scene)
         self.view.resize(1000, 1000)
