@@ -76,12 +76,12 @@ class GraphElement:
 
 class Node(GraphElement):
     def __init__(
-            self,
-            parent_graph=None,
-            uid=None,
-            name=None,
-            colour=None,
-            position=None,
+        self,
+        parent_graph=None,
+        uid=None,
+        name=None,
+        colour=None,
+        position=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.position = position if position else [0, 0]
@@ -110,13 +110,13 @@ class Node(GraphElement):
 
 class SourceNode(Node):
     def __init__(
-            self,
-            parent_graph=None,
-            uid=None,
-            name=None,
-            colour=None,
-            position=None,
-            user_defined_attribute=None,
+        self,
+        parent_graph=None,
+        uid=None,
+        name=None,
+        colour=None,
+        position=None,
+        user_defined_attribute=None,
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = (
@@ -131,12 +131,12 @@ class GroundNode(Node):
     groundnode_counter = 0
 
     def __init__(
-            self,
-            parent_graph=None,
-            uid=None,
-            name=None,
-            colour=None,
-            position=None,
+        self,
+        parent_graph=None,
+        uid=None,
+        name=None,
+        colour=None,
+        position=None,
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
@@ -154,15 +154,15 @@ class GroundNode(Node):
 
 class Arc(GraphElement):
     def __init__(
-            self,
-            parent_graph=None,
-            uid=None,
-            name=None,
-            colour=None,
-            node1=None,
-            node2=None,
-            user_define_attribute=None,
-            value=None
+        self,
+        parent_graph=None,
+        uid=None,
+        name=None,
+        colour=None,
+        node1=None,
+        node2=None,
+        user_define_attribute=None,
+        value=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
@@ -210,18 +210,39 @@ class Arc(GraphElement):
             if isinstance(self.node1, str) or isinstance(self.node2, str):
                 raise ArcfunctionError("You must enter an Object!!")
 
-            elif isinstance(self.node1, Node) and isinstance(self.node2, SourceNode) or isinstance(self.node2,
-                                                                                                   GroundNode):
-                return abs(self.node1.value - int(self.node2.user_defined_attribute)) / self.value
+            elif (
+                isinstance(self.node1, Node)
+                and isinstance(self.node2, SourceNode)
+                or isinstance(self.node2, GroundNode)
+            ):
+                return (
+                    abs(self.node1.value - int(self.node2.user_defined_attribute))
+                    / self.value
+                )
 
-            elif isinstance(self.node1, SourceNode) or isinstance(self.node1, GroundNode) and isinstance(self.node2,
-                                                                                                         Node):
-                return abs(int(self.node1.user_defined_attribute) - int(self.node2.value)) / self.value
+            elif (
+                isinstance(self.node1, SourceNode)
+                or isinstance(self.node1, GroundNode)
+                and isinstance(self.node2, Node)
+            ):
+                return (
+                    abs(int(self.node1.user_defined_attribute) - int(self.node2.value))
+                    / self.value
+                )
 
-            elif isinstance(self.node1, SourceNode) or isinstance(self.node1, GroundNode) and isinstance(self.node2,
-                                                                                                         GroundNode) or isinstance(
-                    self.node2, SourceNode):
-                return abs(int(self.node1.user_defined_attribute) - int(self.node2.user_defined_attribute)) / self.value
+            elif (
+                isinstance(self.node1, SourceNode)
+                or isinstance(self.node1, GroundNode)
+                and isinstance(self.node2, GroundNode)
+                or isinstance(self.node2, SourceNode)
+            ):
+                return (
+                    abs(
+                        int(self.node1.user_defined_attribute)
+                        - int(self.node2.user_defined_attribute)
+                    )
+                    / self.value
+                )
 
         elif self.user_define_attribute.lower() == "diode":
             pass
