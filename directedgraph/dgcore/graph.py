@@ -7,30 +7,29 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import GraphComponent, Node, SourceNode, GroundNode, Arc
-from directedgraph.dgcore import excp
 
 
 class Graph:
     def __init__(self, name=None):
         self.name = name if name else "Untitled"
         self.components = {}
-        # #TODO 可以优化速度，除了 UID 之外，还有什么经常调用的可以放到外层。
 
     def print_graph_details(self):
         print("------------------")
         print("Graph vars(self):")
         print(vars(self))
-        # attrs = vars(self)
-        # print(", ".join("%s: %s" % item for item in attrs.items()))
         print("------------------")
         print("Graph Components:")
-        for component in self.components:  # #TODO 改成从 Value 遍历，不然性能损耗很大。
+        for (
+            component_uid,
+            component,
+        ) in self.components.items():
             print(
                 "UID:",
-                self.components[component].uid,
+                component.uid,
                 "|",
                 "Name:",
-                self.components[component].name,
+                component.name,
             )
 
     def get(self):
@@ -112,9 +111,9 @@ class Graph:
     def update_component_colour(self, uid, colour):
         self.components[uid].colour = colour
 
-    # update_arc_position(uid, uid, uid)
-    # update_arc_position(uid, node1, node2)
-    # update_arc_position(arc, node1, node2)
+    # def update_arc_position(uid, uid, uid):
+    # def update_arc_position(uid, node1, node2):
+    # def update_arc_position(arc1, node1, node2):
     def update_arc_position(self, arc1, node1, node2):
         if isinstance(arc1, Arc):
             arc1.update_position(node1, node2)
@@ -129,7 +128,7 @@ class Graph:
         else:
             return False
 
-    def verify_graph_integrity(self):
+    def verify_graph_integrity(self):  # #TODO
         groundnode_counter = 0
         for key in self.components:
             if self.components[key]["type"] == "GroundNode":
@@ -141,4 +140,7 @@ class Graph:
 
 
 if __name__ == "__main__":
-    pass
+    import unittest
+    from tests.test_dgcore import TestGraph
+
+    unittest.main()
