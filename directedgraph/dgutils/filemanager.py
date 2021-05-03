@@ -18,7 +18,7 @@ class FileManager:
         for attribute in attributes:
             try:
                 temp[attribute] = (
-                    component.getComponentsByTagName(attribute)[0].childNodes[0].data
+                    component.getElementsByTagName(attribute)[0].childNodes[0].data
                 )
             except IndexError:
                 pass
@@ -31,8 +31,8 @@ class FileManager:
 
         # Get Graph Name
         graph_name = (
-            dom1.getComponentsByTagName("Graph")[0]
-            .getComponentsByTagName("name")[0]
+            dom1.getElementsByTagName("Graph")[0]
+            .getElementsByTagName("name")[0]
             .childNodes[0]
             .data
         )
@@ -40,7 +40,7 @@ class FileManager:
 
         # Get Graph components
         for component_type in type_list:
-            components = dom1.getComponentsByTagName(component_type)
+            components = dom1.getElementsByTagName(component_type)
             for component in components:
                 temp = {}
                 temp["type"] = component_type
