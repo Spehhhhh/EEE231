@@ -11,7 +11,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import (
-    GraphElement,
+    GraphComponent,
     Graph,
     Node,
     SourceNode,
@@ -48,32 +48,34 @@ class TestGraph(unittest.TestCase):
     @logger.catch
     def test_id(self):
         graph1 = Graph("graph1")
-        graph1.create_element({"type": "Node", "name": "Node without UID"})
-        graph1.create_element({"type": "Node", "name": "Node 1", "uid": "7778da0a0a0a"})
+        graph1.create_component({"type": "Node", "name": "Node without UID"})
+        graph1.create_component(
+            {"type": "Node", "name": "Node 1", "uid": "7778da0a0a0a"}
+        )
 
         graph2 = Graph("graph2")
 
-        self.assertEqual(graph2.elements, {})
-        self.assertEqual(len(graph1.elements), 2)
+        self.assertEqual(graph2.components, {})
+        self.assertEqual(len(graph1.components), 2)
 
     @logger.catch
-    def test_insert_element(self):
+    def test_insert_component(self):
         graph1 = Graph("graph1")
 
         node1 = Node(graph1, "b911b214f553", "node1")
-        graph1.insert_element(node1)
+        graph1.insert_component(node1)
         node2 = Node(graph1, "9a2812943a39", "node2")
-        graph1.insert_element(node2)
+        graph1.insert_component(node2)
 
-        self.assertEqual(len(graph1.elements), 2)
-        self.assertEqual(graph1.get_element("b911b214f553"), node1)
-        self.assertEqual(graph1.get_element("b911b214f553").name, "node1")
-        self.assertEqual(graph1.get_element("9a2812943a39").parent_graph, graph1)
+        self.assertEqual(len(graph1.components), 2)
+        self.assertEqual(graph1.get_component("b911b214f553"), node1)
+        self.assertEqual(graph1.get_component("b911b214f553").name, "node1")
+        self.assertEqual(graph1.get_component("9a2812943a39").parent_graph, graph1)
 
     @logger.catch
-    def test_create_element(self):
+    def test_create_component(self):
         graph1 = Graph("graph1")
-        graph1.create_element(
+        graph1.create_component(
             {
                 "type": "Node",
                 "name": "node1",
@@ -83,14 +85,14 @@ class TestGraph(unittest.TestCase):
             }
         )
 
-        self.assertEqual(graph1.get_element("b911b214f553").name, "node1")
-        # self.assertEqual(type(graph1.get_element("b911b214f553")), Node)
-        self.assertIsInstance(graph1.get_element("b911b214f553"), Node)
+        self.assertEqual(graph1.get_component("b911b214f553").name, "node1")
+        # self.assertEqual(type(graph1.get_component("b911b214f553")), Node)
+        self.assertIsInstance(graph1.get_component("b911b214f553"), Node)
 
-        graph1.create_element(
+        graph1.create_component(
             {"type": "GroundNode", "name": "groundnode", "uid": "9a2812943a39"}
         )
-        graph1.create_element(
+        graph1.create_component(
             {
                 "type": "Arc",
                 "name": "arc1",
@@ -100,7 +102,7 @@ class TestGraph(unittest.TestCase):
             }
         )
         self.assertEqual(
-            graph1.get_element("7778da0a0a0a").get_position(), ([10, 5], [0, 0])
+            graph1.get_component("7778da0a0a0a").get_position(), ([10, 5], [0, 0])
         )
 
     @logger.catch
@@ -173,48 +175,48 @@ class TestGraph(unittest.TestCase):
             )
         )
         self.assertEqual(graph1.name, "graph1")
-        self.assertEqual(graph1.get_element("b7c567add4ff").name, "arc1")
-        self.assertEqual(len(graph1.elements), 8)
+        self.assertEqual(graph1.get_component("b7c567add4ff").name, "arc1")
+        self.assertEqual(len(graph1.components), 8)
 
     @logger.catch
-    def test_generate_element_uid(self):
+    def test_generate_component_uid(self):
         graph1 = Graph("graph1")
-        graph1.create_element({"type": "Node", "name": "Node without UID 1"})
-        graph1.create_element({"type": "Node", "name": "Node without UID 2"})
-        graph1.create_element(
+        graph1.create_component({"type": "Node", "name": "Node without UID 1"})
+        graph1.create_component({"type": "Node", "name": "Node without UID 2"})
+        graph1.create_component(
             {"type": "Node", "name": "Node with UID", "uid": "7778da0a0a0a"}
         )
-        graph1.create_element(
+        graph1.create_component(
             {"type": "Node", "name": "Node with duplicate UID", "uid": "7778da0a0a0a"}
         )
 
-        self.assertEqual(len(graph1.elements), 4)
+        self.assertEqual(len(graph1.components), 4)
 
     @logger.catch
     def test_error(self):
-        # graph1.create_element({"type": "Arc", "name": "Arc 1", "uid": "7778da0a0a0a"})
-        # graph1.create_element({"name": "Fooo", "uid": "7778da0a0a0a"})
+        # graph1.create_component({"type": "Arc", "name": "Arc 1", "uid": "7778da0a0a0a"})
+        # graph1.create_component({"name": "Fooo", "uid": "7778da0a0a0a"})
         pass
 
     @logger.catch
     def test_query_and_delete(self):
         # print("---Init---")
         graph1 = Graph("graph1")
-        graph1.create_element({"type": "Node", "name": "Node without UID 1"})
-        graph1.create_element({"type": "Node", "name": "Node without UID 2"})
-        graph1.create_element({"type": "Node", "name": "Foo", "uid": "7778da0a0a0a"})
-        graph1.create_element({"type": "Node", "uid": "32a24bfcfefe"})
-        self.assertEqual(len(graph1.elements), 4)
+        graph1.create_component({"type": "Node", "name": "Node without UID 1"})
+        graph1.create_component({"type": "Node", "name": "Node without UID 2"})
+        graph1.create_component({"type": "Node", "name": "Foo", "uid": "7778da0a0a0a"})
+        graph1.create_component({"type": "Node", "uid": "32a24bfcfefe"})
+        self.assertEqual(len(graph1.components), 4)
 
         # print("---Try Get Node---")
-        self.assertEqual(graph1.get_element("7778da0a0a0a").name, "Foo")
-        self.assertEqual(graph1.get_element("32a24bfcfefe").name, "Untitled")
+        self.assertEqual(graph1.get_component("7778da0a0a0a").name, "Foo")
+        self.assertEqual(graph1.get_component("32a24bfcfefe").name, "Untitled")
 
         # print("---Try Delete---")
-        self.assertTrue(graph1.delete_element("32a24bfcfefe"))
-        self.assertFalse(graph1.delete_element("32a24bfcfefe"))
-        self.assertFalse(graph1.delete_element("31233"))
-        self.assertEqual(len(graph1.elements), 3)
+        self.assertTrue(graph1.delete_component("32a24bfcfefe"))
+        self.assertFalse(graph1.delete_component("32a24bfcfefe"))
+        self.assertFalse(graph1.delete_component("31233"))
+        self.assertEqual(len(graph1.components), 3)
 
     @logger.catch
     def test_graph_efficiency(self):

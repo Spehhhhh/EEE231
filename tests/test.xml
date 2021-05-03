@@ -3,7 +3,7 @@
     <Graph>
         <name>graph1</name>
     </Graph>
-    <Element>
+    <Component>
         <Node uid="7778da0a0a0a">
             <name>node1</name>
             <colour>#FFFFFF</colour>
@@ -49,5 +49,5 @@
             <node1>365bb94004f2</node1>
             <node2>3d8cc5a3ce64</node2>
         </Arc>
-    </Element>
+    </Component>
 </DirectedGraph>
