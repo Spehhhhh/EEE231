@@ -41,8 +41,8 @@ class NodeItem(QGraphicsEllipseItem):
 
     def __init__(self, node_instance):
         self.node = node_instance
-        self.x = self.node.position[0]
-        self.y = self.node.position[1]
+        # self.x = self.node.position[0] # X
+        # self.y = self.node.position[1] # Y
 
         self.node_radius = 25.0
         self.node_fill_colour = QColor(226, 170, 243)
@@ -50,8 +50,8 @@ class NodeItem(QGraphicsEllipseItem):
         self.node_fill_brush.setColor(self.node_fill_colour)
 
         bounding_shape = QRectF(
-            self.x - self.node_radius,
-            self.y - self.node_radius,
+            self.node.position[0] - self.node_radius,
+            self.node.position[1] - self.node_radius,
             2.0 * self.node_radius,
             2.0 * self.node_radius,
         )
@@ -71,7 +71,13 @@ class NodeItem(QGraphicsEllipseItem):
         self.selectionRectangle.setVisible(False)
 
     def update_node_radius(self, node_radius_new):
-        self.n
+        self.prepareGeometryChange()
+        return
+
+    def update_node_name(self, node_name_new):
+        self.prepareGeometryChange()
+        self.node.update("name", node_name_new)
+        return
 
 
 class DirectedGraphMainWindow(QMainWindow):
@@ -81,10 +87,10 @@ class DirectedGraphMainWindow(QMainWindow):
 
         self.scene = QGraphicsScene(0, 0, 500, 500, self)
 
-        node1 = Node(None, None, "node1", None, [10, 10])
-        node1.update_position([100, 100])
+        node1 = Node(None, None, "node1", None, [200, 200])
         nodeitem1 = NodeItem(node1)
         self.scene.addItem(nodeitem1)
+        self.scene.addItem(NodeItem(Node(None, None, "node1", None, [100, 100])))
 
         self.view = QGraphicsView(self.scene)
         self.view.resize(1000, 1000)
