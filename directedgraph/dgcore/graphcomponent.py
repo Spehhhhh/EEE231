@@ -252,8 +252,7 @@ class Arc(GraphComponent):
 
 
 if __name__ == "__main__":
-    from tests.test_dgcore_graphcomponent import *  # import Test Case
+    import unittest
+    from tests.test_dgcore_graphcomponent import TestGraphComponent
 
-    test_arc_init_case_1()
-    test_arc_init_case_2()
-    pass
+    unittest.main()
