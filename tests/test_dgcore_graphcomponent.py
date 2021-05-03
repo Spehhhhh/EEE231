@@ -120,14 +120,7 @@ def test_arc_function():
     graph1.create_component({"type": "Node", "name": "Node 2", "uid": "7778da0a0a0a"})
     # graph1.print_graph_details()
     arc2 = Arc(
-        graph1,
-        "123",
-        None,
-        "arc2",
-        "859e4b2ec309",
-        "7778da0a0a0a",
-        "resistance",
-        5
+        graph1, "123", None, "arc2", "859e4b2ec309", "7778da0a0a0a", "resistance", 5
     )
     arc2.get_function()
     print(arc2.get())
@@ -139,4 +132,4 @@ def test_arc_function():
 #     # test_arc_init_case_1()
 #     # test_arc_init_case_2()
 #     test_arc_function()
-    # unittest.main()
+# unittest.main()
