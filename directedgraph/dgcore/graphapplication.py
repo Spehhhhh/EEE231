@@ -67,4 +67,10 @@ if __name__ == "__main__":
     #         number=10,
     #     )
     # )
-    pass
+    test_1()
+    test_2()
+
+    import unittest
+    from tests.test_dgcore_graphapplication import TestDirectedGraphApplication
+
+    unittest.main()

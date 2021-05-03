@@ -18,34 +18,34 @@ class GraphComponent:
 
     # If the instance does not have a UID, a UID is generated.
     # If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
-    def generate_uid(self, old_uid=None):
+    def generate_uid(self, uid_old=None):
         UID_LENGTH = 12
         if self.parent_graph == None:
             self.uid = uuid.uuid4().hex[:UID_LENGTH]
         else:
-            if old_uid == None:
-                new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                while new_uid in self.parent_graph.components:
-                    new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                    self.uid = new_uid
-                self.uid = new_uid
-                return new_uid
+            if uid_old == None:
+                uid_new = uuid.uuid4().hex[:UID_LENGTH]
+                while uid_new in self.parent_graph.components:
+                    uid_new = uuid.uuid4().hex[:UID_LENGTH]
+                    self.uid = uid_new
+                self.uid = uid_new
+                return uid_new
             else:
-                if old_uid not in self.parent_graph.components:
-                    self.uid = old_uid
-                    return old_uid
+                if uid_old not in self.parent_graph.components:
+                    self.uid = uid_old
+                    return uid_old
                 else:
                     print(
                         "Error: Duplicate uid occurs",
-                        old_uid,
+                        uid_old,
                         "Try to reassign UID...",
                     )
-                    new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                    while new_uid in self.parent_graph.components:
-                        new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                        self.uid = new_uid
-                    self.uid = new_uid
-                    return new_uid
+                    uid_new = uuid.uuid4().hex[:UID_LENGTH]
+                    while uid_new in self.parent_graph.components:
+                        uid_new = uuid.uuid4().hex[:UID_LENGTH]
+                        self.uid = uid_new
+                    self.uid = uid_new
+                    return uid_new
 
     # .get(): return all
     # .get("name") return name
@@ -125,6 +125,9 @@ class SourceNode(Node):
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
 
+    def update_user_defined_attribute(self, user_defined_attribute_new):
+        self.user_defined_attribute = user_defined_attribute_new
+
 
 class GroundNode(Node):
     groundnode_counter = 0
@@ -141,14 +144,14 @@ class GroundNode(Node):
         self.user_defined_attribute = "0"
         GroundNode.groundnode_counter += 1
 
+    def get_groundnode_counter(self):
+        return GroundNode.groundnode_counter
+
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
 
-    def update_user_defined_attribute(self, user_defined_attribute_new):
-        self.user_defined_attribute = user_defined_attribute_new
-
-    def check_groundnode_counter(self):
-        return GroundNode.groundnode_counter
+    def update_user_defined_attribute(self):
+        return False  # groundnote user_defined_attribute cannot be modified
 
 
 class Arc(GraphComponent):
@@ -252,8 +255,7 @@ class Arc(GraphComponent):
 
 
 if __name__ == "__main__":
-    from tests.test_dgcore_graphcomponent import *  # import Test Case
+    import unittest
+    from tests.test_dgcore_graphcomponent import TestGraphComponent
 
-    test_arc_init_case_1()
-    test_arc_init_case_2()
-    pass
+    unittest.main()
