@@ -14,6 +14,27 @@ class Graph:
         self.name = name if name else "Untitled"
         self.components = {}
 
+    # Control Graph()
+
+    def get(self):
+        return True
+
+    def get_name(self):
+        return self.name
+
+    def update_name(self, name):
+        self.name = name
+
+    def verify_graph_integrity(self):  # #TODO
+        groundnode_counter = 0
+        for key in self.components:
+            if self.components[key]["type"] == "GroundNode":
+                groundnode_counter += 1
+        if groundnode_counter != 1:
+            return False
+        else:
+            return True
+
     def print_graph_details(self):
         print("------------------")
         print("Graph vars(self):")
@@ -32,14 +53,7 @@ class Graph:
                 component.name,
             )
 
-    def get(self):
-        return True
-
-    def get_name(self):
-        return self.name
-
-    def update_name(self, name):
-        self.name = name
+    # Control GraphComponent()
 
     def get_component(self, uid):
         # print(self.components[uid].get_name())
@@ -127,16 +141,6 @@ class Graph:
             return True
         else:
             return False
-
-    def verify_graph_integrity(self):  # #TODO
-        groundnode_counter = 0
-        for key in self.components:
-            if self.components[key]["type"] == "GroundNode":
-                groundnode_counter += 1
-        if groundnode_counter != 1:
-            return False
-        else:
-            return True
 
 
 if __name__ == "__main__":
