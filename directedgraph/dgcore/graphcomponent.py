@@ -147,6 +147,12 @@ class GroundNode(Node):
     def get_groundnode_counter(self):
         return GroundNode.groundnode_counter
 
+    def get_user_defined_attribute(self):
+        return self.user_defined_attribute
+
+    def update_user_defined_attribute(self):
+        return False  # groundnote user_defined_attribute cannot be modified
+
 
 class Arc(GraphComponent):
     def __init__(
