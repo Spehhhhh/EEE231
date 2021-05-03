@@ -1,4 +1,8 @@
 import sys
+import time
+import timeit
+import itertools
+import unittest
 from pathlib import Path
 from loguru import logger
 
@@ -10,34 +14,55 @@ from directedgraph.dgcore import (
     GraphComponent,
     Graph,
     Node,
-    GroundNode,
     SourceNode,
+    GroundNode,
     Arc,
     create_graph,
 )
 
-
-def test_get():
-    component1 = GraphComponent()
-    print(vars(component1))
-    print(component1.get())
-    print(component1.get("name"))
-
-
-def test_node_position():
-    # node1 = Node(None, None, None, None, [1, 2])
-    node1 = Node()
-    print(node1.get())
-    node1.update_position([0, 9])
-    print(node1.get("position"))
-    print(node1.get_position())
+logger.add(
+    "logs/test_dgcore_graphcomponent.py.log",
+    level="DEBUG",
+    format="{time:YYYY-MM-DD :mm:ss} - {level} - {file} - {line} - {message}",
+    rotation="10 MB",
+)
+logger.info("Start Log")
 
 
-def test_groundnode():
-    groundnode1 = GroundNode()
-    print(groundnode1.get())
-    sourcenode1 = SourceNode(None, None, "sourcenode1", None, [2, 3], "abc")
-    print(sourcenode1.get())
+class TestGraph(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        pass
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    @logger.catch
+    def test_get(self):
+        component1 = GraphComponent()
+        self.assertEqual(vars(component1), component1.get())
+        self.assertEqual(component1.get("name"), "Untitled")
+
+    @logger.catch
+    def test_node_position(self):
+        # node1 = Node(None, None, None, None, [1, 2])
+        node1 = Node()
+        node1.update_position([0, 9])
+        self.assertEqual(node1.get("position"), [0, 9])
+
+    @logger.catch
+    def test_groundnode_sourcenode(self):
+        groundnode1 = GroundNode()
+        self.assertEqual(groundnode1.get("user_defined_attribute"), "0")
+        sourcenode1 = SourceNode(None, None, "sourcenode1", None, [2, 3], "foo")
+        self.assertEqual(sourcenode1.get("user_defined_attribute"), "foo")
 
 
 # pass  node as uid
@@ -106,6 +131,7 @@ def test_arc_function():
 
 
 if __name__ == "__main__":
+    # test_arc_init_case_1()
     # test_arc_init_case_2()
-    test_arc_function()
-    pass
+    # test_arc_function()
+    unittest.main()
