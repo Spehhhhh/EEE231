@@ -88,8 +88,8 @@ def test_arc_function():
     from directedgraph.dgcore.graph import Graph
 
     graph1 = Graph("graph1")
-    graph1.create_element({"type": "Node", "name": "Node 1", "uid": "859e4b2ec309"})
-    graph1.create_element({"type": "Node", "name": "Node 2", "uid": "7778da0a0a0a"})
+    graph1.create_element({"type": "SourceNode", "name": "Node 1", "uid": "859e4b2ec309"})
+    graph1.create_element({"type": "GroundNode", "name": "Node 2", "uid": "7778da0a0a0a"})
     # graph1.print_graph_details()
     arc2 = Arc(
         graph1,
@@ -98,8 +98,13 @@ def test_arc_function():
         "arc2",
         "859e4b2ec309",
         "7778da0a0a0a",
+        "resistance",
+        5
     )
     arc2.get_function()
+    print(arc2.get())
+    arc2.update_function("resistance")
+    print(arc2.get())
 
 if __name__ == "__main__":
     # test_arc_init_case_2()
