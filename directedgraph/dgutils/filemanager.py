@@ -14,11 +14,11 @@ class FileManager:
         # self.link_graph = None
         pass
 
-    def parse_attribute(self, element, temp, attributes):
+    def parse_attribute(self, component, temp, attributes):
         for attribute in attributes:
             try:
                 temp[attribute] = (
-                    element.getElementsByTagName(attribute)[0].childNodes[0].data
+                    component.getElementsByTagName(attribute)[0].childNodes[0].data
                 )
             except IndexError:
                 pass
@@ -26,7 +26,7 @@ class FileManager:
     def read_graph(self, filepath):
         dom1 = minidom.parse(filepath)
         graph_attribute = []
-        graph_elements = []
+        graph_components = []
         type_list = ["Node", "SourceNode", "GroundNode", "Arc"]
 
         # Get Graph Name
@@ -38,31 +38,31 @@ class FileManager:
         )
         graph_attribute.append({"name": graph_name})
 
-        # Get Graph elements
-        for element_type in type_list:
-            elements = dom1.getElementsByTagName(element_type)
-            for element in elements:
+        # Get Graph components
+        for component_type in type_list:
+            components = dom1.getElementsByTagName(component_type)
+            for component in components:
                 temp = {}
-                temp["type"] = element_type
-                temp["uid"] = element.getAttribute("uid")
+                temp["type"] = component_type
+                temp["uid"] = component.getAttribute("uid")
 
-                self.parse_attribute(element, temp, ["name", "colour"])
-                if element_type == "Node":
-                    self.parse_attribute(element, temp, ["position_x", "position_y"])
-                elif element_type == "SourceNode":
+                self.parse_attribute(component, temp, ["name", "colour"])
+                if component_type == "Node":
+                    self.parse_attribute(component, temp, ["position_x", "position_y"])
+                elif component_type == "SourceNode":
                     self.parse_attribute(
-                        element,
+                        component,
                         temp,
                         ["position_x", "position_y", "user_defined_attribute"],
                     )
-                elif element_type == "GroundNode":
-                    self.parse_attribute(element, temp, ["position_x", "position_y"])
-                elif element_type == "Arc":
-                    self.parse_attribute(element, temp, ["node1", "node2"])
-                graph_elements.append(temp)
+                elif component_type == "GroundNode":
+                    self.parse_attribute(component, temp, ["position_x", "position_y"])
+                elif component_type == "Arc":
+                    self.parse_attribute(component, temp, ["node1", "node2"])
+                graph_components.append(temp)
 
         # Return Data as Tuple
-        graph = (graph_attribute, graph_elements)
+        graph = (graph_attribute, graph_components)
         return graph
 
     def save_graph(self, filepath, graph):

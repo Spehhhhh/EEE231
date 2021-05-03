@@ -8,7 +8,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 
-class GraphElement:
+class GraphComponent:
     def __init__(self, parent_graph=None, uid=None, name=None, colour=None):
         self.parent_graph = parent_graph
         self.uid = None
@@ -18,34 +18,34 @@ class GraphElement:
 
     # If the instance does not have a UID, a UID is generated.
     # If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
-    def generate_uid(self, old_uid=None):
+    def generate_uid(self, uid_old=None):
         UID_LENGTH = 12
         if self.parent_graph == None:
             self.uid = uuid.uuid4().hex[:UID_LENGTH]
         else:
-            if old_uid == None:
-                new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                while new_uid in self.parent_graph.elements:
-                    new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                    self.uid = new_uid
-                self.uid = new_uid
-                return new_uid
+            if uid_old == None:
+                uid_new = uuid.uuid4().hex[:UID_LENGTH]
+                while uid_new in self.parent_graph.components:
+                    uid_new = uuid.uuid4().hex[:UID_LENGTH]
+                    self.uid = uid_new
+                self.uid = uid_new
+                return uid_new
             else:
-                if old_uid not in self.parent_graph.elements:
-                    self.uid = old_uid
-                    return old_uid
+                if uid_old not in self.parent_graph.components:
+                    self.uid = uid_old
+                    return uid_old
                 else:
                     print(
                         "Error: Duplicate uid occurs",
-                        old_uid,
+                        uid_old,
                         "Try to reassign UID...",
                     )
-                    new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                    while new_uid in self.parent_graph.elements:
-                        new_uid = uuid.uuid4().hex[:UID_LENGTH]
-                        self.uid = new_uid
-                    self.uid = new_uid
-                    return new_uid
+                    uid_new = uuid.uuid4().hex[:UID_LENGTH]
+                    while uid_new in self.parent_graph.components:
+                        uid_new = uuid.uuid4().hex[:UID_LENGTH]
+                        self.uid = uid_new
+                    self.uid = uid_new
+                    return uid_new
 
     # .get(): return all
     # .get("name") return name
@@ -73,7 +73,7 @@ class GraphElement:
         self.element_attribute = element_attribute_new
 
 
-class Node(GraphElement):
+class Node(GraphComponent):
     def __init__(
         self,
         parent_graph=None,
@@ -84,6 +84,8 @@ class Node(GraphElement):
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.position = position if position else [0, 0]
+        # it won't get any value which can be obtained from the simulator
+        self.value = 0
 
     def get_position(self):
         return self.position
@@ -100,6 +102,9 @@ class Node(GraphElement):
     def update_position(self, position):
         self.position[0] = position[0]
         self.position[1] = position[1]
+
+    def get_value(self):
+        return self.value
 
 
 class SourceNode(Node):
@@ -120,6 +125,9 @@ class SourceNode(Node):
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
 
+    def update_user_defined_attribute(self, user_defined_attribute_new):
+        self.user_defined_attribute = user_defined_attribute_new
+
 
 class GroundNode(Node):
     groundnode_counter = 0
@@ -136,17 +144,17 @@ class GroundNode(Node):
         self.user_defined_attribute = "0"
         GroundNode.groundnode_counter += 1
 
+    def get_groundnode_counter(self):
+        return GroundNode.groundnode_counter
+
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
 
-    def update_user_defined_attribute(self, user_defined_attribute_new):
-        self.user_defined_attribute = user_defined_attribute_new
-
-    def check_groundnode_counter(self):
-        return GroundNode.groundnode_counter
+    def update_user_defined_attribute(self):
+        return False  # groundnote user_defined_attribute cannot be modified
 
 
-class Arc(GraphElement):
+class Arc(GraphComponent):
     def __init__(
         self,
         parent_graph=None,
@@ -155,15 +163,25 @@ class Arc(GraphElement):
         colour=None,
         node1=None,
         node2=None,
+        user_define_attribute=None,
+        value=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
+        self.node1 = node1
+        self.node2 = node2
         self.update_position(node1, node2)
+        self.user_define_attribute = user_define_attribute
+        self.function = {}
+        self.value = value
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
     def get_position(self):
         return (self.nodes[0].get_position(), self.nodes[1].get_position())
+
+    def update_value(self, data):
+        self.attribute_value = data
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
@@ -172,21 +190,72 @@ class Arc(GraphElement):
         if node1 is not None:
             if isinstance(node1, str):
                 if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_element(node1))
+                    self.nodes.append(self.parent_graph.get_component(node1))
             elif isinstance(node1, Node) or issubclass(node1, Node):
                 self.nodes.append(node1)
 
         if node2 is not None:
             if isinstance(node2, str) and self.parent_graph != None:
                 if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_element(node2))
+                    self.nodes.append(self.parent_graph.get_component(node2))
             elif isinstance(node2, Node) or issubclass(node2, Node):
                 self.nodes.append(node2)
 
+    def update_user_define_attribute(self, new_user_define_attribute):
+        self.user_define_attribute = new_user_define_attribute
+
+    # get editable function,eg: if Take a resistance.
+    # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
+    # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
+    def get_function(self):
+        if self.user_define_attribute == None:
+            return
+        elif self.user_define_attribute.lower() == "resistance":
+            if (
+                isinstance(self.node1, Node)
+                and isinstance(self.node2, SourceNode)
+                or isinstance(self.node2, GroundNode)
+            ):
+                return (
+                    abs(self.node1.value - int(self.node2.user_defined_attribute))
+                    / self.value
+                )
+
+            elif (
+                isinstance(self.node1, SourceNode)
+                or isinstance(self.node1, GroundNode)
+                and isinstance(self.node2, Node)
+            ):
+                return (
+                    abs(int(self.node1.user_defined_attribute) - int(self.node2.value))
+                    / self.value
+                )
+
+            elif (
+                isinstance(self.node1, SourceNode)
+                or isinstance(self.node1, GroundNode)
+                and isinstance(self.node2, GroundNode)
+                or isinstance(self.node2, SourceNode)
+            ):
+                return (
+                    abs(
+                        int(self.node1.user_defined_attribute)
+                        - int(self.node2.user_defined_attribute)
+                    )
+                    / self.value
+                )
+
+        elif self.user_define_attribute.lower() == "diode":
+            pass
+
+    # function['resistance']=(V_i - V)j) / R.
+    def update_function(self, name):
+        function_update = self.get_function()
+        self.function[name] = function_update
+
 
 if __name__ == "__main__":
-    from tests.test_dgcore_graphelement import *  # import Test Case
+    import unittest
+    from tests.test_dgcore_graphcomponent import TestGraphComponent
 
-    test_arc_init_case_1()
-    test_arc_init_case_2()
-    pass
+    unittest.main()

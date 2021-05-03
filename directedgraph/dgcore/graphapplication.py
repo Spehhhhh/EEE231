@@ -27,7 +27,7 @@ class DirectedGraphApplication:
 def create_graph(graph_raw_data):
     new_graph = Graph(graph_raw_data[0][0].get("name"))
     for item in graph_raw_data[1]:
-        new_graph.create_element(item)
+        new_graph.create_component(item)
     return new_graph
 
 
@@ -39,12 +39,12 @@ def load_graph(path):
 
 def test_1():
     graph_attribute = [{"name": "graph1"}]
-    graph_elements = [
+    graph_components = [
         {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
         {"type": "Node", "name": "node2", "uid": "32a24bfcfefe"},
         {"type": "Node", "uid": "32a24bfcfefe"},
     ]
-    graph_raw_data = (graph_attribute, graph_elements)
+    graph_raw_data = (graph_attribute, graph_components)
     graph1 = create_graph(graph_raw_data)
     graph1.print_graph_details()
 
@@ -67,4 +67,10 @@ if __name__ == "__main__":
     #         number=10,
     #     )
     # )
-    pass
+    test_1()
+    test_2()
+
+    import unittest
+    from tests.test_dgcore_graphapplication import TestDirectedGraphApplication
+
+    unittest.main()
