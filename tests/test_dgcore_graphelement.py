@@ -16,6 +16,8 @@ from directedgraph.dgcore import (
 )
 
 from directedgraph.dgcore.graphcomponent import GraphComponent
+
+
 def test_get():
     element1 = GraphComponent()
     print(vars(element1))
