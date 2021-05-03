@@ -175,12 +175,12 @@ class DirectedGraphMainWindow(QMainWindow):
         test = NodeItem(Node(None, None, None, None, [300, 300]))
         self.scene.addItem(test)
 
-        menu = QMenu()
-        menu.addAction("Action 1")
-        menu.addAction("Action 2")
-        menu.addAction("Action 3")
-        menu.exec_()
-        self.scene.addItem(menu)
+        # menu = QMenu()
+        # menu.addAction("Action 1")
+        # menu.addAction("Action 2")
+        # menu.addAction("Action 3")
+        # menu.exec_()
+        # self.scene.addItem(menu)
 
     def event_filter(self, source, event):
         pass
