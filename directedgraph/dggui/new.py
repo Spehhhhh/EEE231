@@ -317,6 +317,7 @@ class MainWindow(QMainWindow):
         self.mainWidget = QWidget()
         self.mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(self.mainWidget)
+        self.graphicsView.setRenderHints(QPainter.Antialiasing)
 
 
 if __name__ == "__main__":
