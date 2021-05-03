@@ -6,15 +6,21 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import GraphComponent, Node, SourceNode, GroundNode, Arc
+from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc
 
 
 class Graph:
+    """
+    init Graph()
+    """
+
     def __init__(self, name=None):
         self.name = name if name else "Untitled"
         self.components = {}
 
-    # Control Graph()
+    """
+    Control Graph()
+    """
 
     def get(self):
         return True
@@ -54,7 +60,9 @@ class Graph:
                 component.name,
             )
 
-    # Control GraphComponent()
+    """
+    Control GraphComponent()
+    """
 
     def get_component(self, uid):
         # print(self.components[uid].get_name())
