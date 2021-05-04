@@ -6,32 +6,21 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import GraphComponent, Node, SourceNode, GroundNode, Arc
-from directedgraph.dgcore import excp
+from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc
 
 
 class Graph:
+    """
+    init Graph()
+    """
+
     def __init__(self, name=None):
         self.name = name if name else "Untitled"
         self.components = {}
-        # #TODO 可以优化速度，除了 UID 之外，还有什么经常调用的可以放到外层。
 
-    def print_graph_details(self):
-        print("------------------")
-        print("Graph vars(self):")
-        print(vars(self))
-        # attrs = vars(self)
-        # print(", ".join("%s: %s" % item for item in attrs.items()))
-        print("------------------")
-        print("Graph Components:")
-        for component in self.components:  # #TODO 改成从 Value 遍历，不然性能损耗很大。
-            print(
-                "UID:",
-                self.components[component].uid,
-                "|",
-                "Name:",
-                self.components[component].name,
-            )
+    """
+    Control Graph()
+    """
 
     def get(self):
         return True
@@ -42,13 +31,47 @@ class Graph:
     def update_name(self, name):
         self.name = name
 
+    # #TODO
+    def verify_graph_integrity(self):
+        groundnode_counter = 0
+        for key in self.components:
+            if self.components[key]["type"] == "GroundNode":
+                groundnode_counter += 1
+        if groundnode_counter != 1:
+            return False
+        else:
+            return True
+
+    def print_graph_details(self):
+        print("------------------")
+        print("Graph vars(self):")
+        print(vars(self))
+        print("------------------")
+        print("Graph Components:")
+        for (
+            component_uid,
+            component,
+        ) in self.components.items():
+            print(
+                "UID:",
+                component.uid,
+                "|",
+                "Name:",
+                component.name,
+            )
+
+    """
+    Control GraphComponent()
+    """
+
     def get_component(self, uid):
         # print(self.components[uid].get_name())
         # print("parent_graph:", self.components[uid].get_parent_graph())
         # print(vars(self.components[uid])) # 可以返回对象也可以返回字典
         return self.components[uid]
 
-    def create_component(self, parameters):  # #TODO 按参数里的字典新建组件
+    # #TODO 按参数里的字典新建组件
+    def create_component(self, parameters):
         if parameters.get("type", None) == "Node":
             component = Node(
                 self,
@@ -112,9 +135,9 @@ class Graph:
     def update_component_colour(self, uid, colour):
         self.components[uid].colour = colour
 
-    # update_arc_position(uid, uid, uid)
-    # update_arc_position(uid, node1, node2)
-    # update_arc_position(arc, node1, node2)
+    # def update_arc_position(uid, uid, uid):
+    # def update_arc_position(uid, node1, node2):
+    # def update_arc_position(arc1, node1, node2):
     def update_arc_position(self, arc1, node1, node2):
         if isinstance(arc1, Arc):
             arc1.update_position(node1, node2)
@@ -122,23 +145,17 @@ class Graph:
             if len(node2) == 12 and self.parent_graph == self:
                 self.get_component["arc1"].update_position(node1, node2)
 
-    def delete_component(self, uid):  # #TODO 需要写误删除逻辑
+    # #TODO 需要写误删除逻辑
+    def delete_component(self, uid):
         if uid in self.components:
             self.components.pop(uid)
             return True
         else:
             return False
 
-    def verify_graph_integrity(self):
-        groundnode_counter = 0
-        for key in self.components:
-            if self.components[key]["type"] == "GroundNode":
-                groundnode_counter += 1
-        if groundnode_counter != 1:
-            return False
-        else:
-            return True
-
 
 if __name__ == "__main__":
-    pass
+    import unittest
+    from tests.test_dgcore import TestGraph
+
+    unittest.main()  # Run Unit tests

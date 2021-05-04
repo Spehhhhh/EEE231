@@ -68,8 +68,8 @@ The attributes can also be updated by using method `update()`.
 ### `GraphComponent()` Methods
 
 - `generate_uid(self, old_id=None)`
-  - parameter: old_uid, data type:string
-  - return type: return new uid if old_id is None oterhwise return new_uid
+  - parameter: uid_old, data type:string
+  - return type: return new uid if old_id is None oterhwise return uid_new
 - `get(self, component_attribute=None)`
   - parameter: component_attribute data_type:string
   - return type: dictonary type of component
@@ -96,16 +96,16 @@ logic for `generate_uid()`:
 if self.parent_graph is None then 
     self.uid = uuid.uuid4().hex[:12] #automatically generate 12 bits uid
 else:
-    if old_uid is None:
-        check whether old_uid is in the corresponding graph or not in case it is repeated
+    if uid_old is None:
+        check whether uid_old is in the corresponding graph or not in case it is repeated
     if it is not in the corresponding graph then assign old uid to object's uid,otherwise send notification 'There is a duplicate':
 
-    new_uid = uuid.uuid4().hex[:12]
+    uid_new = uuid.uuid4().hex[:12]
     # check whether new  id is in the corresponding graph
-    while new_uid in self.parent_graph.components:
-        new_uid = uuid.uuid4().hex[:12]
-        self.uid = new_uid
-    self.uid = new_uid
+    while uid_new in self.parent_graph.components:
+        uid_new = uuid.uuid4().hex[:12]
+        self.uid = uid_new
+    self.uid = uid_new
 ```
 ## `Node()`
 
