@@ -6,6 +6,10 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QVBoxLayout,
     QWidget,
+    QLineEdit,
+    QPushButton,
+    QDialog,
+    QLabel
 )
 from PySide6.QtWidgets import QMenuBar, QMenu
 from PySide6.QtWidgets import QToolBar, QStatusBar
@@ -372,7 +376,35 @@ class SourceNodeItem(QGraphicsEllipseItem):
         bounding = self.boundingRect()
         offset = bounding.center()
         super().setPos(pos - offset)
-class DirectedGraphMainWindow(QMainWindow):
+
+class Input(QDialog,QMainWindow):
+    def __init__(self, parent=None):
+        super(Input, self).__init__(parent)
+        self.setWindowTitle("Input source node value")
+        self.edit = QLineEdit(self)
+        self.edit.placeholderText()
+        self.button = QPushButton("confirm")
+        layout = QVBoxLayout()
+        layout.addWidget(self.edit)
+        layout.addWidget(self.button)
+        # Set dialog layout
+        self.setLayout(layout)
+        # Add button signal to greetings slot
+        self.button.clicked.connect(self.confirm)
+
+    def confirm(self):
+        try:
+            return float(self.edit.text())
+        except ValueError:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("You have to enter a number!!")
+            msg.show()
+            msg.exec_()
+            return
+
+
+class DirectedGraphMainWindow(QMainWindow,QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("GUI editor")
@@ -475,9 +507,18 @@ class DirectedGraphMainWindow(QMainWindow):
                 GroundNodeItem(GroundNode(None, None, "groundnode1", None, [500, 300]))
             )
     def on_sourcenode(self):
+        form=Input()
+        form.show()
+        form.exec_()
+        value=str(form.confirm())
+        print("value:",value)
         self.scene.addItem(
-            SourceNodeItem(SourceNode(None, None, "sourcenode1", None, [250, 300]))
+            SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         )
+
+
+
+
 
     def init_graph(self):
         self.scene.addItem(NodeItem(Node(None, None, "node1", None, [200, 200])))
