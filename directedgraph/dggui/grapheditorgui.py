@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QDialog,
-    QLabel
+    QLabel,
 )
 from PySide6.QtWidgets import QMenuBar, QMenu
 from PySide6.QtWidgets import QToolBar, QStatusBar
@@ -265,6 +265,7 @@ class GroundNodeItem(QGraphicsEllipseItem):
         offset = bounding.center()
         super().setPos(pos - offset)
 
+
 class SourceNodeItem(QGraphicsEllipseItem):
     # Global Config
 
@@ -377,7 +378,8 @@ class SourceNodeItem(QGraphicsEllipseItem):
         offset = bounding.center()
         super().setPos(pos - offset)
 
-class Input(QDialog,QMainWindow):
+
+class Input(QDialog, QMainWindow):
     def __init__(self, parent=None):
         super(Input, self).__init__(parent)
         self.setWindowTitle("Input source node value")
@@ -404,7 +406,7 @@ class Input(QDialog,QMainWindow):
             return
 
 
-class DirectedGraphMainWindow(QMainWindow,QDialog):
+class DirectedGraphMainWindow(QMainWindow, QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("GUI editor")
@@ -506,19 +508,16 @@ class DirectedGraphMainWindow(QMainWindow,QDialog):
             self.scene.addItem(
                 GroundNodeItem(GroundNode(None, None, "groundnode1", None, [500, 300]))
             )
+
     def on_sourcenode(self):
-        form=Input()
+        form = Input()
         form.show()
         form.exec_()
-        value=str(form.confirm())
-        print("value:",value)
+        value = str(form.confirm())
+        print("value:", value)
         self.scene.addItem(
             SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         )
-
-
-
-
 
     def init_graph(self):
         self.scene.addItem(NodeItem(Node(None, None, "node1", None, [200, 200])))
