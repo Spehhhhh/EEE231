@@ -62,6 +62,7 @@ class G_Node(QGraphicsEllipseItem):
             True
         )  # Make the node accpect the Hover event (让鼠标可以更改指针)
 
+        
         # ============== Set Some Node Text ================
         self.textItem = QGraphicsSimpleTextItem("0", self)
         rect = self.textItem.boundingRect()
@@ -70,6 +71,7 @@ class G_Node(QGraphicsEllipseItem):
 
     # =============== Set some Node Text ================
 
+    
     # ================================================================ Mouse Event (鼠标相关) ==========================================================================================
     # mouse hover event
     # # This method is used to change the Cursor when the mouse has been point to the node
