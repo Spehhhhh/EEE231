@@ -45,7 +45,6 @@ from PySide6.QtWidgets import (
 # = 鼠标可以正常使用
 # ====================================================================
 
-
 class G_Node(QGraphicsEllipseItem):
     def __init__(self, x, y, r):
         super().__init__(0, 0, r, r)
@@ -61,9 +60,10 @@ class G_Node(QGraphicsEllipseItem):
         self.setAcceptHoverEvents(
             True
         )  # Make the node accpect the Hover event (让鼠标可以更改指针)
+        
 
         # ============== Set Some Node Text ================
-        self.textItem = QGraphicsSimpleTextItem("G/0", self)
+        self.textItem = QGraphicsSimpleTextItem("0", self)
         rect = self.textItem.boundingRect()
         rect.moveCenter(self.boundingRect().center())
         self.textItem.setPos(rect.topLeft())
@@ -111,6 +111,36 @@ class G_Node(QGraphicsEllipseItem):
     def mouseReleaseEvent(self, event):
         # print x,y coordinate when release the mouse (click)
         print("x: {0}, y: {1}".format(self.pos().x(), self.pos().y()))
+    
+    def contextMenuEvent(self, event):
+        #Pop up menu for Node
+        popmenu = QMenu()
+
+        #Name
+        nameaction = QAction("Name")
+        popmenu.addAction(nameaction)
+        #nameaction.triggered.connect()
+
+        #Colour
+        colouraction = QAction("Colour")
+        popmenu.addAction(colouraction)
+        #colouraction.triggered.connect()
+
+        #Value
+        valueaction = QAction("Value")
+        popmenu.addAction(valueaction)
+        #valueaction.triggered.connect()
+
+        popmenu.addSeparator()
+
+        #Delete
+        deleteaction = QAction("Delete")
+        popmenu.addAction(deleteaction)
+        #deleteaction.triggered.connect()
+
+        #Excute at node Position, so it won't collide with Main windows pop-up menu
+        popmenu.exec_(event.screenPos())
+
 
     # ====================================================================== 鼠标相关 =========================================================================================
 
@@ -130,7 +160,10 @@ class S_Node(QGraphicsEllipseItem):
         self.setAcceptHoverEvents(
             True
         )  # Make the node accpect the Hover event (让鼠标可以更改指针)
-
+        
+        #Moveable and Selectable
+        self.setFlags(QGraphicsItem.ItemIsSelectable|QGraphicsItem.ItemIsMovable)
+        
         # ============== Set Some Node Text ================
         self.textItem = QGraphicsSimpleTextItem("V", self)
         rect = self.textItem.boundingRect()
@@ -181,6 +214,35 @@ class S_Node(QGraphicsEllipseItem):
         # print x,y coordinate when release the mouse (click)
         print("x: {0}, y: {1}".format(self.pos().x(), self.pos().y()))
 
+    
+    def contextMenuEvent(self, event):
+        #Pop up menu for Node
+        popmenu = QMenu()
+
+        #Name
+        nameaction = QAction("Name")
+        popmenu.addAction(nameaction)
+        #nameaction.triggered.connect()
+
+        #Colour
+        colouraction = QAction("Colour")
+        popmenu.addAction(colouraction)
+        #colouraction.triggered.connect()
+
+        #Value
+        valueaction = QAction("Value")
+        popmenu.addAction(valueaction)
+        #valueaction.triggered.connect()
+
+        popmenu.addSeparator()
+
+        #Delete
+        deleteaction = QAction("Delete")
+        popmenu.addAction(deleteaction)
+        #deleteaction.triggered.connect()
+
+        #Excute at node Position, so it won't collide with Main windows pop-up menu
+        popmenu.exec_(event.screenPos())
     # ====================================================================== 鼠标相关 =========================================================================================
 
 
@@ -201,7 +263,7 @@ class I_Node(QGraphicsEllipseItem):
         )  # Make the node accpect the Hover event (让鼠标可以更改指针)
 
         # ============== Set Some Node Text ================
-        self.textItem = QGraphicsSimpleTextItem("TEXT?", self)
+        self.textItem = QGraphicsSimpleTextItem("I", self)
         rect = self.textItem.boundingRect()
         rect.moveCenter(self.boundingRect().center())
         self.textItem.setPos(rect.topLeft())
@@ -249,7 +311,35 @@ class I_Node(QGraphicsEllipseItem):
     def mouseReleaseEvent(self, event):
         # print x,y coordinate when release the mouse (click)
         print("x: {0}, y: {1}".format(self.pos().x(), self.pos().y()))
+    
+    def contextMenuEvent(self, event):
+        #Pop up menu for Node
+        popmenu = QMenu()
 
+        #Name
+        nameaction = QAction("Name")
+        popmenu.addAction(nameaction)
+        #nameaction.triggered.connect()
+
+        #Colour
+        colouraction = QAction("Colour")
+        popmenu.addAction(colouraction)
+        #colouraction.triggered.connect()
+
+        #Value
+        valueaction = QAction("Value")
+        popmenu.addAction(valueaction)
+        #valueaction.triggered.connect()
+
+        popmenu.addSeparator()
+
+        #Delete
+        deleteaction = QAction("Delete")
+        popmenu.addAction(deleteaction)
+        #deleteaction.triggered.connect()
+
+        #Excute at node Position, so it won't collide with Main windows pop-up menu
+        popmenu.exec_(event.screenPos())
     # ====================================================================== Mouse Event (鼠标相关) =========================================================================================
 
 
@@ -259,41 +349,50 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("GUI Editor")
         self.mainLayout = QVBoxLayout()
+  
+
 
         # ====================================================================================
         #      All from Example.py       but all tiggered is disabled
         # Setup menu bar & File menu
         self.fileMenu = self.menuBar().addMenu("&File")
         self.openMenuAction = self.fileMenu.addAction("&Open")
-        # self.openMenuAction.triggered.connect(self.on_open_action)
+        #self.openMenuAction.triggered.connect(self.on_open_action)
+        self.fileMenu.addSeparator()
+        self.fileMenuAction = self.fileMenu.addAction("&Save")
+        self.fileMenu.addSeparator()
+        self.fileMenuAction = self.fileMenu.addAction("&Save As")
         self.fileMenu.addSeparator()
         self.quitMenuAction = self.fileMenu.addAction("&Quit")
-        # self.quitMenuAction.triggered.connect(self.on_quit_action)
+        #self.quitMenuAction.triggered.connect(self.on_quit_action)
 
         # Setup Tools menu
         self.toolsMenu = self.menuBar().addMenu("&Tools")
         self.preferencesMenuAction = self.toolsMenu.addAction("&Preferences")
-        # self.preferencesMenuAction.triggered.connect(self.on_preferences_action)
+        #self.preferencesMenuAction.triggered.connect(self.on_preferences_action)
 
         # Setup About menu
         self.aboutMenu = self.menuBar().addMenu("&About")
         self.aboutMenuAction = self.aboutMenu.addAction("&About")
-        # self.aboutMenuAction.triggered.connect(self.on_about_action)
+        #self.aboutMenuAction.triggered.connect(self.on_about_action)
 
         # Create main toolbar
         self.mainToolBar = QToolBar()
         self.mainToolBar.setMovable(False)
         self.newToolButton = self.mainToolBar.addAction("New")
-        self.openToolButton = self.mainToolBar.addAction("Open")
-        # self.openToolButton.triggered.connect(self.on_open_action)
-        self.saveToolButton = self.mainToolBar.addAction("Save")
-        self.saveAsToolButton = self.mainToolBar.addAction("Save As")
+        self.newToolButton = self.mainToolBar.addAction("Insert")
+        self.newToolButton = self.mainToolBar.addAction("Zoom In")
+        self.newToolButton = self.mainToolBar.addAction("Zoom Out")
+        #self.openToolButton.triggered.connect(self.on_open_action)
+        #self.openToolButton.triggered.connect(self.on_insert_action)
+        #self.openToolButton.triggered.connect(self.on_insert_action)
         self.addToolBar(self.mainToolBar)
         self.mainLayout.addWidget(self.mainToolBar)
 
         # =======================================================================================
 
         self.graphicsscene = QGraphicsScene(0, 0, 500, 500, self)
+        
 
         # ==================================
         # Add items here
@@ -318,6 +417,21 @@ class MainWindow(QMainWindow):
         self.mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(self.mainWidget)
         self.graphicsView.setRenderHints(QPainter.Antialiasing)
+        
+        #Right click the blank Area to give some options for better interafce with User
+        #Might not needed 可能不需要
+    def contextMenuEvent(self, event):
+        contextmenu = QMenu(self)
+        newAction = contextmenu.addAction("New")
+        openAction = contextmenu.addAction("Open")
+        quirAction = contextmenu.addAction("Save")
+        quirAction = contextmenu.addAction("Copy")
+        quirAction = contextmenu.addAction("Past")
+        quirAction = contextmenu.addAction("Help...")
+
+        action = contextmenu.exec_(self.mapToGlobal(event.pos()))
+
+
 
 
 if __name__ == "__main__":
