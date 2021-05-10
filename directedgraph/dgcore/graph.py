@@ -1,5 +1,9 @@
+"""This module is Graph() Class."""
+
 import sys
 from pathlib import Path
+
+# from . import Node, SourceNode, GroundNode, Arc
 
 # Print status
 
@@ -12,6 +16,17 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc
+
+"""Gets and prints the spreadsheet's header columns
+
+Args:
+    file_loc (str): The file location of the spreadsheet
+    print_cols (bool): A flag used to print the columns to the console
+        (default is False)
+
+Returns:
+    list: a list of strings representing the header columns
+"""
 
 
 class Graph:
@@ -155,7 +170,8 @@ class Graph:
 
 
 if __name__ == "__main__":
-    import unittest
+    import unittest  # unittest
     from tests.test_dgcore import TestGraph  # Import Unit tests
 
+    TestGraph()
     unittest.main()  # Run tests
