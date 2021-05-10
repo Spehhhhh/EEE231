@@ -37,10 +37,10 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc
-from directedgraph.dgcore.excp import GroundNodeNumberException
+from directedgraph.dgcore import GroundNodeNumberException
 
 
-class NodeItem(QGraphicsEllipseItem, QWidget):
+class NodeItem(QGraphicsEllipseItem):
     # Global Config
 
     def __init__(self, node_instance):
@@ -66,6 +66,7 @@ class NodeItem(QGraphicsEllipseItem, QWidget):
         self.ItemIsSelectable = True
         self.ItemIsMovable = True
         self.ItemSendsGeometryChanges = True
+        self.setAcceptHoverEvents(True)  # Make the Node accpect the Hover Event
 
         # Create selection rectangle shown when node is selected
         self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
@@ -92,6 +93,20 @@ class NodeItem(QGraphicsEllipseItem, QWidget):
 
         print("paint called")
         return
+
+    # =========== Mouse Event =============================================================
+
+    def hoverEnterEvent(self, event):
+        # Override cursor shape into Openhand to indicate that drag is allowed
+        # also indicate that you have selected a node (read to move)
+        # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
+        app = QtWidgets.QApplication.instance()  # Obtain the Q application instance
+        app.instance().setOverrideCursor(Qt.OpenHandCursor)
+
+    def hoverLeaveEvent(self, event):
+        # This Method is used to change back the cursor when mouse is not point to the node
+        app = QtWidgets.QApplication.instance()  # Obtain the Q application instance
+        app.instance().restoreOverrideCursor()
 
     def mousePressEvent(self, event):
         # Handler for mousePressEvent
@@ -152,118 +167,35 @@ class NodeItem(QGraphicsEllipseItem, QWidget):
         offset = bounding.center()
         super().setPos(pos - offset)
 
+    # Pop Menu ==================================================================
+    def contextMenuEvent(self, event):
+        # Pop up menu for Node
+        popmenu = QMenu()
 
-class GroundNodeItem(QGraphicsEllipseItem):
-    # Global Config
+        # Name
+        nameaction = QAction("Name")
+        popmenu.addAction(nameaction)
+        # nameaction.triggered.connect()
 
-    def __init__(self, node_instance):
-        self.node = node_instance
-        self.node_radius = 40.0
-        self.node_fill_colour = QColor(255, 215, 0)
-        self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-        self.node_fill_brush.setColor(self.node_fill_colour)
+        # Colour
+        colouraction = QAction("Colour")
+        popmenu.addAction(colouraction)
+        # colouraction.triggered.connect()
 
-        bounding_shape = QRectF(
-            self.node.position[0] - self.node_radius,
-            self.node.position[1] - self.node_radius,
-            2.0 * self.node_radius,
-            2.0 * self.node_radius,
-        )
-        # Bounding rectangle of node 'ellipse' i.e. circle
-        super().__init__(bounding_shape)
+        # Value
+        valueaction = QAction("Value")
+        popmenu.addAction(valueaction)
+        # valueaction.triggered.connect()
 
-        self.setZValue(0)
-        self.setBrush(self.node_fill_brush)
+        popmenu.addSeparator()
 
-        # Set node attributes
-        self.ItemIsSelectable = True
-        self.ItemIsMovable = True
-        self.ItemSendsGeometryChanges = True
+        # Delete
+        deleteaction = QAction("Delete")
+        popmenu.addAction(deleteaction)
+        # deleteaction.triggered.connect()
 
-        # Create selection rectangle shown when node is selected
-        self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
-        self.selectionRectangle.setVisible(False)
-
-    def paint(self, painter, option, parent):
-        # Paint the node instance - called by QGraphicView instance
-        boundingRect = self.boundingRect()
-
-        if self.selectionRectangle.isVisible():
-            # Paint selection rectangle
-            painter.setPen(Qt.DashLine)
-            painter.setBrush(Qt.NoBrush)
-            self.selectionRectangle.setRect(boundingRect)
-            painter.drawRect(boundingRect)
-
-        # Paint node circle
-        painter.setBrush(self.node_fill_brush)
-        painter.drawEllipse(boundingRect)
-
-        # Paint node text
-        painter.setPen(Qt.black)
-        painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
-
-        print("paint called")
-        return
-
-    def mousePressEvent(self, event):
-        # Handler for mousePressEvent
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        self.selectionRectangle.setVisible(True)
-        print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        # self.update()
-        return
-
-    # def eventFilter(self, source, event):
-
-    #     if event.type() == QEvent.MouseButtonPress:
-    #         print(source)
-    #     # if QMouseEvent.button() == Qt.LeftButton:
-    #     #     mousePos = QMouseEvent.pos()
-    #     #     self.selectionRectangle.setVisible(True)
-    #     #     print("Left Button Clicked")
-    #     #     print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-    #     #     # self.update()
-    #     #     return
-    #     # elif QMouseEvent.button() == Qt.RightButton:
-    #     #     print("Right Button Clicked")
-    #     #     QMenu
-    #     #     return
-    #     return super().eventFilter(source, event)
-
-    def mouseReleaseEvent(self, event):
-        # Handler for mouseReleaseEvent
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        self.selectionRectangle.setVisible(False)
-        print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        # self.update()
-        return
-
-    def mouseMoveEvent(self, event):
-        # Handler for mouseMoveEvent
-        self.prepareGeometryChange()
-        scenePosition = event.scenePos()
-        self.node.position[0] = scenePosition.x()
-        self.node.position[1] = scenePosition.y()
-        self.setPos(scenePosition)
-        print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-        # self.update()
-        return
-
-    def mouseDoubleClickEvent(self, event):
-        # Handler for mouseDoubleClickEvent
-        self.prepareGeometryChange()
-        # self.setVisible(False)
-        print("mouseDoubleClickEvent")
-        # self.update()
-        return
-
-    def setPos(self, pos):
-        bounding = self.boundingRect()
-        offset = bounding.center()
-        super().setPos(pos - offset)
+        # Excute at node Position, so it won't collide with Main windows pop-up menu
+        popmenu.exec_(event.screenPos())
 
 
 class SourceNodeItem(QGraphicsEllipseItem):
@@ -282,6 +214,7 @@ class SourceNodeItem(QGraphicsEllipseItem):
             2.0 * self.node_radius,
             2.0 * self.node_radius,
         )
+
         # Bounding rectangle of node 'ellipse' i.e. circle
         super().__init__(bounding_shape)
 
@@ -292,6 +225,7 @@ class SourceNodeItem(QGraphicsEllipseItem):
         self.ItemIsSelectable = True
         self.ItemIsMovable = True
         self.ItemSendsGeometryChanges = True
+        self.setAcceptHoverEvents(True)  # Make the Node accpect the Hover Event
 
         # Create selection rectangle shown when node is selected
         self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
@@ -318,6 +252,158 @@ class SourceNodeItem(QGraphicsEllipseItem):
 
         print("paint called")
         return
+
+    # Mouse Event===================================================================
+    def hoverEnterEvent(self, event):
+        # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
+        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
+        app.instance().setOverrideCursor(Qt.OpenHandCursor)
+
+    def hoverLeaveEvent(self, event):
+        # Change back the cursor when mouse is not point to the node
+        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
+        app.instance().restoreOverrideCursor()
+
+    def mousePressEvent(self, event):
+        # Handler for mousePressEvent
+        self.prepareGeometryChange()
+        mousePos = event.pos()
+        self.selectionRectangle.setVisible(True)
+        print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
+        # self.update()
+        return
+
+    def mouseReleaseEvent(self, event):
+        # Handler for mouseReleaseEvent
+        self.prepareGeometryChange()
+        mousePos = event.pos()
+        self.selectionRectangle.setVisible(False)
+        print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
+        # self.update()
+        return
+
+    def mouseMoveEvent(self, event):
+        # Handler for mouseMoveEvent
+        self.prepareGeometryChange()
+        scenePosition = event.scenePos()
+        self.node.position[0] = scenePosition.x()
+        self.node.position[1] = scenePosition.y()
+        self.setPos(scenePosition)
+        print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
+        # self.update()
+        return
+
+    def mouseDoubleClickEvent(self, event):
+        # Handler for mouseDoubleClickEvent
+        self.prepareGeometryChange()
+        # self.setVisible(False)
+        print("mouseDoubleClickEvent")
+        # self.update()
+        return
+
+    def setPos(self, pos):
+        bounding = self.boundingRect()
+        offset = bounding.center()
+        super().setPos(pos - offset)
+
+    def contextMenuEvent(self, event):
+        # Pop up menu for Node
+        popmenu = QMenu()
+
+        # Name
+        nameaction = QAction("Name")
+        popmenu.addAction(nameaction)
+        # nameaction.triggered.connect()
+
+        # Colour
+        colouraction = QAction("Colour")
+        popmenu.addAction(colouraction)
+        # colouraction.triggered.connect()
+
+        # Value
+        valueaction = QAction("Value")
+        popmenu.addAction(valueaction)
+        # valueaction.triggered.connect()
+
+        popmenu.addSeparator()
+
+        # Delete
+        deleteaction = QAction("Delete")
+        popmenu.addAction(deleteaction)
+        # deleteaction.triggered.connect()
+
+        # Excute at node Position, so it won't collide with Main windows pop-up menu
+        popmenu.exec_(event.screenPos())
+
+
+class GroundNodeItem(QGraphicsEllipseItem):
+    # Global Config
+
+    def __init__(self, node_instance):
+        self.node = node_instance
+        self.node_radius = 40.0
+        self.node_fill_colour = QColor(255, 215, 0)
+        self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
+        self.node_fill_brush.setColor(self.node_fill_colour)
+
+        bounding_shape = QRectF(
+            self.node.position[0] - self.node_radius,
+            self.node.position[1] - self.node_radius,
+            2.0 * self.node_radius,
+            2.0 * self.node_radius,
+        )
+
+        # Bounding rectangle of node 'ellipse' i.e. circle
+        super().__init__(bounding_shape)
+
+        self.setZValue(0)
+        self.setBrush(self.node_fill_brush)
+
+        # Set node attributes
+        self.ItemIsSelectable = True
+        self.ItemIsMovable = True
+        self.ItemSendsGeometryChanges = True
+        self.setAcceptHoverEvents(True)  # Make the Node accpect the Hover Event
+
+        # Create selection rectangle shown when node is selected
+        self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
+        self.selectionRectangle.setVisible(False)
+
+    def paint(self, painter, option, parent):
+        # Paint the node instance - called by QGraphicView instance
+        boundingRect = self.boundingRect()
+
+        if self.selectionRectangle.isVisible():
+            # Paint selection rectangle
+            painter.setPen(Qt.DashLine)
+            painter.setBrush(Qt.NoBrush)
+            self.selectionRectangle.setRect(boundingRect)
+            painter.drawRect(boundingRect)
+
+        # Paint node circle
+        painter.setBrush(self.node_fill_brush)
+        painter.drawEllipse(boundingRect)
+
+        # Paint node text
+        painter.setPen(Qt.black)
+        painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
+
+        print("paint called")
+        return
+
+    # Mouse Event ===============================================================
+
+    # Override cursor shape into Openhand to indicate that drag is allowed,
+    # also indicate that you have selected a node (read to move)
+    def hoverEnterEvent(self, event):
+        # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
+        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
+        app.instance().setOverrideCursor(Qt.OpenHandCursor)
+
+    def hoverLeaveEvent(self, event):
+        # Change back the cursor when mouse is not point to the node
+        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
+        app.instance().restoreOverrideCursor()
 
     def mousePressEvent(self, event):
         # Handler for mousePressEvent
@@ -377,6 +463,41 @@ class SourceNodeItem(QGraphicsEllipseItem):
         bounding = self.boundingRect()
         offset = bounding.center()
         super().setPos(pos - offset)
+
+    # Pop Menu ==================================================================
+    def contextMenuEvent(self, event):
+        # Pop up menu for Node
+        popmenu = QMenu()
+
+        # Name
+        nameaction = QAction("Name")
+        popmenu.addAction(nameaction)
+        # nameaction.triggered.connect()
+
+        # Colour
+        colouraction = QAction("Colour")
+        popmenu.addAction(colouraction)
+        # colouraction.triggered.connect()
+
+        # Value
+        valueaction = QAction("Value")
+        popmenu.addAction(valueaction)
+        # valueaction.triggered.connect()
+
+        popmenu.addSeparator()
+
+        # Delete
+        deleteaction = QAction("Delete")
+        popmenu.addAction(deleteaction)
+        # deleteaction.triggered.connect()
+
+        # Excute at node Position, so it won't collide with Main windows pop-up menu
+        popmenu.exec_(event.screenPos())
+
+
+class ArcItem:
+    def __init__(self, arc_instance):
+        pass
 
 
 class Input(QDialog, QMainWindow):
@@ -409,34 +530,44 @@ class Input(QDialog, QMainWindow):
 class DirectedGraphMainWindow(QMainWindow, QDialog):
     def __init__(self):
         super().__init__()
+        # Title of the Windows
         self.setWindowTitle("GUI editor")
         self.ground_node_count = 0
+
+        # Initialise the QGraphicScene
         self.scene = QGraphicsScene(0, 0, 500, 500, self)
         self.view = QGraphicsView(self.scene)
+
         self.view.resize(1000, 1000)
         self.view.setRenderHints(QPainter.Antialiasing)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.view)
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
+
+        # Set up the Menu Bar============================================================
         self.fileMenu = self.menuBar().addMenu("&File")
+
         self.openMenuAction = self.fileMenu.addAction("&Open")
         self.openMenuAction.triggered.connect(self.on_open_action)  # New-style connect!
+
         self.fileMenu.addSeparator()
+
         self.quitMenuAction = self.fileMenu.addAction("&Quit")
         self.quitMenuAction.triggered.connect(self.on_quit_action)
-        # Setup Tools menu
+
+        # Setup Tools menu==============================================================
         self.toolsMenu = self.menuBar().addMenu("&Tools")
         self.preferencesMenuAction = self.toolsMenu.addAction("&Preferences")
         self.preferencesMenuAction.triggered.connect(self.on_preferences_action)
 
-        # Setup About menu
+        # Setup About menu==============================================================
         self.aboutMenu = self.menuBar().addMenu("&About")
         self.aboutMenuAction = self.aboutMenu.addAction("&About")
         self.aboutMenuAction.triggered.connect(self.on_about_action)
         self.setCentralWidget(self.widget)
 
-        # Setup GraphComponent menu
+        # Setup GraphComponent menu====================================================
         self.GraphComponentMenu = self.menuBar().addMenu("&GraphComponent")
         self.NodeAction = self.GraphComponentMenu.addAction("&Node")
         self.NodeAction.triggered.connect(self.on_node)
@@ -460,6 +591,39 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         self.layout.addWidget(self.mainToolBar)
         self.init_graph()
 
+        # Pop out menu for the graph================================================
+
+    def contextMenuEvent(self, event):
+        contextmenu = QMenu(self)
+
+        newaction = QAction("New")
+        contextmenu.addAction(newaction)
+        # newaction.triggered.connect()
+
+        openaction = QAction("Open")
+        contextmenu.addAction(openaction)
+        # openaction.triggered.connect()
+
+        saveaction = QAction("Save")
+        contextmenu.addAction(saveaction)
+        # saveaction.triggered.connect()
+
+        copyaction = QAction("Copy")
+        contextmenu.addAction(copyaction)
+        # copyaction.triggered.connect()
+
+        pastaction = contextmenu.addAction("Past")
+        contextmenu.addAction(pastaction)
+        # copyaction.triggered.connect()
+
+        helpaction = QAction("Help...")
+        contextmenu.addAction(helpaction)
+        # copyaction.triggered.connect()
+
+        # Excute the pop menu at all the graph area, but won't conflit with node pop meun
+        action = contextmenu.exec_(self.mapToGlobal(event.pos()))
+
+    # Trigger Fcuntions =========================================================
     def on_open_action(self):
         """Handler for 'Open' action"""
         fileName = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.md"))
@@ -493,7 +657,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         return
 
     def on_node(self):
-        self.scene.addItem(NodeItem(Node(None, None, None, None, [500, 300])))
+        self.scene.addItem(NodeItem(Node(None, None, "I", None, [500, 300])))  # #TODO
 
     def on_groundnode(self):
         self.ground_node_count += 1
@@ -521,8 +685,8 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
     def init_graph(self):
         self.scene.addItem(NodeItem(Node(None, None, "node1", None, [200, 200])))
-        self.scene.addItem(NodeItem(Node(None, None, None, None, [100, 100])))
-        test = NodeItem(Node(None, None, None, None, [300, 300]))
+        self.scene.addItem(NodeItem(Node(None, None, "node2", None, [100, 100])))
+        test = NodeItem(Node(None, None, "node3", None, [300, 300]))
         self.scene.addItem(test)
 
         # menu = QMenu()
