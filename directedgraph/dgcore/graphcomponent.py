@@ -85,7 +85,11 @@ class Node(GraphComponent):
         super().__init__(parent_graph, uid, name, colour)
         self.position = position if position else [0, 0]
         # it won't get any value which can be obtained from the simulator
+        # The user cannot change (Default is 0)
         self.value = 0
+        # Objects of the arc connected to this node
+        # #TODO 此处要注意的是 Node 当中这个 List 可能有多个，而 Source Node 中只能有一个
+        self.arcs = []
 
     def get_position(self):
         return self.position

@@ -42,11 +42,12 @@ class Graph:
         else:
             return True
 
+    # For debugging Graph
     def print_graph_details(self):
-        print("------------------")
+        print("------------------------------------")
         print("Graph vars(self):")
         print(vars(self))
-        print("------------------")
+        print("------------------------------------")
         print("Graph Components:")
         for (
             component_uid,

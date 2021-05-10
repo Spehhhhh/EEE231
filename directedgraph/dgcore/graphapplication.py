@@ -15,6 +15,7 @@ from directedgraph.dgutils import FileManager
 
 class DirectedGraphApplication:
     def __init__(self):
+        self.auto_save_interval = 300  # Seconds
         pass
 
     def main(self):
@@ -37,7 +38,7 @@ def load_graph(path):
     return new_graph
 
 
-def test_1():
+def test_create_graph():
     graph_attribute = [{"name": "graph1"}]
     graph_components = [
         {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
@@ -49,7 +50,7 @@ def test_1():
     graph1.print_graph_details()
 
 
-def test_2():
+def test_load_graph():
     path = (
         Path(os.path.dirname(__file__))
         .parent.parent.joinpath("tests")
@@ -67,8 +68,8 @@ if __name__ == "__main__":
     #         number=10,
     #     )
     # )
-    test_1()
-    test_2()
+    test_create_graph()
+    test_load_graph()
 
     import unittest
     from tests.test_dgcore_graphapplication import TestDirectedGraphApplication
