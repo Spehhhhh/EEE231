@@ -1,7 +1,10 @@
-class GroundNodeNumberException(Exception):
-    def __init__(self, groundnode_counter=None):
-        self.groundnode_counter = groundnode_counter
+class GroundNodeNumberError(Exception):
+    def __init__(self, expression, message):
+        self.expression = expression
+        self.message = message
 
 
-class ArcfunctionError(Exception):
-    pass
+class ArcError(Exception):
+    def __init__(self, expression, message):
+        self.expression = expression
+        self.message = message
