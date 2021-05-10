@@ -29,8 +29,8 @@ jobs:
         id: pytest
         uses: alexanderdamiani/pytester-cov@v1.0.1
         with:
-          pytest-root-dir: 'directedgraph'
-          cov-omit-list: 'tests/*'
+          pytest-root-dir: '.'
+          cov-omit-list: 'tests/*, */__init__.py, */site-packages/*, */excp.py'
           cov-threshold-single: ${{ env.COVERAGE_TOTAL }}
           cov-threshold-total: ${{ env.COVERAGE_SINGLE }}
 
