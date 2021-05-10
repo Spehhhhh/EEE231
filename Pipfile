@@ -8,6 +8,8 @@ pyside6 = "*"
 loguru = "*"
 pytest = "*"
 pyqt6 = "*"
+coverage = "*"
+pylint = "*"
 
 [dev-packages]
 black = "*"

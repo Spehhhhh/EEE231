@@ -1,7 +1,12 @@
 import sys
 from pathlib import Path
 
+# Print status
+
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
+
+# Use the sys module to add Path.
+
 current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
@@ -10,17 +15,13 @@ from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc
 
 
 class Graph:
-    """
-    init Graph()
-    """
+    # init Graph()
 
     def __init__(self, name=None):
         self.name = name if name else "Untitled"
         self.components = {}
 
-    """
-    Control Graph()
-    """
+    # Control Graph()
 
     def get(self):
         return True
@@ -42,11 +43,12 @@ class Graph:
         else:
             return True
 
+    # For debugging Graph
     def print_graph_details(self):
-        print("------------------")
+        print("------------------------------------")
         print("Graph vars(self):")
         print(vars(self))
-        print("------------------")
+        print("------------------------------------")
         print("Graph Components:")
         for (
             component_uid,
@@ -60,9 +62,7 @@ class Graph:
                 component.name,
             )
 
-    """
-    Control GraphComponent()
-    """
+    # Control GraphComponent()
 
     def get_component(self, uid):
         # print(self.components[uid].get_name())
@@ -142,7 +142,7 @@ class Graph:
         if isinstance(arc1, Arc):
             arc1.update_position(node1, node2)
         elif isinstance(arc1, str):
-            if len(node2) == 12 and self.parent_graph == self:
+            if len(node2) == 12 and arc1.parent_graph == self:
                 self.get_component["arc1"].update_position(node1, node2)
 
     # #TODO 需要写误删除逻辑
@@ -156,6 +156,6 @@ class Graph:
 
 if __name__ == "__main__":
     import unittest
-    from tests.test_dgcore import TestGraph
+    from tests.test_dgcore import TestGraph  # Import Unit tests
 
-    unittest.main()  # Run Unit tests
+    unittest.main()  # Run tests
