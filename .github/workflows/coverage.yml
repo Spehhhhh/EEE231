@@ -1,7 +1,5 @@
 name: coverage
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 jobs:
@@ -24,49 +22,6 @@ jobs:
         run: |
           pip install coverage
           coverage run -m unittest discover
-          coverage report -m
-      - name: pytest
-        id: pytest
-        uses: alexanderdamiani/pytester-cov@v1.0.1
-        with:
-          pytest-root-dir: '.'
-          cov-omit-list: 'tests/*, */__init__.py, */site-packages/*, */excp.py'
-          cov-threshold-single: ${{ env.COVERAGE_TOTAL }}
-          cov-threshold-total: ${{ env.COVERAGE_SINGLE }}
-
-      - name: Coverage single fail - new issue
-        if: ${{ steps.pytest.outputs.cov-threshold-single-fail == 'true' }}
-        uses: nashmaniac/create-issue-action@v1.1
-        with:
-          title: Pytest coverage single falls below minimum ${{ env.COVERAGE_SINGLE }}
-          token: ${{secrets.GITHUB_TOKEN}}
-          assignees: ${{github.actor}}
-          labels: worflow-failed
-          body: ${{ steps.pytest.outputs.output-table }}
-
-      - name: Coverage single fail - exit
-        if: ${{ steps.pytest.outputs.cov-threshold-single-fail == 'true' }}
-        run: |
-          echo "cov single fail ${{ steps.pytest.outputs.cov-threshold-single-fail }}"
-          exit 1
-
-      - name: Coverage total fail - new issue
-        if: ${{ steps.pytest.outputs.cov-threshold-total-fail == 'true' }}
-        uses: nashmaniac/create-issue-action@v1.1
-        with:
-          title: Pytest coverage total falls below minimum ${{ env.COVERAGE_TOTAL }}
-          token: ${{secrets.GITHUB_TOKEN}}
-          assignees: ${{github.actor}}
-          labels: worflow-failed
-          body: ${{ steps.pytest.outputs.output-table }}
-
-      - name: Coverage total fail - exit
-        if: ${{ steps.pytest.outputs.cov-threshold-total-fail == 'true' }}
-        run: |
-          echo "cov single fail ${{ steps.pytest.outputs.cov-threshold-total-fail }}"
-          exit 1
-
-      - name: Commit pytest coverage table
-        uses: peter-evans/commit-comment@v1
-        with:
-          body: ${{ steps.pytest.outputs.output-table }}
+          coverage report -m > pytest-coverage.txt
+      - name: Comment coverage
+        uses: coroo/pytest-coverage-commentator@v1.0.2
