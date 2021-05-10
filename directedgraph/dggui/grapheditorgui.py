@@ -1,5 +1,6 @@
+from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
 from PySide6.QtGui import QAction
-from PySide6 import QtGui, QtWidgets
+from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics
 from PySide6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -14,8 +15,6 @@ from PySide6.QtWidgets import (
 from PySide6.QtWidgets import QMenuBar, QMenu
 from PySide6.QtWidgets import QToolBar, QStatusBar
 from PySide6.QtWidgets import QFileDialog, QMessageBox
-from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
-from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush
 from PySide6.QtWidgets import (
     QGraphicsScene,
     QGraphicsView,
@@ -25,8 +24,6 @@ from PySide6.QtWidgets import (
     QGraphicsRectItem,
     QGraphicsItemGroup,
 )
-
-from PySide6.QtGui import QFontMetrics
 
 import sys
 from pathlib import Path
@@ -100,12 +97,12 @@ class NodeItem(QGraphicsEllipseItem):
         # Override cursor shape into Openhand to indicate that drag is allowed
         # also indicate that you have selected a node (read to move)
         # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
-        app = QtWidgets.QApplication.instance()  # Obtain the Q application instance
+        app = QApplication.instance()  # Obtain the Q application instance
         app.instance().setOverrideCursor(Qt.OpenHandCursor)
 
     def hoverLeaveEvent(self, event):
         # This Method is used to change back the cursor when mouse is not point to the node
-        app = QtWidgets.QApplication.instance()  # Obtain the Q application instance
+        app = QApplication.instance()  # Obtain the Q application instance
         app.instance().restoreOverrideCursor()
 
     def mousePressEvent(self, event):
@@ -116,23 +113,6 @@ class NodeItem(QGraphicsEllipseItem):
         print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
         # self.update()
         return
-
-    # def eventFilter(self, source, event):
-
-    #     if event.type() == QEvent.MouseButtonPress:
-    #         print(source)
-    #     # if QMouseEvent.button() == Qt.LeftButton:
-    #     #     mousePos = QMouseEvent.pos()
-    #     #     self.selectionRectangle.setVisible(True)
-    #     #     print("Left Button Clicked")
-    #     #     print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-    #     #     # self.update()
-    #     #     return
-    #     # elif QMouseEvent.button() == Qt.RightButton:
-    #     #     print("Right Button Clicked")
-    #     #     QMenu
-    #     #     return
-    #     return super().eventFilter(source, event)
 
     def mouseReleaseEvent(self, event):
         # Handler for mouseReleaseEvent
@@ -196,6 +176,23 @@ class NodeItem(QGraphicsEllipseItem):
 
         # Excute at node Position, so it won't collide with Main windows pop-up menu
         popmenu.exec_(event.screenPos())
+
+    # def eventFilter(self, source, event):
+
+    #     if event.type() == QEvent.MouseButtonPress:
+    #         print(source)
+    #     # if QMouseEvent.button() == Qt.LeftButton:
+    #     #     mousePos = QMouseEvent.pos()
+    #     #     self.selectionRectangle.setVisible(True)
+    #     #     print("Left Button Clicked")
+    #     #     print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
+    #     #     # self.update()
+    #     #     return
+    #     # elif QMouseEvent.button() == Qt.RightButton:
+    #     #     print("Right Button Clicked")
+    #     #     QMenu
+    #     #     return
+    #     return super().eventFilter(source, event)
 
 
 class SourceNodeItem(QGraphicsEllipseItem):
@@ -334,6 +331,12 @@ class SourceNodeItem(QGraphicsEllipseItem):
 
         # Excute at node Position, so it won't collide with Main windows pop-up menu
         popmenu.exec_(event.screenPos())
+
+
+class GroundNodeTestItem(NodeItem):
+    def __init__(self, node_instance):
+        super().__init__(node_instance)
+        self.node_radius = 10.0
 
 
 class GroundNodeItem(QGraphicsEllipseItem):
@@ -687,6 +690,9 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         self.scene.addItem(NodeItem(Node(None, None, "node1", None, [200, 200])))
         self.scene.addItem(NodeItem(Node(None, None, "node2", None, [100, 100])))
         test = NodeItem(Node(None, None, "node3", None, [300, 300]))
+        self.scene.addItem(
+            GroundNodeTestItem(Node(None, None, "GroundNodeTestItem", None, [400, 400]))
+        )
         self.scene.addItem(test)
 
         # menu = QMenu()
