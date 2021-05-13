@@ -120,11 +120,16 @@ class SourceNode(Node):
         colour=None,
         position=None,
         user_defined_attribute=None,
+        current=None,
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = (
             user_defined_attribute if user_defined_attribute else "0"
         )
+        if current == None:
+            self.current = 0
+        else:
+            self.current = current
 
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
@@ -167,7 +172,9 @@ class Arc(GraphComponent):
         colour=None,
         node1=None,
         node2=None,
+        #     属性是啥：纯电阻？电容？
         user_define_attribute=None,
+        #     阻抗值
         value=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
@@ -221,7 +228,7 @@ class Arc(GraphComponent):
                 or isinstance(self.node2, GroundNode)
             ):
                 return (
-                    abs(self.node1.value - int(self.node2.user_defined_attribute))
+                    abs(self.node1.value - float(self.node2.user_defined_attribute))
                     / self.value
                 )
 
@@ -231,7 +238,10 @@ class Arc(GraphComponent):
                 and isinstance(self.node2, Node)
             ):
                 return (
-                    abs(int(self.node1.user_defined_attribute) - int(self.node2.value))
+                    abs(
+                        float(self.node1.user_defined_attribute)
+                        - float(self.node2.value)
+                    )
                     / self.value
                 )
 
@@ -243,23 +253,99 @@ class Arc(GraphComponent):
             ):
                 return (
                     abs(
-                        int(self.node1.user_defined_attribute)
-                        - int(self.node2.user_defined_attribute)
+                        float(self.node1.user_defined_attribute)
+                        - float(self.node2.user_defined_attribute)
+                    )
+                    / self.value
+                )
+        elif self.user_define_attribute.lower() == "capacitor":
+            if (
+                isinstance(self.node1, Node)
+                and isinstance(self.node2, SourceNode)
+                or isinstance(self.node2, GroundNode)
+            ):
+                return (
+                    abs(self.node1.value - float(self.node2.user_defined_attribute))
+                    / self.value
+                )
+
+            elif (
+                isinstance(self.node1, SourceNode)
+                or isinstance(self.node1, GroundNode)
+                and isinstance(self.node2, Node)
+            ):
+                return (
+                    abs(
+                        float(self.node1.user_defined_attribute)
+                        - float(self.node2.value)
                     )
                     / self.value
                 )
 
+            elif (
+                isinstance(self.node1, SourceNode)
+                or isinstance(self.node1, GroundNode)
+                and isinstance(self.node2, GroundNode)
+                or isinstance(self.node2, SourceNode)
+            ):
+                return (
+                    abs(
+                        float(self.node1.user_defined_attribute)
+                        - float(self.node2.user_defined_attribute)
+                    )
+                    / self.value
+                )
         elif self.user_define_attribute.lower() == "diode":
             pass
 
     # function['resistance']=(V_i - V)j) / R.
-    def update_function(self, name):
+    def update_function(self):
         function_update = self.get_function()
-        self.function[name] = function_update
+        self.function[self.user_define_attribute] = function_update
+
+    def update_node(self):
+        if isinstance(self.node1, SourceNode) and isinstance(self.node2, Node):
+            node2.value = float(
+                self.node1.user_defined_attribute
+            ) - node1.current * float(self.value)
+        elif isinstance(self.node1, Node) and isinstance(self.node2, Node):
+            node2.value = (
+                float(self.node1.value)
+                - self.value * self.function[self.user_define_attribute]
+            )
 
 
 if __name__ == "__main__":
-    import unittest
-    from tests.test_dgcore_graphcomponent import TestGraphComponent
-
-    unittest.main()
+    node1 = SourceNode(None, None, "Node1", None, [200, 300], 8, 2)
+    node2 = Node(None, None, "Node2", None, [300, 300])
+    arc1 = Arc(None, None, None, None, node1, node2, "resistance", 5)
+    print(
+        arc1.user_define_attribute
+        + " connceted between {} and {}".format(arc1.node1.name, arc1.node2.name)
+    )
+    if arc1.user_define_attribute == "resistance":
+        print(
+            "r1:"
+            + str(arc1.value)
+            + "\t\t"
+            + str(arc1.node1.value)
+            + "\t \t"
+            + str(arc1.node2.value)
+        )
+    else:
+        print(
+            "c1:"
+            + str(arc1.value)
+            + "\t\t"
+            + str(arc1.node1.value)
+            + "\t \t"
+            + str(arc1.node2.value)
+        )
+    print(node2.get())
+    arc1.update_function()
+    arc1.update_node()
+    print(node2.get())
+    # import unittest
+    # from tests.test_dgcore_graphcomponent import TestGraphComponent
+    #
+    # unittest.main()
