@@ -175,16 +175,16 @@ class Arc(GraphComponent):
         #     属性是啥：纯电阻？电容？
         user_define_attribute=None,
         #     阻抗值
-        value=None,
+        Impedance=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
         self.node1 = node1
         self.node2 = node2
-        self.update_position(node1, node2)
         self.user_define_attribute = user_define_attribute
+        self.update_position(node1, node2)
         self.function = {}
-        self.value = value
+        self.Impedance = Impedance
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
@@ -192,7 +192,7 @@ class Arc(GraphComponent):
         return (self.nodes[0].get_position(), self.nodes[1].get_position())
 
     def update_value(self, data):
-        self.attribute_value = data
+        self.Impedance = data
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
@@ -229,7 +229,7 @@ class Arc(GraphComponent):
             ):
                 return (
                     abs(self.node1.value - float(self.node2.user_defined_attribute))
-                    / self.value
+                    / self.Impedance
                 )
 
             elif (
@@ -242,7 +242,7 @@ class Arc(GraphComponent):
                         float(self.node1.user_defined_attribute)
                         - float(self.node2.value)
                     )
-                    / self.value
+                    / self.Impedance
                 )
 
             elif (
@@ -256,7 +256,7 @@ class Arc(GraphComponent):
                         float(self.node1.user_defined_attribute)
                         - float(self.node2.user_defined_attribute)
                     )
-                    / self.value
+                    / self.Impedance
                 )
         elif self.user_define_attribute.lower() == "capacitor":
             if (
@@ -266,7 +266,7 @@ class Arc(GraphComponent):
             ):
                 return (
                     abs(self.node1.value - float(self.node2.user_defined_attribute))
-                    / self.value
+                    / self.Impedance
                 )
 
             elif (
@@ -279,7 +279,7 @@ class Arc(GraphComponent):
                         float(self.node1.user_defined_attribute)
                         - float(self.node2.value)
                     )
-                    / self.value
+                    / self.Impedance
                 )
 
             elif (
@@ -293,7 +293,7 @@ class Arc(GraphComponent):
                         float(self.node1.user_defined_attribute)
                         - float(self.node2.user_defined_attribute)
                     )
-                    / self.value
+                    / self.Impedance
                 )
         elif self.user_define_attribute.lower() == "diode":
             pass
@@ -307,11 +307,11 @@ class Arc(GraphComponent):
         if isinstance(self.node1, SourceNode) and isinstance(self.node2, Node):
             node2.value = float(
                 self.node1.user_defined_attribute
-            ) - node1.current * float(self.value)
+            ) - node1.current * float(self.Impedance)
         elif isinstance(self.node1, Node) and isinstance(self.node2, Node):
             node2.value = (
                 float(self.node1.value)
-                - self.value * self.function[self.user_define_attribute]
+                - self.Impedance * self.function[self.user_define_attribute]
             )
 
 
@@ -326,7 +326,7 @@ if __name__ == "__main__":
     if arc1.user_define_attribute == "resistance":
         print(
             "r1:"
-            + str(arc1.value)
+            + str(arc1.Impedance)
             + "\t\t"
             + str(arc1.node1.value)
             + "\t \t"
@@ -335,7 +335,7 @@ if __name__ == "__main__":
     else:
         print(
             "c1:"
-            + str(arc1.value)
+            + str(arc1.Impedance)
             + "\t\t"
             + str(arc1.node1.value)
             + "\t \t"

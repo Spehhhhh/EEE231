@@ -1,42 +1,26 @@
-"""This module is Graph() Class."""
-
 import sys
 from pathlib import Path
 
-# from . import Node, SourceNode, GroundNode, Arc
-
-# Print status
-
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
-
-# Use the sys module to add Path.
-
 current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc
 
-"""Gets and prints the spreadsheet's header columns
-
-Args:
-    file_loc (str): The file location of the spreadsheet
-    print_cols (bool): A flag used to print the columns to the console
-        (default is False)
-
-Returns:
-    list: a list of strings representing the header columns
-"""
-
 
 class Graph:
-    # init Graph()
+    """
+    init Graph()
+    """
 
     def __init__(self, name=None):
         self.name = name if name else "Untitled"
         self.components = {}
 
-    # Control Graph()
+    """
+    Control Graph()
+    """
 
     def get(self):
         return True
@@ -77,7 +61,9 @@ class Graph:
                 component.name,
             )
 
-    # Control GraphComponent()
+    """
+    Control GraphComponent()
+    """
 
     def get_component(self, uid):
         # print(self.components[uid].get_name())
@@ -135,6 +121,8 @@ class Graph:
                 parameters.get("colour", None),
                 parameters.get("node1", None),
                 parameters.get("node2", None),
+                parameters.get("user_define_attribute", None),
+                parameters.get("Impedance", None),
             )
             self.insert_component(component)
             return component
@@ -157,7 +145,7 @@ class Graph:
         if isinstance(arc1, Arc):
             arc1.update_position(node1, node2)
         elif isinstance(arc1, str):
-            if len(node2) == 12 and arc1.parent_graph == self:
+            if len(node2) == 12 and self.parent_graph == self:
                 self.get_component["arc1"].update_position(node1, node2)
 
     # #TODO 需要写误删除逻辑
@@ -170,8 +158,7 @@ class Graph:
 
 
 if __name__ == "__main__":
-    import unittest  # unittest
-    from tests.test_dgcore import TestGraph  # Import Unit tests
+    import unittest
+    from tests.test_dgcore import TestGraph
 
-    TestGraph()
-    unittest.main()  # Run tests
+    unittest.main()  # Run Unit tests
