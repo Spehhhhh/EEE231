@@ -121,6 +121,8 @@ class Graph:
                 parameters.get("colour", None),
                 parameters.get("node1", None),
                 parameters.get("node2", None),
+                parameters.get("user_define_attribute",None),
+                parameters.get("Impedance",None)
             )
             self.insert_component(component)
             return component
@@ -158,5 +160,4 @@ class Graph:
 if __name__ == "__main__":
     import unittest
     from tests.test_dgcore import TestGraph
-
     unittest.main()  # Run Unit tests
