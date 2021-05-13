@@ -8,6 +8,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 
+
 class GraphComponent:
     def __init__(self, parent_graph=None, uid=None, name=None, colour=None):
         self.parent_graph = parent_graph
