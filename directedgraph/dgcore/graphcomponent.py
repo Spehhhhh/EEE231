@@ -177,25 +177,24 @@ class Arc(GraphComponent):
         node2=None,
         #     属性是啥：纯电阻？电容？
         user_define_attribute=None,
-        #     阻抗值
-        impedance=None,
+        user_define_arc_type=""
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
         self.node1 = node1
         self.node2 = node2
         self.user_define_attribute = user_define_attribute
+        self.user_define_arc_type=user_define_arc_type
         self.update_position(node1, node2)
         self.function = {}
-        self.impedance = impedance
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
     def get_position(self):
         return (self.nodes[0].get_position(), self.nodes[1].get_position())
 
-    def update_value(self, data):
-        self.impedance = data
+    def update_user_defined_arc_type(self,new_user_defined_arc_type):
+        self.user_define_arc_type=new_user_defined_arc_type
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
@@ -221,101 +220,101 @@ class Arc(GraphComponent):
     # get editable function,eg: if Take a resistance.
     # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
     # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
-    def get_function(self):
-        if self.user_define_attribute == None:
-            return
-        elif self.user_define_attribute.lower() == "resistance":
-            if (
-                isinstance(self.node1, Node)
-                and isinstance(self.node2, SourceNode)
-                or isinstance(self.node2, GroundNode)
-            ):
-                return (
-                    abs(self.node1.value - float(self.node2.user_defined_attribute))
-                    / self.impedance
-                )
-
-            elif (
-                isinstance(self.node1, SourceNode)
-                or isinstance(self.node1, GroundNode)
-                and isinstance(self.node2, Node)
-            ):
-                return (
-                    abs(
-                        float(self.node1.user_defined_attribute)
-                        - float(self.node2.value)
-                    )
-                    / self.impedance
-                )
-
-            elif (
-                isinstance(self.node1, SourceNode)
-                or isinstance(self.node1, GroundNode)
-                and isinstance(self.node2, GroundNode)
-                or isinstance(self.node2, SourceNode)
-            ):
-                return (
-                    abs(
-                        float(self.node1.user_defined_attribute)
-                        - float(self.node2.user_defined_attribute)
-                    )
-                    / self.impedance
-                )
-        elif self.user_define_attribute.lower() == "capacitor":
-            if (
-                isinstance(self.node1, Node)
-                and isinstance(self.node2, SourceNode)
-                or isinstance(self.node2, GroundNode)
-            ):
-                return (
-                    abs(self.node1.value - float(self.node2.user_defined_attribute))
-                    / self.impedance
-                )
-
-            elif (
-                isinstance(self.node1, SourceNode)
-                or isinstance(self.node1, GroundNode)
-                and isinstance(self.node2, Node)
-            ):
-                return (
-                    abs(
-                        float(self.node1.user_defined_attribute)
-                        - float(self.node2.value)
-                    )
-                    / self.impedance
-                )
-
-            elif (
-                isinstance(self.node1, SourceNode)
-                or isinstance(self.node1, GroundNode)
-                and isinstance(self.node2, GroundNode)
-                or isinstance(self.node2, SourceNode)
-            ):
-                return (
-                    abs(
-                        float(self.node1.user_defined_attribute)
-                        - float(self.node2.user_defined_attribute)
-                    )
-                    / self.impedance
-                )
-        elif self.user_define_attribute.lower() == "diode":
-            pass
-
-    # function['resistance']=(V_i - V)j) / R.
-    def update_function(self):
-        function_update = self.get_function()
-        self.function[self.user_define_attribute] = function_update
-
-    def update_node(self):
-        if isinstance(self.node1, SourceNode) and isinstance(self.node2, Node):
-            node2.value = float(
-                self.node1.user_defined_attribute
-            ) - node1.current * float(self.impedance)
-        elif isinstance(self.node1, Node) and isinstance(self.node2, Node):
-            node2.value = (
-                float(self.node1.value)
-                - self.impedance * self.function[self.user_define_attribute]
-            )
+    # def get_function(self):
+    #     if self.user_define_attribute == None:
+    #         return
+    #     elif self.user_define_attribute.lower() == "resistance":
+    #         if (
+    #             isinstance(self.node1, Node)
+    #             and isinstance(self.node2, SourceNode)
+    #             or isinstance(self.node2, GroundNode)
+    #         ):
+    #             return (
+    #                 abs(self.node1.value - float(self.node2.user_defined_attribute))
+    #                 / self.impedance
+    #             )
+    #
+    #         elif (
+    #             isinstance(self.node1, SourceNode)
+    #             or isinstance(self.node1, GroundNode)
+    #             and isinstance(self.node2, Node)
+    #         ):
+    #             return (
+    #                 abs(
+    #                     float(self.node1.user_defined_attribute)
+    #                     - float(self.node2.value)
+    #                 )
+    #                 / self.impedance
+    #             )
+    #
+    #         elif (
+    #             isinstance(self.node1, SourceNode)
+    #             or isinstance(self.node1, GroundNode)
+    #             and isinstance(self.node2, GroundNode)
+    #             or isinstance(self.node2, SourceNode)
+    #         ):
+    #             return (
+    #                 abs(
+    #                     float(self.node1.user_defined_attribute)
+    #                     - float(self.node2.user_defined_attribute)
+    #                 )
+    #                 / self.impedance
+    #             )
+    #     elif self.user_define_attribute.lower() == "capacitor":
+    #         if (
+    #             isinstance(self.node1, Node)
+    #             and isinstance(self.node2, SourceNode)
+    #             or isinstance(self.node2, GroundNode)
+    #         ):
+    #             return (
+    #                 abs(self.node1.value - float(self.node2.user_defined_attribute))
+    #                 / self.impedance
+    #             )
+    #
+    #         elif (
+    #             isinstance(self.node1, SourceNode)
+    #             or isinstance(self.node1, GroundNode)
+    #             and isinstance(self.node2, Node)
+    #         ):
+    #             return (
+    #                 abs(
+    #                     float(self.node1.user_defined_attribute)
+    #                     - float(self.node2.value)
+    #                 )
+    #                 / self.impedance
+    #             )
+    #
+    #         elif (
+    #             isinstance(self.node1, SourceNode)
+    #             or isinstance(self.node1, GroundNode)
+    #             and isinstance(self.node2, GroundNode)
+    #             or isinstance(self.node2, SourceNode)
+    #         ):
+    #             return (
+    #                 abs(
+    #                     float(self.node1.user_defined_attribute)
+    #                     - float(self.node2.user_defined_attribute)
+    #                 )
+    #                 / self.impedance
+    #             )
+    #     elif self.user_define_attribute.lower() == "diode":
+    #         pass
+    #
+    # # function['resistance']=(V_i - V)j) / R.
+    # def update_function(self):
+    #     function_update = self.get_function()
+    #     self.function[self.user_define_attribute] = function_update
+    #
+    # def update_node(self):
+    #     if isinstance(self.node1, SourceNode) and isinstance(self.node2, Node):
+    #         node2.value = float(
+    #             self.node1.user_defined_attribute
+    #         ) - node1.current * float(self.impedance)
+    #     elif isinstance(self.node1, Node) and isinstance(self.node2, Node):
+    #         node2.value = (
+    #             float(self.node1.value)
+    #             - self.impedance * self.function[self.user_define_attribute]
+    #         )
 
 
 if __name__ == "__main__":
@@ -326,28 +325,28 @@ if __name__ == "__main__":
         arc1.user_define_attribute
         + " connceted between {} and {}".format(arc1.node1.name, arc1.node2.name)
     )
-    if arc1.user_define_attribute == "resistance":
-        print(
-            "r1:"
-            + str(arc1.impedance)
-            + "\t\t"
-            + str(arc1.node1.value)
-            + "\t \t"
-            + str(arc1.node2.value)
-        )
-    else:
-        print(
-            "c1:"
-            + str(arc1.impedance)
-            + "\t\t"
-            + str(arc1.node1.value)
-            + "\t \t"
-            + str(arc1.node2.value)
-        )
-    print(node2.get())
-    arc1.update_function()
-    arc1.update_node()
-    print(node2.get())
+    # if arc1.user_define_attribute == "resistance":
+    #     print(
+    #         "r1:"
+    #         + str(arc1.impedance)
+    #         + "\t\t"
+    #         + str(arc1.node1.value)
+    #         + "\t \t"
+    #         + str(arc1.node2.value)
+    #     )
+    # else:
+    #     print(
+    #         "c1:"
+    #         + str(arc1.impedance)
+    #         + "\t\t"
+    #         + str(arc1.node1.value)
+    #         + "\t \t"
+    #         + str(arc1.node2.value)
+    #     )
+    # print(node2.get())
+    # arc1.update_function()
+    # arc1.update_node()
+    # print(node2.get())
     # import unittest
     # from tests.test_dgcore_graphcomponent import TestGraphComponent
     #
