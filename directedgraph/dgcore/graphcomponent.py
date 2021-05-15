@@ -10,9 +10,7 @@ sys.path.append(father_folder)
 
 class GraphComponent:
     def __init__(self, parent_graph=None, uid=None, name=None, colour=None):
-        self.parent_graph = parent_graph  # connected_graph
-        self.connected_gui = None  # connected_graph
-
+        self.parent_graph = parent_graph
         self.uid = None
         self.generate_uid(uid)
         self.name = name if name else "Untitled"
@@ -74,9 +72,6 @@ class GraphComponent:
     def update(self, element_attribute, element_attribute_new):
         self.element_attribute = element_attribute_new
 
-    def update_connected_gui(self, connected_gui_new):
-        self.connected_gui = connected_gui_new
-
 
 class Node(GraphComponent):
     def __init__(
@@ -99,9 +94,6 @@ class Node(GraphComponent):
     def get_position(self):
         return self.position
 
-    def get_value(self):
-        return self.value
-
     # .update(position, [10, 10])
     def update(self, element_attribute, element_attribute_new):
         if element_attribute == "position":
@@ -114,6 +106,9 @@ class Node(GraphComponent):
     def update_position(self, position):
         self.position[0] = position[0]
         self.position[1] = position[1]
+
+    def get_value(self):
+        return self.value
 
 
 class SourceNode(Node):
@@ -144,6 +139,8 @@ class SourceNode(Node):
 
 
 class GroundNode(Node):
+    groundnode_counter = 0
+
     def __init__(
         self,
         parent_graph=None,
@@ -154,10 +151,10 @@ class GroundNode(Node):
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
-        self.parent_graph.groundnode_counter += 1
+        GroundNode.groundnode_counter += 1
 
     def get_groundnode_counter(self):
-        return self.parent_graph.groundnode_counter
+        return GroundNode.groundnode_counter
 
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
@@ -178,7 +175,7 @@ class Arc(GraphComponent):
         #     属性是啥：纯电阻？电容？
         user_define_attribute=None,
         #     阻抗值
-        impedance=None,
+        Impedance=None,
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
@@ -187,7 +184,7 @@ class Arc(GraphComponent):
         self.user_define_attribute = user_define_attribute
         self.update_position(node1, node2)
         self.function = {}
-        self.impedance = impedance
+        self.Impedance = Impedance
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
@@ -195,7 +192,7 @@ class Arc(GraphComponent):
         return (self.nodes[0].get_position(), self.nodes[1].get_position())
 
     def update_value(self, data):
-        self.impedance = data
+        self.Impedance = data
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
@@ -232,7 +229,7 @@ class Arc(GraphComponent):
             ):
                 return (
                     abs(self.node1.value - float(self.node2.user_defined_attribute))
-                    / self.impedance
+                    / self.Impedance
                 )
 
             elif (
@@ -245,7 +242,7 @@ class Arc(GraphComponent):
                         float(self.node1.user_defined_attribute)
                         - float(self.node2.value)
                     )
-                    / self.impedance
+                    / self.Impedance
                 )
 
             elif (
@@ -259,7 +256,7 @@ class Arc(GraphComponent):
                         float(self.node1.user_defined_attribute)
                         - float(self.node2.user_defined_attribute)
                     )
-                    / self.impedance
+                    / self.Impedance
                 )
         elif self.user_define_attribute.lower() == "capacitor":
             if (
@@ -269,7 +266,7 @@ class Arc(GraphComponent):
             ):
                 return (
                     abs(self.node1.value - float(self.node2.user_defined_attribute))
-                    / self.impedance
+                    / self.Impedance
                 )
 
             elif (
@@ -282,7 +279,7 @@ class Arc(GraphComponent):
                         float(self.node1.user_defined_attribute)
                         - float(self.node2.value)
                     )
-                    / self.impedance
+                    / self.Impedance
                 )
 
             elif (
@@ -296,7 +293,7 @@ class Arc(GraphComponent):
                         float(self.node1.user_defined_attribute)
                         - float(self.node2.user_defined_attribute)
                     )
-                    / self.impedance
+                    / self.Impedance
                 )
         elif self.user_define_attribute.lower() == "diode":
             pass
@@ -310,11 +307,11 @@ class Arc(GraphComponent):
         if isinstance(self.node1, SourceNode) and isinstance(self.node2, Node):
             node2.value = float(
                 self.node1.user_defined_attribute
-            ) - node1.current * float(self.impedance)
+            ) - node1.current * float(self.Impedance)
         elif isinstance(self.node1, Node) and isinstance(self.node2, Node):
             node2.value = (
                 float(self.node1.value)
-                - self.impedance * self.function[self.user_define_attribute]
+                - self.Impedance * self.function[self.user_define_attribute]
             )
 
 
@@ -329,7 +326,7 @@ if __name__ == "__main__":
     if arc1.user_define_attribute == "resistance":
         print(
             "r1:"
-            + str(arc1.impedance)
+            + str(arc1.Impedance)
             + "\t\t"
             + str(arc1.node1.value)
             + "\t \t"
@@ -338,7 +335,7 @@ if __name__ == "__main__":
     else:
         print(
             "c1:"
-            + str(arc1.impedance)
+            + str(arc1.Impedance)
             + "\t\t"
             + str(arc1.node1.value)
             + "\t \t"
