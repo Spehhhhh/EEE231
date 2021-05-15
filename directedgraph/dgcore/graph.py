@@ -121,6 +121,8 @@ class Graph:
                 parameters.get("colour", None),
                 parameters.get("node1", None),
                 parameters.get("node2", None),
+                parameters.get("user_define_attribute", None),
+                parameters.get("user_define_arc_type", None),
             )
             self.insert_component(component)
             return component
