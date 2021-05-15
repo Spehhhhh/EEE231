@@ -23,27 +23,39 @@ def main():
     # Build graph
     graph = Graph("DemoGraph")
 
-    id_node0 = "0"
-    node0 = graph.create_component({"type": "Node", "name": "Node 1", "uid": id_node0})
-    graph.insert_component(node0)
+    source_node=graph.create_component({"type":"SourceNode","name":"s1","color":"#0123123"})
 
-    id_node1 = "1"
-    node1 = graph.create_component({"type": "Node", "name": "Node 1", "uid": id_node1})
+    node4 = graph.create_component({"type": "Node", "name": "n4","position":[200,300]})
+    graph.insert_component(node4)
+
+
+    node1 = graph.create_component({"type": "Node", "name": "n1","position":[300,400]})
     graph.insert_component(node1)
 
-    id_node2 = "2"
-    node2 = graph.create_component({"type": "Node", "name": "Node 2", "uid": id_node2})
+
+    node2 = graph.create_component({"type": "Node", "name": "n2","position":[400,500]})
     graph.insert_component(node2)
+
+    node3 = graph.create_component({"type": "Node", "name": "n3", "position": [700, 500]})
+    graph.insert_component(node3)
+
+    node5=graph.create_component({"type": "Node", "name": "n5", "position": [800, 500]})
+
+    node6=graph.create_component({"type": "Node", "name": "n6", "position": [900, 500]})
+
+    node7=graph.create_component({"type": "Node", "name": "n7", "position": [1000, 500]})
+
+    ground_node=graph.create_component({"type": "GroundNode", "name": "g1", "position": [2000, 500]})
 
     r1 = graph.create_component(
         {
             "type": "Arc",
             "name": "r1",
             "uid": str(uuid4()),
-            "node1": id_node1,
-            "node2": id_node2,
-            "user_define_attribute": "resistor",
-            "Impedance": 1000,
+            "node1": node2,
+            "node2": node3,
+            "user_define_arc_type": "resistor",
+            "user_define_attribute": 150
         }
     )
     graph.insert_component(r1)
@@ -53,60 +65,132 @@ def main():
             "type": "Arc",
             "name": "r2",
             "uid": str(uuid4()),
-            "node1": id_node2,
-            "node2": id_node1,
-            "user_define_attribute": "resistor",
-            "Impedance": 1000,
+            "node1": node2,
+            "node2": node3,
+            "user_define_attribute": 15,
+            "user_define_arc_type": "resistor"
         }
     )
-    graph.insert_component(r2)
-
-    r3 = graph.create_component(
-        {
+    r3=graph.create_component({
             "type": "Arc",
             "name": "r3",
             "uid": str(uuid4()),
-            "node1": id_node2,
-            "node2": id_node1,
-            "user_define_attribute": "resistor",
-            "Impedance": 1000,
-        }
-    )
-    vdd = graph.create_component(
+            "node1": node3,
+            "node2": node4,
+            "user_define_attribute": "255k",
+            "user_define_arc_type": "resistor"
+        })
+    r4 = graph.create_component({
+        "type": "Arc",
+        "name": "r4",
+        "uid": str(uuid4()),
+        "node1": node3,
+        "node2": node4,
+        "user_define_attribute": "200k",
+        "user_define_arc_type": "resistor"
+    })
+    r5 = graph.create_component({
+        "type": "Arc",
+        "name": "r5",
+        "uid": str(uuid4()),
+        "node1": node3,
+        "node2": node4,
+        "user_define_attribute": "120k",
+        "user_define_arc_type": "resistor"
+    })
+
+    r6 = graph.create_component({
+        "type": "Arc",
+        "name": "r6",
+        "uid": str(uuid4()),
+        "node1": node4,
+        "node2": node5,
+        "user_define_attribute": 40,
+        "user_define_arc_type": "resistor"
+    })
+    graph.insert_component(r2)
+
+    c1 = graph.create_component(
         {
             "type": "Arc",
-            "name": "vdd",
+            "name": "c1",
             "uid": str(uuid4()),
-            "node1": id_node1,
-            "node2": id_node0,
-            "value": 5,
+            "node1": source_node,
+            "node2": node1,
+            "user_define_attribute": 20,
+            "user_define_arc_type":"capacitor"
         }
     )
-    print(r3.get())
-
+    graph.insert_component(c1)
+    c2 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "c2",
+            "uid": str(uuid4()),
+            "node1": node1,
+            "node2": node2,
+            "user_define_attribute": "20u",
+            "user_define_arc_type":"capacitor"
+        }
+    )
+    c3 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "c3",
+            "uid": str(uuid4()),
+            "node1": node4,
+            "node2": node6,
+            "user_define_attribute": "100p",
+            "user_define_arc_type": "capacitor"
+        }
+    )
+    c4 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "c4",
+            "uid": str(uuid4()),
+            "node1": node6,
+            "node2": node7,
+            "user_define_attribute": "220u",
+            "user_define_arc_type": "capacitor"
+        }
+    )
+    c5 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "c5",
+            "uid": str(uuid4()),
+            "node1": node7,
+            "node2": ground_node,
+            "user_define_attribute": "120 nF",
+            "user_define_arc_type": "capacitor"
+        }
+    )
     # Output txt
     with open("../dgcore/DemoGraph.csv", "w", newline="", encoding="utf-8") as f:
-        headers = ["#", "Arc", "node1", "node2", "value"]
+        headers = ["#", "Arc_type", "node1", "node2", "value"]
         f_csv = csv.writer(f, delimiter=" ")
         f_csv.writerow(headers)
+        f_csv.writerow(["\n"])
         for component in graph.components.values():
             if isinstance(component, Arc):
                 f_csv.writerow(
                     [
-                        component.get("user_define_attribute"),
-                        "connected between node {} and {}".format(
-                            component.get("node1"), component.get("node2")
+                        component.get("user_define_arc_type"),
+                        "connected between {} and {}".format(
+                            component.get("node1").name, component.get("node2").name
                         ),
                     ]
                 )
                 f_csv.writerow(
                     [
                         component.name,
-                        graph.components[component.node1].uid,
-                        graph.components[component.node2].uid,
-                        component.Impedance,
+                        graph.components[component.uid].node1.name,
+                        graph.components[component.uid].node2.name,
+                        component.user_define_attribute
                     ]
                 )
+                f_csv.writerow(['\n'])
         f_csv.writerow([".end"])
 
 

@@ -154,7 +154,7 @@ class GroundNode(Node):
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
-        self.parent_graph.groundnode_counter += 1
+        # self.parent_graph.groundnode_counter += 1
 
     def get_groundnode_counter(self):
         return self.parent_graph.groundnode_counter

@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QDialog,
     QLabel,
 )
+from PySide6 import QtWidgets
 from PySide6.QtWidgets import QMenuBar, QMenu
 from PySide6.QtWidgets import QToolBar, QStatusBar
 from PySide6.QtWidgets import QFileDialog, QMessageBox
@@ -34,7 +35,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc
-from directedgraph.dgcore import GroundNodeNumberException
+from directedgraph.dgcore import GroundNodeNumberError
 
 
 class NodeItem(QGraphicsEllipseItem):
@@ -670,7 +671,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
             msg.setText("Only one ground_node is allowed!!!")
             msg.show()
             msg.exec_()
-            raise GroundNodeNumberException("oops!!")
+            raise GroundNodeNumberError("oops!!")
         else:
             self.scene.addItem(
                 GroundNodeItem(GroundNode(None, None, "groundnode1", None, [500, 300]))
