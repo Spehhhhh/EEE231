@@ -1,0 +1,10 @@
+# Arc node1 node2 value
+resistor "connected between node 1 and 2"
+r1 1 2 1000
+resistor "connected between node 2 and 1"
+r2 2 1 1000
+resistor "connected between node 2 and 1"
+r3 2 1 1000
+ "connected between node 1 and 0"
+vdd 1 0 
+.end
