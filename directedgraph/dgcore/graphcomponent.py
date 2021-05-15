@@ -177,14 +177,14 @@ class Arc(GraphComponent):
         node2=None,
         #     属性是啥：纯电阻？电容？
         user_define_attribute=None,
-        user_define_arc_type=""
+        user_define_arc_type="",
     ):
         super().__init__(parent_graph, uid, name, colour)
         self.nodes = []
         self.node1 = node1
         self.node2 = node2
         self.user_define_attribute = user_define_attribute
-        self.user_define_arc_type=user_define_arc_type
+        self.user_define_arc_type = user_define_arc_type
         self.update_position(node1, node2)
         self.function = {}
 
@@ -193,8 +193,8 @@ class Arc(GraphComponent):
     def get_position(self):
         return (self.nodes[0].get_position(), self.nodes[1].get_position())
 
-    def update_user_defined_arc_type(self,new_user_defined_arc_type):
-        self.user_define_arc_type=new_user_defined_arc_type
+    def update_user_defined_arc_type(self, new_user_defined_arc_type):
+        self.user_define_arc_type = new_user_defined_arc_type
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
