@@ -18,6 +18,7 @@ from directedgraph.dgcore import (
     create_graph,
 )
 
+
 def main():
     # Build graph
     graph = Graph("DemoGraph")
@@ -34,25 +35,78 @@ def main():
     node2 = graph.create_component({"type": "Node", "name": "Node 2", "uid": id_node2})
     graph.insert_component(node2)
 
-    r1 = graph.create_component({"type": "Arc", "name": "r1", "uid": str(uuid4()), "node1": id_node1, "node2": id_node2,"user_define_attribute":"resistor", "Impedance": 1000})
+    r1 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "r1",
+            "uid": str(uuid4()),
+            "node1": id_node1,
+            "node2": id_node2,
+            "user_define_attribute": "resistor",
+            "Impedance": 1000,
+        }
+    )
     graph.insert_component(r1)
 
-    r2 = graph.create_component({"type": "Arc", "name": "r2", "uid": str(uuid4()), "node1": id_node2, "node2": id_node1 ,"user_define_attribute":"resistor","Impedance": 1000})
+    r2 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "r2",
+            "uid": str(uuid4()),
+            "node1": id_node2,
+            "node2": id_node1,
+            "user_define_attribute": "resistor",
+            "Impedance": 1000,
+        }
+    )
     graph.insert_component(r2)
 
-    r3= graph.create_component({"type":"Arc","name":"r3","uid":str(uuid4()),"node1":id_node2,"node2":id_node1,"user_define_attribute":"resistor","Impedance":1000})
-    vdd = graph.create_component({"type": "Arc", "name": "vdd", "uid": str(uuid4()), "node1": id_node1, "node2": id_node0, "value": 5})
+    r3 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "r3",
+            "uid": str(uuid4()),
+            "node1": id_node2,
+            "node2": id_node1,
+            "user_define_attribute": "resistor",
+            "Impedance": 1000,
+        }
+    )
+    vdd = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "vdd",
+            "uid": str(uuid4()),
+            "node1": id_node1,
+            "node2": id_node0,
+            "value": 5,
+        }
+    )
     print(r3.get())
 
-    #Output txt
-    with open('../dgcore/DemoGraph.csv', 'w', newline="", encoding='utf-8')as f:
-        headers = ["#","Arc" ,"node1", "node2", "value"]
-        f_csv = csv.writer(f, delimiter=' ')
+    # Output txt
+    with open("../dgcore/DemoGraph.csv", "w", newline="", encoding="utf-8") as f:
+        headers = ["#", "Arc", "node1", "node2", "value"]
+        f_csv = csv.writer(f, delimiter=" ")
         f_csv.writerow(headers)
         for component in graph.components.values():
             if isinstance(component, Arc):
-                f_csv.writerow([component.get("user_define_attribute"), "connected between node {} and {}".format(component.get("node1"),component.get("node2"))])
-                f_csv.writerow([component.name, graph.components[component.node1].uid, graph.components[component.node2].uid, component.Impedance])
+                f_csv.writerow(
+                    [
+                        component.get("user_define_attribute"),
+                        "connected between node {} and {}".format(
+                            component.get("node1"), component.get("node2")
+                        ),
+                    ]
+                )
+                f_csv.writerow(
+                    [
+                        component.name,
+                        graph.components[component.node1].uid,
+                        graph.components[component.node2].uid,
+                        component.Impedance,
+                    ]
+                )
         f_csv.writerow([".end"])
 
 
