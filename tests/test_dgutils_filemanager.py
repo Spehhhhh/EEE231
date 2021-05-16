@@ -128,7 +128,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "14123f",
                 "node2_uid": "1f9cb9",
-                "user_define_arc_type": "None",
+                "user_defined_attribute": "None",
+                "user_defined_arc_type": "None",
             },
             {
                 "type": "Arc",
@@ -137,7 +138,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "59d632",
                 "node2_uid": "1d2386",
-                "user_define_arc_type": "Capacitor",
+                "user_defined_attribute": "10",
+                "user_defined_arc_type": "Capacitor",
             },
             {
                 "type": "Arc",
@@ -146,7 +148,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "1d2386",
                 "node2_uid": "567071",
-                "user_define_arc_type": "Capacitor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Capacitor",
             },
             {
                 "type": "Arc",
@@ -155,7 +158,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "1f9cb9",
                 "node2_uid": "9cf405",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
             {
                 "type": "Arc",
@@ -164,7 +168,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "9cf405",
                 "node2_uid": "a129a9",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
             {
                 "type": "Arc",
@@ -173,7 +178,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "9cf405",
                 "node2_uid": "a129a9",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
             {
                 "type": "Arc",
@@ -182,7 +188,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "a129a9",
                 "node2_uid": "59d632",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
             {
                 "type": "Arc",
@@ -191,7 +198,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "a129a9",
                 "node2_uid": "59d632",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
             {
                 "type": "Arc",
@@ -200,7 +208,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "a129a9",
                 "node2_uid": "59d632",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
             {
                 "type": "Arc",
@@ -209,7 +218,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "59d632",
                 "node2_uid": "8ad505",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
             {
                 "type": "Arc",
@@ -218,7 +228,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "8ad505",
                 "node2_uid": "567071",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
             {
                 "type": "Arc",
@@ -227,7 +238,8 @@ class TestFileManager(unittest.TestCase):
                 "colour": "#FFFFFF",
                 "node1_uid": "567071",
                 "node2_uid": "365bb9",
-                "user_define_arc_type": "Resistor",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
             },
         ]
         self.assertEqual(data1[0], list1)

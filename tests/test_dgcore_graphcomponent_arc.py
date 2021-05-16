@@ -53,7 +53,7 @@ def test_arc_init_case_2():
 
 def test_arc_function():
     node1 = GroundNode(None, None, "node1", None, None)
-    # set SourceNode user_define_attribute to 5(5v)
+    # set SourceNode user_defined_attribute to 5(5v)
     node2 = SourceNode(None, None, "ndoe2", None, None, 10)
     arc1 = Arc(None, "sdasd", "arc1", None, node1, node2, "resistance", 5)
     arc1.get_function()

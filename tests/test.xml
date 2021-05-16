@@ -67,24 +67,24 @@
             <colour>#FFFFFF</colour>
             <node1_uid>14123f</node1_uid>
             <node2_uid>1f9cb9</node2_uid>
-            <user_define_attribute>None</user_define_attribute>
-            <user_define_arc_type>None</user_define_arc_type>
+            <user_defined_attribute>None</user_defined_attribute>
+            <user_defined_arc_type>None</user_defined_arc_type>
         </Arc>
         <Arc uid="174404">
             <name>C1</name>
             <colour>#FFFFFF</colour>
             <node1_uid>59d632</node1_uid>
             <node2_uid>1d2386</node2_uid>
-            <user_define_attribute>10</user_define_attribute>
-            <user_define_arc_type>Capacitor</user_define_arc_type>
+            <user_defined_attribute>10</user_defined_attribute>
+            <user_defined_arc_type>Capacitor</user_defined_arc_type>
         </Arc>
         <Arc uid="1c7ad3">
             <name>C2</name>
             <colour>#FFFFFF</colour>
             <node1_uid>1d2386</node1_uid>
             <node2_uid>567071</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Capacitor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Capacitor</user_defined_arc_type>
         </Arc>
 
         <Arc uid="2201bd">
@@ -92,72 +92,72 @@
             <colour>#FFFFFF</colour>
             <node1_uid>1f9cb9</node1_uid>
             <node2_uid>9cf405</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="bd6295">
             <name>R2</name>
             <colour>#FFFFFF</colour>
             <node1_uid>9cf405</node1_uid>
             <node2_uid>a129a9</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="a88df3">
             <name>R3</name>
             <colour>#FFFFFF</colour>
             <node1_uid>9cf405</node1_uid>
             <node2_uid>a129a9</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="b081b6">
             <name>R4</name>
             <colour>#FFFFFF</colour>
             <node1_uid>a129a9</node1_uid>
             <node2_uid>59d632</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="2f7002">
             <name>R5</name>
             <colour>#FFFFFF</colour>
             <node1_uid>a129a9</node1_uid>
             <node2_uid>59d632</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="0dcb2f">
             <name>R6</name>
             <colour>#FFFFFF</colour>
             <node1_uid>a129a9</node1_uid>
             <node2_uid>59d632</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="33ae52">
             <name>R7</name>
             <colour>#FFFFFF</colour>
             <node1_uid>59d632</node1_uid>
             <node2_uid>8ad505</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="6bf56b">
             <name>R8</name>
             <colour>#FFFFFF</colour>
             <node1_uid>8ad505</node1_uid>
             <node2_uid>567071</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="ea40e5">
             <name>R9</name>
             <colour>#FFFFFF</colour>
             <node1_uid>567071</node1_uid>
             <node2_uid>365bb9</node2_uid>
-            <user_define_attribute>5</user_define_attribute>
-            <user_define_arc_type>Resistor</user_define_arc_type>
+            <user_defined_attribute>5</user_defined_attribute>
+            <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
     </Component>
 </DirectedGraph>

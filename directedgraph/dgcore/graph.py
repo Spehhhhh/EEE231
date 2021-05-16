@@ -27,7 +27,59 @@ class Graph:
     """
 
     def get(self):
-        return True
+        graph_attribute = []
+        graph_attribute.append({"name": self.name})
+
+        graph_components = []
+        for component in self.components.values():
+            if isinstance(component, Arc):
+                component_dict = {}
+                component_dict["type"] = "Arc"
+                component_dict["uid"] = component.uid
+                component_dict["name"] = component.name
+                component_dict["colour"] = component.colour
+                component_dict["node1_uid"] = component.nodes[0].uid
+                component_dict["node2_uid"] = component.nodes[1].uid
+                component_dict[
+                    "user_defined_attribute"
+                ] = component.user_defined_attribute
+                component_dict[
+                    "user_defined_arc_type"
+                ] = component.user_defined_arc_type
+                graph_components.append(component_dict)
+            elif isinstance(component, Node):
+                component_dict = {}
+                component_dict["type"] = "Node"
+                component_dict["uid"] = component.uid
+                component_dict["name"] = component.name
+                component_dict["colour"] = component.colour
+                component_dict["position_x"] = component.position[0]
+                component_dict["position_x"] = component.position[1]
+                graph_components.append(component_dict)
+            elif isinstance(component, SourceNode):
+                component_dict = {}
+                component_dict["type"] = "SourceNode"
+                component_dict["uid"] = component.uid
+                component_dict["name"] = component.name
+                component_dict["colour"] = component.colour
+                component_dict["position_x"] = component.position[0]
+                component_dict["position_x"] = component.position[1]
+                component_dict[
+                    "user_defined_attribute"
+                ] = component.user_defined_attribute
+                graph_components.append(component_dict)
+            elif isinstance(component, GroundNode):
+                component_dict = {}
+                component_dict["type"] = "GroundNode"
+                component_dict["uid"] = component.uid
+                component_dict["name"] = component.name
+                component_dict["colour"] = component.colour
+                component_dict["position_x"] = component.position[0]
+                component_dict["position_x"] = component.position[1]
+                graph_components.append(component_dict)
+            else:
+                pass
+        return (graph_attribute, graph_components)
 
     def get_name(self):
         return self.name
@@ -159,8 +211,8 @@ class Graph:
                 parameters.get("colour", None),
                 parameters.get("node1_uid", None),
                 parameters.get("node2_uid", None),
-                parameters.get("user_define_attribute", None),
-                parameters.get("user_define_arc_type", None),
+                parameters.get("user_defined_attribute", None),
+                parameters.get("user_defined_arc_type", None),
             )
             self.insert_component(component)
             return component

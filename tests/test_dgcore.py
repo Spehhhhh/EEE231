@@ -45,6 +45,24 @@ class TestGraph(unittest.TestCase):
         pass
 
     @logger.catch
+    def test_get(self):
+        graph1 = Graph("graph1")
+        graph1.create_component({"type": "Node", "name": "Node 1", "uid": "7778da"})
+        graph1.create_component({"type": "Node", "name": "Node 2", "uid": "b911b2"})
+        graph1.create_component(
+            {
+                "type": "Arc",
+                "name": "Arc 1",
+                "uid": "9a2812",
+                "node1_uid": "7778da",
+                "node2_uid": "b911b2",
+                "user_defined_attribute": "5",
+                "user_defined_arc_type": "Resistor",
+            }
+        )
+        print(graph1.get())
+
+    @logger.catch
     def test_id(self):
         graph1 = Graph("graph1")
         graph1.create_component({"type": "Node", "name": "Node without UID"})
@@ -104,8 +122,8 @@ class TestGraph(unittest.TestCase):
                 "colour": "#0000",
                 "node1_uid": "7778da",
                 "node2_uid": "0a0a0b",
-                "user_define_attribute": None,
-                "user_define_arc_type": None,
+                "user_defined_attribute": None,
+                "user_defined_arc_type": None,
             }
         )
         self.assertEqual(
@@ -212,8 +230,8 @@ class TestGraph(unittest.TestCase):
                 "colour": "#0000",
                 "node1_uid": "7778da",
                 "node2_uid": "7778da",
-                "user_define_attribute": None,
-                "user_define_arc_type": None,
+                "user_defined_attribute": None,
+                "user_defined_arc_type": None,
             }
         )
         graph1.create_component(
@@ -224,8 +242,8 @@ class TestGraph(unittest.TestCase):
                 "colour": "#0000",
                 "node1_uid": "7778da",
                 "node2_uid": "9a2812",
-                "user_define_attribute": None,
-                "user_define_arc_type": None,
+                "user_defined_attribute": None,
+                "user_defined_arc_type": None,
             }
         )
         graph1.create_component(
@@ -236,8 +254,8 @@ class TestGraph(unittest.TestCase):
                 "colour": "#0000",
                 "node1_uid": "7778da",
                 "node2_uid": "9a2812",
-                "user_define_attribute": None,
-                "user_define_arc_type": None,
+                "user_defined_attribute": None,
+                "user_defined_arc_type": None,
             }
         )
         # graph1.print_graph_details()

@@ -18,16 +18,16 @@ class Arc(GraphComponent):
         colour=None,
         node1_uid=None,
         node2_uid=None,
-        user_define_attribute=None,
-        user_define_arc_type=None,
+        user_defined_attribute=None,
+        user_defined_arc_type=None,
     ):
         super().__init__(connected_graph, uid, name, colour)
 
         self.nodes = [None, None]
         self.update_position(node1_uid, node2_uid)
 
-        self.user_define_attribute = user_define_attribute
-        self.user_define_arc_type = user_define_arc_type
+        self.user_defined_attribute = user_defined_attribute
+        self.user_defined_arc_type = user_defined_arc_type
 
         # self.function = {}
 
@@ -55,41 +55,41 @@ class Arc(GraphComponent):
                 self.nodes[1] = node2
 
     def update_user_defined_arc_type(self, new_user_defined_arc_type):
-        self.user_define_arc_type = new_user_defined_arc_type
+        self.user_defined_arc_type = new_user_defined_arc_type
 
-    def update_user_define_attribute(self, new_user_define_attribute):
+    def update_user_defined_attribute(self, new_user_defined_attribute):
         str_can_be_usde = ["p", "u", "k", "n", "m"]
-        if new_user_define_attribute.isdigit() is True:
-            if self.user_define_arc_type.lower() == "resistor":
+        if new_user_defined_attribute.isdigit() is True:
+            if self.user_defined_arc_type.lower() == "resistor":
                 if (
-                    len(new_user_define_attribute) > 1
-                    and new_user_define_attribute[0] == "0"
-                    or new_user_define_attribute == "-"
+                    len(new_user_defined_attribute) > 1
+                    and new_user_defined_attribute[0] == "0"
+                    or new_user_defined_attribute == "-"
                 ):
                     raise ValueError("wrong input!!!")
-        elif new_user_define_attribute.isdigit() is False:
-            if new_user_define_attribute[0] == "0":
+        elif new_user_defined_attribute.isdigit() is False:
+            if new_user_defined_attribute[0] == "0":
                 raise ValueError("wrong input!!!")
-            for j in new_user_define_attribute:
+            for j in new_user_defined_attribute:
                 if j.isdigit() is False:
                     if j.lower() not in str_can_be_usde:
                         raise ValueError("wrong input!!!")
                     else:
-                        index = new_user_define_attribute.index(j)
-                        if len(new_user_define_attribute[index:]) > 1:
+                        index = new_user_defined_attribute.index(j)
+                        if len(new_user_defined_attribute[index:]) > 1:
                             raise ValueError("wrong input!!!")
         else:
-            self.user_define_attribute = new_user_define_attribute
+            self.user_defined_attribute = new_user_defined_attribute
 
-        self.user_define_attribute = new_user_define_attribute
+        self.user_defined_attribute = new_user_defined_attribute
 
     # get editable function,eg: if Take a resistance.
     # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
     # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
     # def get_function(self):
-    #     if self.user_define_attribute == None:
+    #     if self.user_defined_attribute == None:
     #         return
-    #     elif self.user_define_attribute.lower() == "resistance":
+    #     elif self.user_defined_attribute.lower() == "resistance":
     #         if (
     #             isinstance(self.node1, Node)
     #             and isinstance(self.node2, SourceNode)
@@ -126,7 +126,7 @@ class Arc(GraphComponent):
     #                 )
     #                 / self.impedance
     #             )
-    #     elif self.user_define_attribute.lower() == "capacitor":
+    #     elif self.user_defined_attribute.lower() == "capacitor":
     #         if (
     #             isinstance(self.node1, Node)
     #             and isinstance(self.node2, SourceNode)
@@ -163,13 +163,13 @@ class Arc(GraphComponent):
     #                 )
     #                 / self.impedance
     #             )
-    #     elif self.user_define_attribute.lower() == "diode":
+    #     elif self.user_defined_attribute.lower() == "diode":
     #         pass
     #
     # # function['resistance']=(V_i - V)j) / R.
     # def update_function(self):
     #     function_update = self.get_function()
-    #     self.function[self.user_define_attribute] = function_update
+    #     self.function[self.user_defined_attribute] = function_update
     #
     # def update_node(self):
     #     if isinstance(self.node1, SourceNode) and isinstance(self.node2, Node):
@@ -179,5 +179,5 @@ class Arc(GraphComponent):
     #     elif isinstance(self.node1, Node) and isinstance(self.node2, Node):
     #         node2.value = (
     #             float(self.node1.value)
-    #             - self.impedance * self.function[self.user_define_attribute]
+    #             - self.impedance * self.function[self.user_defined_attribute]
     #         )

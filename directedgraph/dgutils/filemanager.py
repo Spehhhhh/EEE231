@@ -71,7 +71,7 @@ class FileManager:
                             "node1_uid",
                             "node2_uid",
                             "user_defined_attribute",
-                            "user_define_arc_type",
+                            "user_defined_arc_type",
                         ],
                     )
                 graph_components.append(temp)
@@ -83,7 +83,11 @@ class FileManager:
     def create_graph(self, graph_raw_data):
         new_graph = Graph(graph_raw_data[0][0].get("name"))
         for item in graph_raw_data[1]:
-            new_graph.create_component(item)
+            if item.get("type") is not "Arc":
+                new_graph.create_component(item)
+        for item in graph_raw_data[1]:
+            if item.get("type") is "Arc":
+                new_graph.create_component(item)
         return new_graph
 
     def export_graph(self, filepath, import_graph):
@@ -107,6 +111,6 @@ if __name__ == "__main__":
     # dom1 = minidom.parse(str(path))
 
     import unittest
-    from tests.test_dgutils import TestFileManager
+    from tests.test_dgutils_filemanager import TestFileManager
 
     unittest.main()

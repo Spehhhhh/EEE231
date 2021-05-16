@@ -35,7 +35,7 @@ def main():
             "uid": str(uuid4()),
             "node1": id_node1,
             "node2": id_node2,
-            "user_define_attribute": "resistor",
+            "user_defined_attribute": "resistor",
             "Impedance": 1000,
         }
     )
@@ -48,7 +48,7 @@ def main():
             "uid": str(uuid4()),
             "node1": id_node2,
             "node2": id_node1,
-            "user_define_attribute": "resistor",
+            "user_defined_attribute": "resistor",
             "Impedance": 1000,
         }
     )
@@ -61,7 +61,7 @@ def main():
             "uid": str(uuid4()),
             "node1": id_node2,
             "node2": id_node1,
-            "user_define_attribute": "resistor",
+            "user_defined_attribute": "resistor",
             "Impedance": 1000,
         }
     )
@@ -86,7 +86,7 @@ def main():
             if isinstance(component, Arc):
                 f_csv.writerow(
                     [
-                        component.get("user_define_attribute"),
+                        component.get("user_defined_attribute"),
                         "connected between node {} and {}".format(
                             component.get("node1"), component.get("node2")
                         ),
