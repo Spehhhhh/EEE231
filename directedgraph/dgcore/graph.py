@@ -35,47 +35,47 @@ class Graph:
             if isinstance(component, Arc):
                 component_dict = {}
                 component_dict["type"] = "Arc"
-                component_dict["uid"] = component.uid
-                component_dict["name"] = component.name
-                component_dict["colour"] = component.colour
-                component_dict["node1_uid"] = component.nodes[0].uid
-                component_dict["node2_uid"] = component.nodes[1].uid
+                component_dict["uid"] = str(component.uid)
+                component_dict["name"] = str(component.name)
+                component_dict["colour"] = str(component.colour)
+                component_dict["node1_uid"] = str(component.nodes[0].uid)
+                component_dict["node2_uid"] = str(component.nodes[1].uid)
                 component_dict[
                     "user_defined_attribute"
-                ] = component.user_defined_attribute
+                ] = str(component.user_defined_attribute)
                 component_dict[
                     "user_defined_arc_type"
-                ] = component.user_defined_arc_type
+                ] = str(component.user_defined_arc_type)
                 graph_components.append(component_dict)
             elif isinstance(component, Node):
                 component_dict = {}
                 component_dict["type"] = "Node"
-                component_dict["uid"] = component.uid
-                component_dict["name"] = component.name
-                component_dict["colour"] = component.colour
-                component_dict["position_x"] = component.position[0]
-                component_dict["position_x"] = component.position[1]
+                component_dict["uid"] = str(component.uid)
+                component_dict["name"] = str(component.name)
+                component_dict["colour"] = str(component.colour)
+                component_dict["position_x"] = str(component.position[0])
+                component_dict["position_y"] = str(component.position[1])
                 graph_components.append(component_dict)
             elif isinstance(component, SourceNode):
                 component_dict = {}
                 component_dict["type"] = "SourceNode"
-                component_dict["uid"] = component.uid
-                component_dict["name"] = component.name
-                component_dict["colour"] = component.colour
-                component_dict["position_x"] = component.position[0]
-                component_dict["position_x"] = component.position[1]
+                component_dict["uid"] = str(component.uid)
+                component_dict["name"] = str(component.name)
+                component_dict["colour"] = str(component.colour)
+                component_dict["position_x"] = str(component.position[0])
+                component_dict["position_y"] = str(component.position[1])
                 component_dict[
                     "user_defined_attribute"
-                ] = component.user_defined_attribute
+                ] = str(component.user_defined_attribute)
                 graph_components.append(component_dict)
             elif isinstance(component, GroundNode):
                 component_dict = {}
                 component_dict["type"] = "GroundNode"
-                component_dict["uid"] = component.uid
-                component_dict["name"] = component.name
-                component_dict["colour"] = component.colour
-                component_dict["position_x"] = component.position[0]
-                component_dict["position_x"] = component.position[1]
+                component_dict["uid"] = str(component.uid)
+                component_dict["name"] = str(component.name)
+                component_dict["colour"] = str(component.colour)
+                component_dict["position_x"] = str(component.position[0])
+                component_dict["position_y"] = str(component.position[1])
                 graph_components.append(component_dict)
             else:
                 pass
@@ -249,6 +249,6 @@ class Graph:
 
 if __name__ == "__main__":
     import unittest
-    from tests.test_dgcore import TestGraph
+    from tests.test_dgcore_graph import TestGraph
 
     unittest.main()  # Run Unit tests

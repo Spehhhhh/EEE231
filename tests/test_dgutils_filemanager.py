@@ -245,6 +245,9 @@ class TestFileManager(unittest.TestCase):
         self.assertEqual(data1[0], list1)
         self.assertEqual(data1[1], list2)
 
+        graph1 = fm.create_graph((list1, list2))
+        self.assertEqual(data1[0], graph1.get()[0])
+
     @logger.catch
     def test_create_graph(self):
         fm = FileManager()
