@@ -34,7 +34,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc
-from directedgraph.dgcore import GroundNodeNumberException
+from directedgraph.dgcore import GroundNodeNumberError
 
 
 class NodeItem(QGraphicsEllipseItem):
