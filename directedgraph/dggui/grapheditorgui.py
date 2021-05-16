@@ -84,6 +84,8 @@ class NodeItem(QGraphicsEllipseItem):
         self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
         self.selectionRectangle.setVisible(False)
 
+    # ------------------------- paint -------------------------
+
     def paint(self, painter, option, parent):
         # Paint the node instance - called by QGraphicView instance
         boundingRect = self.boundingRect()
@@ -113,40 +115,44 @@ class NodeItem(QGraphicsEllipseItem):
         print("paint called")
         return
 
-    # =========== Mouse Event =============================================================
+    def setPos(self, pos):
+        bounding = self.boundingRect()
+        offset = bounding.center()
+        super().setPos(pos - offset)
 
+    # ------------------------- Mouse Event -------------------------
+
+    # Override cursor shape into Openhand to indicate that drag is allowed
+    # also indicate that you have selected a node (read to move)
+    # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
     def hoverEnterEvent(self, event):
-        # Override cursor shape into Openhand to indicate that drag is allowed
-        # also indicate that you have selected a node (read to move)
-        # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().setOverrideCursor(Qt.OpenHandCursor)
 
+    # This Method is used to change back the cursor when mouse is not point to the node
     def hoverLeaveEvent(self, event):
-        # This Method is used to change back the cursor when mouse is not point to the node
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().restoreOverrideCursor()
 
+    # Handler for mousePressEvent
     def mousePressEvent(self, event):
-        # Handler for mousePressEvent
         self.prepareGeometryChange()
         mousePos = event.pos()
         # self.selectionRectangle.setVisible(True)
         print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        # self.update()
         return
 
+    # Handler for mouseReleaseEvent
     def mouseReleaseEvent(self, event):
-        # Handler for mouseReleaseEvent
         self.prepareGeometryChange()
         mousePos = event.pos()
         # self.selectionRectangle.setVisible(False)
         print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        # self.update()
         return
 
+    # Handler for mouseMoveEvent
     def mouseMoveEvent(self, event):
-        # Handler for mouseMoveEvent
+
         self.prepareGeometryChange()
         scenePosition = event.scenePos()
         self.setPos(scenePosition)
@@ -155,23 +161,18 @@ class NodeItem(QGraphicsEllipseItem):
         self.node.position[1] = scenePosition.y()
 
         print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-        # self.update()
         return
 
+    # Handler for mouseDoubleClickEvent
     def mouseDoubleClickEvent(self, event):
-        # Handler for mouseDoubleClickEvent
         self.prepareGeometryChange()
         # self.setVisible(False)
         print("mouseDoubleClickEvent")
-        # self.update()
         return
 
-    def setPos(self, pos):
-        bounding = self.boundingRect()
-        offset = bounding.center()
-        super().setPos(pos - offset)
+    # ------------------------- Pop -------------------------
 
-    # Pop Menu ==================================================================
+    # Pop Menu
     def contextMenuEvent(self, event):
         # Pop up menu for Node
         popmenu = QMenu()
@@ -200,6 +201,8 @@ class NodeItem(QGraphicsEllipseItem):
 
         # Excute at node Position, so it won't collide with Main windows pop-up menu
         popmenu.exec_(event.screenPos())
+
+    # ------------------------- Action -------------------------
 
     def on_name_action(self):
         text, result = QInputDialog.getText(
