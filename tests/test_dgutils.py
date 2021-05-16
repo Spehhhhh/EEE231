@@ -13,6 +13,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgutils import FileManager
+from directedgraph.dgcore import create_graph, graph
 
 
 logger.add(
@@ -229,6 +230,21 @@ class TestFileManager(unittest.TestCase):
         ]
         self.assertEqual(data1[0], list1)
         self.assertEqual(data1[1], list2)
+
+    @logger.catch
+    def test_read_and_create_graph(self):
+        filemanager1 = FileManager()
+        data1 = filemanager1.read_graph(str(self.path))
+        graph1 = create_graph(data1)
+
+        graph1.verify_graph_integrity()
+        # graph1.print_graph_details()
+
+        print("N1 Arcs:", len(graph1.get_component("1f9cb9").arcs))
+        print("N2 Arcs:", len(graph1.get_component("9cf405").arcs))
+        print("N4 Arcs:", len(graph1.get_component("59d632").arcs))
+        print("N7 Arcs:", len(graph1.get_component("567071").arcs))
+        print("G1 Arcs:", len(graph1.get_component("365bb9").arcs))
 
 
 if __name__ == "__main__":

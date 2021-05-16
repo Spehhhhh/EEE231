@@ -35,7 +35,21 @@ class Graph:
     def update_name(self, name):
         self.name = name
 
-    # #TODO
+    def update_compoment_node_arcs(self):
+        self.arc_counter = 0
+        compoments_values = self.components.values()
+
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, Node) or issubclass(
+                type(compoment_inst), Node
+            ):
+                compoment_inst.arcs.clear()
+
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, Arc):
+                self.arc_counter += 1
+                compoment_inst.nodes[0].arcs.append(compoment_inst)
+                compoment_inst.nodes[1].arcs.append(compoment_inst)
 
     def verify_graph_integrity(self):
         return_list = []
@@ -54,17 +68,7 @@ class Graph:
             pass
 
         # Source only allows single arcs
-        for compoment_inst in compoments_values:
-            if isinstance(compoment_inst, Node) or issubclass(
-                type(compoment_inst), Node
-            ):
-                compoment_inst.arcs.clear()
-
-        for compoment_inst in compoments_values:
-            if isinstance(compoment_inst, Arc):
-                self.arc_counter += 1
-                compoment_inst.nodes[0].arcs.append(compoment_inst)
-                compoment_inst.nodes[1].arcs.append(compoment_inst)
+        self.update_compoment_node_arcs()
 
         for compoment_inst in compoments_values:
             if isinstance(compoment_inst, SourceNode):
