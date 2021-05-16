@@ -60,7 +60,40 @@ class TestGraph(unittest.TestCase):
                 "user_defined_arc_type": "Resistor",
             }
         )
-        print(graph1.get())
+        self.assertEqual(
+            graph1.get(),
+            (
+                [{"name": "graph1"}],
+                [
+                    {
+                        "type": "Node",
+                        "uid": "7778da",
+                        "name": "Node 1",
+                        "colour": "#000000",
+                        "position_x": "0",
+                        "position_y": "0",
+                    },
+                    {
+                        "type": "Node",
+                        "uid": "b911b2",
+                        "name": "Node 2",
+                        "colour": "#000000",
+                        "position_x": "0",
+                        "position_y": "0",
+                    },
+                    {
+                        "type": "Arc",
+                        "uid": "9a2812",
+                        "name": "Arc 1",
+                        "colour": "#000000",
+                        "node1_uid": "7778da",
+                        "node2_uid": "b911b2",
+                        "user_defined_attribute": "5",
+                        "user_defined_arc_type": "Resistor",
+                    },
+                ],
+            ),
+        )
 
     @logger.catch
     def test_id(self):
