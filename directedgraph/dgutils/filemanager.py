@@ -91,7 +91,7 @@ class FileManager:
         return new_graph
 
     def export_graph(self, filepath, import_graph):
-        import_graph.get()
+        graph_raw_data = import_graph.get()
 
     def export_graph_png(self, filepath, import_graph):
         pass
