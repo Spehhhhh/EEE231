@@ -6,50 +6,50 @@
     <Component>
         <Node uid="1f9cb9">
             <name>N1</name>
-            <colour>#FF0000</colour>
-            <position_x>0</position_x>
-            <position_y>0</position_y>
+            <colour>#fd5455</colour>
+            <position_x>300</position_x>
+            <position_y>100</position_y>
         </Node>
         <Node uid="9cf405">
             <name>N2</name>
-            <colour>#FF0000</colour>
-            <position_x>10</position_x>
-            <position_y>10</position_y>
+            <colour>#fd5455</colour>
+            <position_x>500</position_x>
+            <position_y>100</position_y>
         </Node>
         <Node uid="a129a9">
             <name>N3</name>
-            <colour>#FF0000</colour>
-            <position_x>20</position_x>
-            <position_y>20</position_y>
+            <colour>#fd5455</colour>
+            <position_x>700</position_x>
+            <position_y>100</position_y>
         </Node>
         <Node uid="59d632">
             <name>N4</name>
-            <colour>#FF0000</colour>
-            <position_x>30</position_x>
-            <position_y>30</position_y>
+            <colour>#fd5455</colour>
+            <position_x>700</position_x>
+            <position_y>300</position_y>
         </Node>
         <Node uid="8ad505">
             <name>N5</name>
-            <colour>#FF0000</colour>
-            <position_x>40</position_x>
-            <position_y>40</position_y>
+            <colour>#fd5455</colour>
+            <position_x>700</position_x>
+            <position_y>500</position_y>
         </Node>
         <Node uid="1d2386">
             <name>N6</name>
-            <colour>#FF0000</colour>
-            <position_x>50</position_x>
-            <position_y>50</position_y>
+            <colour>#fd5455</colour>
+            <position_x>500</position_x>
+            <position_y>300</position_y>
         </Node>
         <Node uid="567071">
             <name>N7</name>
-            <colour>#FF0000</colour>
-            <position_x>60</position_x>
-            <position_y>60</position_y>
+            <colour>#fd5455</colour>
+            <position_x>500</position_x>
+            <position_y>500</position_y>
         </Node>
 
         <SourceNode uid="14123f">
             <name>S1</name>
-            <colour>#00FF00</colour>
+            <colour>#0f8080</colour>
             <position_x>100</position_x>
             <position_y>100</position_y>
             <user_defined_attribute>5</user_defined_attribute>
@@ -57,9 +57,9 @@
 
         <GroundNode uid="365bb9">
             <name>G1</name>
-            <colour>#FFFF00</colour>
-            <position_x>200</position_x>
-            <position_y>200</position_y>
+            <colour>#d4aa01</colour>
+            <position_x>500</position_x>
+            <position_y>700</position_y>
         </GroundNode>
 
         <Arc uid="8665f0">
