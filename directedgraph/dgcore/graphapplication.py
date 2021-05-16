@@ -1,7 +1,4 @@
-import timeit
 import sys
-import os
-from pathlib import Path
 from pathlib import Path
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
@@ -25,52 +22,7 @@ class DirectedGraphApplication:
         pass
 
 
-def create_graph(graph_raw_data):
-    new_graph = Graph(graph_raw_data[0][0].get("name"))
-    for item in graph_raw_data[1]:
-        new_graph.create_component(item)
-    return new_graph
-
-
-def load_graph(path):
-    fm = FileManager()
-    new_graph = create_graph(fm.read_graph(path))
-    return new_graph
-
-
-def test_create_graph():
-    graph_attribute = [{"name": "graph1"}]
-    graph_components = [
-        {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
-        {"type": "Node", "name": "node2", "uid": "32a24bfcfefe"},
-        {"type": "Node", "uid": "32a24bfcfefe"},
-    ]
-    graph_raw_data = (graph_attribute, graph_components)
-    graph1 = create_graph(graph_raw_data)
-    graph1.print_graph_details()
-
-
-def test_load_graph():
-    path = (
-        Path(os.path.dirname(__file__))
-        .parent.parent.joinpath("tests")
-        .joinpath("test.xml")
-    )
-    graph = load_graph(str(path))
-    graph.print_graph_details()
-
-
 if __name__ == "__main__":
-    # print(
-    #     timeit.timeit(
-    #         "test_1()",
-    #         setup="from __main__ import test_1",
-    #         number=10,
-    #     )
-    # )
-    test_create_graph()
-    test_load_graph()
-
     import unittest
     from tests.test_dgcore_graphapplication import TestDirectedGraphApplication
 

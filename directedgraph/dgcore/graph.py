@@ -15,6 +15,10 @@ class Graph:
     """
 
     def __init__(self, name=None):
+        self.connected_gui = None
+        self.groundnode_counter = 0
+        self.arc_counter = 0
+
         self.name = name if name else "Untitled"
         self.components = {}
 
@@ -23,7 +27,59 @@ class Graph:
     """
 
     def get(self):
-        return True
+        graph_attribute = []
+        graph_attribute.append({"name": self.name})
+
+        graph_components = []
+        for component in self.components.values():
+            if isinstance(component, Arc):
+                component_dict = {}
+                component_dict["type"] = "Arc"
+                component_dict["uid"] = str(component.uid)
+                component_dict["name"] = str(component.name)
+                component_dict["colour"] = str(component.colour)
+                component_dict["node1_uid"] = str(component.nodes[0].uid)
+                component_dict["node2_uid"] = str(component.nodes[1].uid)
+                component_dict[
+                    "user_defined_attribute"
+                ] = str(component.user_defined_attribute)
+                component_dict[
+                    "user_defined_arc_type"
+                ] = str(component.user_defined_arc_type)
+                graph_components.append(component_dict)
+            elif isinstance(component, Node):
+                component_dict = {}
+                component_dict["type"] = "Node"
+                component_dict["uid"] = str(component.uid)
+                component_dict["name"] = str(component.name)
+                component_dict["colour"] = str(component.colour)
+                component_dict["position_x"] = str(component.position[0])
+                component_dict["position_y"] = str(component.position[1])
+                graph_components.append(component_dict)
+            elif isinstance(component, SourceNode):
+                component_dict = {}
+                component_dict["type"] = "SourceNode"
+                component_dict["uid"] = str(component.uid)
+                component_dict["name"] = str(component.name)
+                component_dict["colour"] = str(component.colour)
+                component_dict["position_x"] = str(component.position[0])
+                component_dict["position_y"] = str(component.position[1])
+                component_dict[
+                    "user_defined_attribute"
+                ] = str(component.user_defined_attribute)
+                graph_components.append(component_dict)
+            elif isinstance(component, GroundNode):
+                component_dict = {}
+                component_dict["type"] = "GroundNode"
+                component_dict["uid"] = str(component.uid)
+                component_dict["name"] = str(component.name)
+                component_dict["colour"] = str(component.colour)
+                component_dict["position_x"] = str(component.position[0])
+                component_dict["position_y"] = str(component.position[1])
+                graph_components.append(component_dict)
+            else:
+                pass
+        return (graph_attribute, graph_components)
 
     def get_name(self):
         return self.name
@@ -31,16 +87,50 @@ class Graph:
     def update_name(self, name):
         self.name = name
 
-    # #TODO
+    def update_compoment_node_arcs(self):
+        self.arc_counter = 0
+        compoments_values = self.components.values()
+
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, Node) or issubclass(
+                type(compoment_inst), Node
+            ):
+                compoment_inst.arcs.clear()
+
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, Arc):
+                self.arc_counter += 1
+                compoment_inst.nodes[0].arcs.append(compoment_inst)
+                compoment_inst.nodes[1].arcs.append(compoment_inst)
+
     def verify_graph_integrity(self):
-        groundnode_counter = 0
-        for key in self.components:
-            if self.components[key]["type"] == "GroundNode":
-                groundnode_counter += 1
-        if groundnode_counter != 1:
-            return False
+        return_list = []
+        return_list.clear()
+        compoments_values = self.components.values()
+        self.groundnode_counter = 0
+        self.arc_counter = 0
+
+        # Only one Ground Node is allowed
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, GroundNode):
+                self.groundnode_counter += 1
+        if self.groundnode_counter != 1:
+            return_list.append("Only one Ground Node is allowed")
         else:
-            return True
+            pass
+
+        # Source only allows single arcs
+        self.update_compoment_node_arcs()
+
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, SourceNode):
+                if len(compoment_inst.arcs) > 1:
+                    return_list.append("Source only allows single arcs")
+
+        if self.arc_counter > 50:
+            return_list.append("Too many Arcs")
+
+        return return_list
 
     # For debugging Graph
     def print_graph_details(self):
@@ -67,7 +157,7 @@ class Graph:
 
     def get_component(self, uid):
         # print(self.components[uid].get_name())
-        # print("parent_graph:", self.components[uid].get_parent_graph())
+        # print("connected_graph:", self.components[uid].get_connected_graph())
         # print(vars(self.components[uid])) # 可以返回对象也可以返回字典
         return self.components[uid]
 
@@ -105,11 +195,11 @@ class Graph:
                 self,
                 parameters.get("uid", None),
                 parameters.get("name", None),
+                parameters.get("colour", None),
                 [
                     int(parameters.get("position_x", 0)),
                     int(parameters.get("position_y", 0)),
                 ],
-                parameters.get("position", None),
             )
             self.insert_component(component)
             return component
@@ -119,10 +209,10 @@ class Graph:
                 parameters.get("uid", None),
                 parameters.get("name", None),
                 parameters.get("colour", None),
-                parameters.get("node1", None),
-                parameters.get("node2", None),
-                parameters.get("user_define_attribute", None),
-                parameters.get("user_define_arc_type", None),
+                parameters.get("node1_uid", None),
+                parameters.get("node2_uid", None),
+                parameters.get("user_defined_attribute", None),
+                parameters.get("user_defined_arc_type", None),
             )
             self.insert_component(component)
             return component
@@ -145,7 +235,7 @@ class Graph:
         if isinstance(arc1, Arc):
             arc1.update_position(node1, node2)
         elif isinstance(arc1, str):
-            if len(node2) == 12 and self.parent_graph == self:
+            if len(node2) == 12 and self.connected_graph == self:
                 self.get_component["arc1"].update_position(node1, node2)
 
     # #TODO 需要写误删除逻辑
@@ -159,6 +249,6 @@ class Graph:
 
 if __name__ == "__main__":
     import unittest
-    from tests.test_dgcore import TestGraph
+    from tests.test_dgcore_graph import TestGraph
 
     unittest.main()  # Run Unit tests
