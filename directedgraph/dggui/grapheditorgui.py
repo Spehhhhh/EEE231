@@ -1,3 +1,4 @@
+from os import name
 from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
 from PySide6.QtGui import QAction
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics
@@ -34,7 +35,7 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc
+from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc, graph
 from directedgraph.dgcore import GroundNodeNumberError
 
 
@@ -43,8 +44,15 @@ class NodeItem(QGraphicsEllipseItem):
 
     def __init__(self, node_instance):
         self.node = node_instance
-        self.node_radius = 25.0
-        self.node_fill_colour = QColor(231, 84, 128)
+
+        self.node_radius = 30.0
+
+        self.node_fill_colour = QColor(
+            int(self.node.colour[1:3], 16),
+            int(self.node.colour[3:5], 16),
+            int(self.node.colour[5:7], 16),
+        )
+
         self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
         self.node_fill_brush.setColor(self.node_fill_colour)
 
@@ -110,7 +118,7 @@ class NodeItem(QGraphicsEllipseItem):
         # Handler for mousePressEvent
         self.prepareGeometryChange()
         mousePos = event.pos()
-        self.selectionRectangle.setVisible(True)
+        # self.selectionRectangle.setVisible(True)
         print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
         # self.update()
         return
@@ -119,7 +127,7 @@ class NodeItem(QGraphicsEllipseItem):
         # Handler for mouseReleaseEvent
         self.prepareGeometryChange()
         mousePos = event.pos()
-        self.selectionRectangle.setVisible(False)
+        # self.selectionRectangle.setVisible(False)
         print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
         # self.update()
         return
@@ -154,46 +162,32 @@ class NodeItem(QGraphicsEllipseItem):
         popmenu = QMenu()
 
         # Name
-        nameaction = QAction("Name")
-        popmenu.addAction(nameaction)
-        # nameaction.triggered.connect()
+        nameAction = QAction("Name")
+        popmenu.addAction(nameAction)
+        nameAction.triggered.connect(self.on_name_action)
 
         # Colour
-        colouraction = QAction("Colour")
-        popmenu.addAction(colouraction)
+        colourAction = QAction("Colour")
+        popmenu.addAction(colourAction)
         # colouraction.triggered.connect()
 
         # Value
-        valueaction = QAction("Value")
-        popmenu.addAction(valueaction)
+        valueAction = QAction("Value")
+        popmenu.addAction(valueAction)
         # valueaction.triggered.connect()
 
         popmenu.addSeparator()
 
         # Delete
-        deleteaction = QAction("Delete")
-        popmenu.addAction(deleteaction)
+        deleteAction = QAction("Delete")
+        popmenu.addAction(deleteAction)
         # deleteaction.triggered.connect()
 
         # Excute at node Position, so it won't collide with Main windows pop-up menu
         popmenu.exec_(event.screenPos())
 
-    # def eventFilter(self, source, event):
-
-    #     if event.type() == QEvent.MouseButtonPress:
-    #         print(source)
-    #     # if QMouseEvent.button() == Qt.LeftButton:
-    #     #     mousePos = QMouseEvent.pos()
-    #     #     self.selectionRectangle.setVisible(True)
-    #     #     print("Left Button Clicked")
-    #     #     print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-    #     #     # self.update()
-    #     #     return
-    #     # elif QMouseEvent.button() == Qt.RightButton:
-    #     #     print("Right Button Clicked")
-    #     #     QMenu
-    #     #     return
-    #     return super().eventFilter(source, event)
+    def on_name_action(self):
+        print(self.node.name)
 
 
 class SourceNodeItem(QGraphicsEllipseItem):
@@ -202,7 +196,11 @@ class SourceNodeItem(QGraphicsEllipseItem):
     def __init__(self, node_instance):
         self.node = node_instance
         self.node_radius = 40.0
-        self.node_fill_colour = QColor(0, 128, 128)
+        self.node_fill_colour = QColor(
+            int(self.node.colour[1:3], 16),
+            int(self.node.colour[3:5], 16),
+            int(self.node.colour[5:7], 16),
+        )
         self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
         self.node_fill_brush.setColor(self.node_fill_colour)
 
@@ -418,23 +416,6 @@ class GroundNodeItem(QGraphicsEllipseItem):
         # self.update()
         return
 
-    # def eventFilter(self, source, event):
-
-    #     if event.type() == QEvent.MouseButtonPress:
-    #         print(source)
-    #     # if QMouseEvent.button() == Qt.LeftButton:
-    #     #     mousePos = QMouseEvent.pos()
-    #     #     self.selectionRectangle.setVisible(True)
-    #     #     print("Left Button Clicked")
-    #     #     print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-    #     #     # self.update()
-    #     #     return
-    #     # elif QMouseEvent.button() == Qt.RightButton:
-    #     #     print("Right Button Clicked")
-    #     #     QMenu
-    #     #     return
-    #     return super().eventFilter(source, event)
-
     def mouseReleaseEvent(self, event):
         # Handler for mouseReleaseEvent
         self.prepareGeometryChange()
@@ -504,9 +485,9 @@ class ArcItem:
         pass
 
 
-class Input(QDialog, QMainWindow):
+class InputFormSourceNode(QDialog, QMainWindow):
     def __init__(self, parent=None):
-        super(Input, self).__init__(parent)
+        super(InputFormSourceNode, self).__init__(parent)
         self.setWindowTitle("Input source node value")
         self.edit = QLineEdit(self)
         self.edit.placeholderText()
@@ -539,10 +520,10 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         self.ground_node_count = 0
 
         # Initialise the QGraphicScene
-        self.scene = QGraphicsScene(0, 0, 500, 500, self)
+        self.scene = QGraphicsScene(0, 0, 1980, 1080, self)
         self.view = QGraphicsView(self.scene)
 
-        self.view.resize(1000, 1000)
+        # self.view.resize(1000, 1000)
         self.view.setRenderHints(QPainter.Antialiasing)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.view)
@@ -589,7 +570,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         self.saveToolButton = self.mainToolBar.addAction("Save")
         self.saveToolButton.setShortcut("Ctrl+S")
         self.saveToolButton.setStatusTip("Save File")
-        self.saveToolButton.triggered.connect(self.file_save)
+        self.saveToolButton.triggered.connect(self.on_save_file)
         self.saveAsToolButton = self.mainToolBar.addAction("Save As")
         self.addToolBar(self.mainToolBar)
         self.layout.addWidget(self.mainToolBar)
@@ -597,6 +578,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
         # Pop out menu for the graph================================================
 
+    # Menu =========================================================
     def contextMenuEvent(self, event):
         contextmenu = QMenu(self)
 
@@ -634,22 +616,16 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         print("opening ", fileName[0])
         return
 
-    # --------------------------------------------------------------------------
-
     def on_quit_action(self):
         """Handler for 'Quit' action"""
         print("quitting application")
         self.close()
         return
 
-    # --------------------------------------------------------------------------
-
     def on_preferences_action(self):
         """Handler for 'Preferences' action"""
         print("preferences")
         return
-
-    # --------------------------------------------------------------------------
 
     def on_about_action(self):
         """Handler for 'About' action"""
@@ -678,7 +654,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
             )
 
     def on_sourcenode(self):
-        form = Input()
+        form = InputFormSourceNode()
         form.show()
         form.exec_()
         value = str(form.confirm())
@@ -687,14 +663,40 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
             SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         )
 
+    def on_save_file(self):
+        name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
+        file = open(name[0], "w")
+        # 传输xml格式，使用filemanager
+        text = "sasd"
+        file.write(text)
+        file.close()
+
+    def event_filter(self, source, event):
+        pass
+
     def init_graph(self):
-        self.scene.addItem(NodeItem(Node(None, None, "node1", None, [200, 200])))
-        self.scene.addItem(NodeItem(Node(None, None, "node2", None, [100, 100])))
-        test = NodeItem(Node(None, None, "node3", None, [300, 300]))
-        self.scene.addItem(
-            GroundNodeTestItem(Node(None, None, "GroundNodeTestItem", None, [400, 400]))
+        from directedgraph.dgutils import FileManager
+        import os
+
+        fm = FileManager()
+        path = (
+            Path(os.path.dirname(__file__))
+            .parent.parent.joinpath("tests")
+            .joinpath("test.xml")
         )
-        self.scene.addItem(test)
+        graph1 = fm.read_graph(str(path))
+
+        for compoment in graph1.components.values():
+            if isinstance(compoment, Node):
+                self.scene.addItem(NodeItem(compoment))
+
+        # self.scene.addItem(NodeItem(Node(None, None, "N1", "#FF0000", [200, 200])))
+        # self.scene.addItem(NodeItem(Node(None, None, "N2", "#FF0000", [100, 100])))
+        # test = NodeItem(Node(None, None, "N3", "#FF0000", [300, 300]))
+        # self.scene.addItem(
+        #     GroundNodeTestItem(Node(None, None, "Test", "#FF0000", [400, 400]))
+        # )
+        # self.scene.addItem(test)
 
         # menu = QMenu()
         # menu.addAction("Action 1")
@@ -702,17 +704,6 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         # menu.addAction("Action 3")
         # menu.exec_()
         # self.scene.addItem(menu)
-
-    def event_filter(self, source, event):
-        pass
-
-    def file_save(self):
-        name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
-        file = open(name[0], "w")
-        # 传输xml格式，使用filemanager
-        text = "sasd"
-        file.write(text)
-        file.close()
 
 
 class DirectedGraphApplication:
@@ -730,4 +721,5 @@ class DirectedGraphApplication:
 
 
 if __name__ == "__main__":
+
     app = DirectedGraphApplication()
