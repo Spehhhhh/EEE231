@@ -8,10 +8,10 @@ from directedgraph.dgcore.graphcomponent import (
     Node,
     SourceNode,
     GroundNode,
-    Arc,
 )
+from directedgraph.dgcore.graphcomponent_arc import Arc
 from directedgraph.dgcore.graph import Graph
-from directedgraph.dgcore.graphapplication import DirectedGraphApplication, create_graph
+from directedgraph.dgcore.graphapplication import DirectedGraphApplication
 
 # import directedgraph.dgcore.graphcomponent
 # import directedgraph.dgcore.graph

@@ -9,9 +9,9 @@ sys.path.append(father_folder)
 
 
 class GraphComponent:
-    def __init__(self, parent_graph=None, uid=None, name=None, colour=None):
-        self.parent_graph = parent_graph  # connected_graph
-        self.connected_gui = None  # connected_graph
+    def __init__(self, connected_graph=None, uid=None, name=None, colour=None):
+        self.connected_graph = connected_graph if connected_graph else None
+        self.connected_gui = None
 
         self.uid = None
         self.generate_uid(uid)
@@ -21,29 +21,29 @@ class GraphComponent:
     # If the instance does not have a UID, a UID is generated.
     # If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
     def generate_uid(self, uid_old=None):
-        UID_LENGTH = 12
-        if self.parent_graph == None:
+        UID_LENGTH = 6
+        if self.connected_graph == None:
             self.uid = uuid.uuid4().hex[:UID_LENGTH]
         else:
             if uid_old == None:
                 uid_new = uuid.uuid4().hex[:UID_LENGTH]
-                while uid_new in self.parent_graph.components:
+                while uid_new in self.connected_graph.components:
                     uid_new = uuid.uuid4().hex[:UID_LENGTH]
                     self.uid = uid_new
                 self.uid = uid_new
                 return uid_new
             else:
-                if uid_old not in self.parent_graph.components:
+                if uid_old not in self.connected_graph.components:
                     self.uid = uid_old
                     return uid_old
                 else:
-                    print(
-                        "Error: Duplicate uid occurs",
-                        uid_old,
-                        "Try to reassign UID...",
-                    )
+                    # print(
+                    #     "Error: Duplicate uid occurs",
+                    #     uid_old,
+                    #     "Try to reassign UID...",
+                    # )
                     uid_new = uuid.uuid4().hex[:UID_LENGTH]
-                    while uid_new in self.parent_graph.components:
+                    while uid_new in self.connected_graph.components:
                         uid_new = uuid.uuid4().hex[:UID_LENGTH]
                         self.uid = uid_new
                     self.uid = uid_new
@@ -57,8 +57,8 @@ class GraphComponent:
         else:
             return vars(self).get(element_attribute, None)
 
-    def get_parent_graph(self):
-        return self.parent_graph
+    def get_connected_graph(self):
+        return self.connected_graph
 
     def get_uid(self):
         return self.uid
@@ -81,17 +81,19 @@ class GraphComponent:
 class Node(GraphComponent):
     def __init__(
         self,
-        parent_graph=None,
+        connected_graph=None,
         uid=None,
         name=None,
         colour=None,
         position=None,
     ):
-        super().__init__(parent_graph, uid, name, colour)
+        super().__init__(connected_graph, uid, name, colour)
         self.position = position if position else [0, 0]
+
         # it won't get any value which can be obtained from the simulator
         # The user cannot change (Default is 0)
         self.value = 0
+
         # Objects of the arc connected to this node
         # #TODO 此处要注意的是 Node 当中这个 List 可能有多个，而 Source Node 中只能有一个
         self.arcs = []
@@ -119,22 +121,17 @@ class Node(GraphComponent):
 class SourceNode(Node):
     def __init__(
         self,
-        parent_graph=None,
+        connected_graph=None,
         uid=None,
         name=None,
         colour=None,
         position=None,
-        user_defined_attribute=None,
-        current=None,
+        user_defined_attribute=None,  # Current
     ):
-        super().__init__(parent_graph, uid, name, colour, position)
+        super().__init__(connected_graph, uid, name, colour, position)
         self.user_defined_attribute = (
             user_defined_attribute if user_defined_attribute else "0"
         )
-        if current == None:
-            self.current = 0
-        else:
-            self.current = current
 
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
@@ -146,18 +143,20 @@ class SourceNode(Node):
 class GroundNode(Node):
     def __init__(
         self,
-        parent_graph=None,
+        connected_graph=None,
         uid=None,
         name=None,
         colour=None,
         position=None,
     ):
-        super().__init__(parent_graph, uid, name, colour, position)
+        super().__init__(connected_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
-        # self.parent_graph.groundnode_counter += 1
+
+        if connected_graph != None:
+            self.connected_graph.groundnode_counter += 1
 
     def get_groundnode_counter(self):
-        return self.parent_graph.groundnode_counter
+        return self.connected_graph.groundnode_counter
 
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
@@ -166,188 +165,8 @@ class GroundNode(Node):
         return False  # groundnote user_defined_attribute cannot be modified
 
 
-class Arc(GraphComponent):
-    def __init__(
-        self,
-        parent_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        node1=None,
-        node2=None,
-        #     属性是啥：纯电阻？电容？
-        user_define_attribute=None,
-        user_define_arc_type="",
-    ):
-        super().__init__(parent_graph, uid, name, colour)
-        self.nodes = []
-        self.node1 = node1
-        self.node2 = node2
-        self.user_define_attribute = user_define_attribute
-        self.user_define_arc_type = user_define_arc_type
-        self.update_position(node1, node2)
-        self.function = {}
-
-    # get_position() get positions of two objects connected by the arc
-    # #TODO 需要设计 Trace Back 捕捉
-    def get_position(self):
-        return (self.nodes[0].get_position(), self.nodes[1].get_position())
-
-    def update_user_defined_arc_type(self, new_user_defined_arc_type):
-        self.user_define_arc_type = new_user_defined_arc_type
-
-    # update_position() get positions of two objects connected by the arc
-    # update_position() can accept both UIDs and objects as parameters
-    # #TODO 需要设计 Trace Back 捕捉
-    def update_position(self, node1=None, node2=None):
-        if node1 is not None:
-            if isinstance(node1, str):
-                if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_component(node1))
-            elif isinstance(node1, Node) or issubclass(node1, Node):
-                self.nodes.append(node1)
-
-        if node2 is not None:
-            if isinstance(node2, str) and self.parent_graph != None:
-                if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_component(node2))
-            elif isinstance(node2, Node) or issubclass(node2, Node):
-                self.nodes.append(node2)
-
-    def update_user_define_attribute(self, new_user_define_attribute):
-        self.user_define_attribute = new_user_define_attribute
-
-    # get editable function,eg: if Take a resistance.
-    # The current through the resistance from node i to node j is given by (V_i - V)j) / R.
-    # But if the arc represented a diode, the current would be I_0 [exp((V_i - V_j)/kT) - 1].
-    # def get_function(self):
-    #     if self.user_define_attribute == None:
-    #         return
-    #     elif self.user_define_attribute.lower() == "resistance":
-    #         if (
-    #             isinstance(self.node1, Node)
-    #             and isinstance(self.node2, SourceNode)
-    #             or isinstance(self.node2, GroundNode)
-    #         ):
-    #             return (
-    #                 abs(self.node1.value - float(self.node2.user_defined_attribute))
-    #                 / self.impedance
-    #             )
-    #
-    #         elif (
-    #             isinstance(self.node1, SourceNode)
-    #             or isinstance(self.node1, GroundNode)
-    #             and isinstance(self.node2, Node)
-    #         ):
-    #             return (
-    #                 abs(
-    #                     float(self.node1.user_defined_attribute)
-    #                     - float(self.node2.value)
-    #                 )
-    #                 / self.impedance
-    #             )
-    #
-    #         elif (
-    #             isinstance(self.node1, SourceNode)
-    #             or isinstance(self.node1, GroundNode)
-    #             and isinstance(self.node2, GroundNode)
-    #             or isinstance(self.node2, SourceNode)
-    #         ):
-    #             return (
-    #                 abs(
-    #                     float(self.node1.user_defined_attribute)
-    #                     - float(self.node2.user_defined_attribute)
-    #                 )
-    #                 / self.impedance
-    #             )
-    #     elif self.user_define_attribute.lower() == "capacitor":
-    #         if (
-    #             isinstance(self.node1, Node)
-    #             and isinstance(self.node2, SourceNode)
-    #             or isinstance(self.node2, GroundNode)
-    #         ):
-    #             return (
-    #                 abs(self.node1.value - float(self.node2.user_defined_attribute))
-    #                 / self.impedance
-    #             )
-    #
-    #         elif (
-    #             isinstance(self.node1, SourceNode)
-    #             or isinstance(self.node1, GroundNode)
-    #             and isinstance(self.node2, Node)
-    #         ):
-    #             return (
-    #                 abs(
-    #                     float(self.node1.user_defined_attribute)
-    #                     - float(self.node2.value)
-    #                 )
-    #                 / self.impedance
-    #             )
-    #
-    #         elif (
-    #             isinstance(self.node1, SourceNode)
-    #             or isinstance(self.node1, GroundNode)
-    #             and isinstance(self.node2, GroundNode)
-    #             or isinstance(self.node2, SourceNode)
-    #         ):
-    #             return (
-    #                 abs(
-    #                     float(self.node1.user_defined_attribute)
-    #                     - float(self.node2.user_defined_attribute)
-    #                 )
-    #                 / self.impedance
-    #             )
-    #     elif self.user_define_attribute.lower() == "diode":
-    #         pass
-    #
-    # # function['resistance']=(V_i - V)j) / R.
-    # def update_function(self):
-    #     function_update = self.get_function()
-    #     self.function[self.user_define_attribute] = function_update
-    #
-    # def update_node(self):
-    #     if isinstance(self.node1, SourceNode) and isinstance(self.node2, Node):
-    #         node2.value = float(
-    #             self.node1.user_defined_attribute
-    #         ) - node1.current * float(self.impedance)
-    #     elif isinstance(self.node1, Node) and isinstance(self.node2, Node):
-    #         node2.value = (
-    #             float(self.node1.value)
-    #             - self.impedance * self.function[self.user_define_attribute]
-    #         )
-
-
 if __name__ == "__main__":
-    node1 = SourceNode(None, None, "Node1", None, [200, 300], 8, 2)
-    node2 = Node(None, None, "Node2", None, [300, 300])
-    arc1 = Arc(None, None, None, None, node1, node2, "resistance", 5)
-    print(
-        arc1.user_define_attribute
-        + " connceted between {} and {}".format(arc1.node1.name, arc1.node2.name)
-    )
-    # if arc1.user_define_attribute == "resistance":
-    #     print(
-    #         "r1:"
-    #         + str(arc1.impedance)
-    #         + "\t\t"
-    #         + str(arc1.node1.value)
-    #         + "\t \t"
-    #         + str(arc1.node2.value)
-    #     )
-    # else:
-    #     print(
-    #         "c1:"
-    #         + str(arc1.impedance)
-    #         + "\t\t"
-    #         + str(arc1.node1.value)
-    #         + "\t \t"
-    #         + str(arc1.node2.value)
-    #     )
-    # print(node2.get())
-    # arc1.update_function()
-    # arc1.update_node()
-    # print(node2.get())
-    # import unittest
-    # from tests.test_dgcore_graphcomponent import TestGraphComponent
-    #
-    # unittest.main()
+    import unittest
+    from tests.test_dgcore_graphcomponent import TestGraphComponent
+
+    unittest.main()

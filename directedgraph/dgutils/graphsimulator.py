@@ -9,14 +9,7 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import (
-    Graph,
-    Node,
-    SourceNode,
-    GroundNode,
-    Arc,
-    create_graph,
-)
+from directedgraph.dgcore import Graph, Node, SourceNode, GroundNode, Arc
 
 
 def main():

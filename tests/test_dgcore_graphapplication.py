@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import timeit
 import itertools
@@ -10,15 +11,7 @@ current_folder = Path(__file__).absolute().parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import (
-    GraphComponent,
-    Graph,
-    Node,
-    SourceNode,
-    GroundNode,
-    Arc,
-    create_graph,
-)
+from directedgraph.dgcore import DirectedGraphApplication
 
 logger.add(
     "logs/test_dgcore_graphapplication.py.log",
@@ -39,7 +32,6 @@ class TestDirectedGraphApplication(unittest.TestCase):
         pass
 
     def setUp(self):
-        self.xml = "TODO"
         pass
 
     def tearDown(self):

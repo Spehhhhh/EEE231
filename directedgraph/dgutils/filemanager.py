@@ -7,6 +7,8 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
+from directedgraph.dgcore import Graph
+
 
 class FileManager:
     def __init__(self):
@@ -24,6 +26,10 @@ class FileManager:
                 pass
 
     def read_graph(self, filepath):
+        new_graph = self.create_graph(self.read_graph_raw_data(filepath))
+        return new_graph
+
+    def read_graph_raw_data(self, filepath):
         dom1 = minidom.parse(filepath)
         graph_attribute = []
         graph_components = []
@@ -58,20 +64,39 @@ class FileManager:
                 elif component_type == "GroundNode":
                     self.parse_attribute(component, temp, ["position_x", "position_y"])
                 elif component_type == "Arc":
-                    self.parse_attribute(component, temp, ["node1", "node2"])
+                    self.parse_attribute(
+                        component,
+                        temp,
+                        [
+                            "node1_uid",
+                            "node2_uid",
+                            "user_defined_attribute",
+                            "user_defined_arc_type",
+                        ],
+                    )
                 graph_components.append(temp)
 
         # Return Data as Tuple
         graph = (graph_attribute, graph_components)
         return graph
 
-    def save_graph(self, filepath, graph):
+    def create_graph(self, graph_raw_data):
+        new_graph = Graph(graph_raw_data[0][0].get("name"))
+        for item in graph_raw_data[1]:
+            if item.get("type") is not "Arc":
+                new_graph.create_component(item)
+        for item in graph_raw_data[1]:
+            if item.get("type") is "Arc":
+                new_graph.create_component(item)
+        return new_graph
+
+    def export_graph(self, filepath, import_graph):
+        graph_raw_data = import_graph.get()
+
+    def export_graph_png(self, filepath, import_graph):
         pass
 
-    def export_graph_png(self, filepath, graph):
-        pass
-
-    def export_graph_pdf(self, filepath, graph):
+    def export_graph_pdf(self, filepath, import_graph):
         pass
 
 
@@ -84,4 +109,8 @@ if __name__ == "__main__":
     #     .joinpath("test.xml")
     # )
     # dom1 = minidom.parse(str(path))
-    pass
+
+    import unittest
+    from tests.test_dgutils_filemanager import TestFileManager
+
+    unittest.main()
