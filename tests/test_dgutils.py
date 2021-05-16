@@ -13,8 +13,6 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgutils import FileManager
-from directedgraph.dgcore import create_graph, graph
-
 
 logger.add(
     "logs/test_dgutils.py.log",
@@ -42,8 +40,12 @@ class TestFileManager(unittest.TestCase):
 
     @logger.catch
     def test_read_graph(self):
-        filemanager1 = FileManager()
-        data1 = filemanager1.read_graph(str(self.path))
+        pass
+
+    @logger.catch
+    def test_read_graph_raw_data(self):
+        fm = FileManager()
+        data1 = fm.read_graph_raw_data(str(self.path))
         list1 = [{"name": "My Graph"}]
         list2 = [
             {
@@ -232,19 +234,96 @@ class TestFileManager(unittest.TestCase):
         self.assertEqual(data1[1], list2)
 
     @logger.catch
+    def test_create_graph(self):
+        fm = FileManager()
+        graph_attribute = [{"name": "graph1"}]
+        graph_components = [
+            {
+                "type": "Node",
+                "uid": "7778da",
+                "name": "node1",
+                "colour": "#FFFFFF",
+                "position_x": "100",
+                "position_y": "105",
+            },
+            {
+                "type": "Node",
+                "uid": "32a24b",
+                "name": "node2",
+                "colour": "#000000",
+                "position_x": "30",
+                "position_y": "30",
+            },
+            {
+                "type": "Node",
+                "uid": "9a2812943a39",
+                "name": "node3",
+            },
+            {
+                "type": "SourceNode",
+                "uid": "b20350",
+                "name": "sourcenode1",
+                "colour": "#000000",
+                "position_x": "40",
+                "position_y": "40",
+                "user_defined_attribute": "0",
+            },
+            {
+                "type": "SourceNode",
+                "uid": "e26c04",
+                "name": "sourcenode2",
+                "colour": "#000000",
+                "position_x": "200",
+                "position_y": "200",
+                "user_defined_attribute": "Test",
+            },
+            {
+                "type": "SourceNode",
+                "uid": "3d8cc5",
+                "name": "sourcenode3",
+                "colour": "#000000",
+                "position_x": "500",
+                "position_y": "500",
+                "user_defined_attribute": "Foo",
+            },
+            {
+                "type": "GroundNode",
+                "uid": "365bb9",
+                "name": "groundnode",
+            },
+            {
+                "type": "Arc",
+                "uid": "b7c567",
+                "name": "arc1",
+                "node1": "365bb9",
+                "node2": "3d8cc5",
+            },
+        ]
+        graph_raw_data = (graph_attribute, graph_components)
+        graph1 = fm.create_graph(graph_raw_data)
+        self.assertEqual(graph1.name, "graph1")
+        self.assertEqual(graph1.get_component("b7c567").name, "arc1")
+        self.assertEqual(len(graph1.components), 8)
+
+    @logger.catch
     def test_read_and_create_graph(self):
-        filemanager1 = FileManager()
-        data1 = filemanager1.read_graph(str(self.path))
-        graph1 = create_graph(data1)
+        fm = FileManager()
+        data1 = fm.read_graph_raw_data(str(self.path))
+        graph1 = fm.create_graph(data1)
 
         graph1.verify_graph_integrity()
         # graph1.print_graph_details()
 
-        print("N1 Arcs:", len(graph1.get_component("1f9cb9").arcs))
-        print("N2 Arcs:", len(graph1.get_component("9cf405").arcs))
-        print("N4 Arcs:", len(graph1.get_component("59d632").arcs))
-        print("N7 Arcs:", len(graph1.get_component("567071").arcs))
-        print("G1 Arcs:", len(graph1.get_component("365bb9").arcs))
+        self.assertEqual(len(graph1.get_component("1f9cb9").arcs), 2)  # N1 Arcs
+        self.assertEqual(len(graph1.get_component("9cf405").arcs), 3)  # N2 Arcs
+        self.assertEqual(len(graph1.get_component("59d632").arcs), 5)  # N4 Arcs
+        self.assertEqual(len(graph1.get_component("567071").arcs), 3)  # N7 Arcs
+        self.assertEqual(len(graph1.get_component("365bb9").arcs), 1)  # G1 Arcs
+        # print("N1 Arcs:", len(graph1.get_component("1f9cb9").arcs))
+        # print("N2 Arcs:", len(graph1.get_component("9cf405").arcs))
+        # print("N4 Arcs:", len(graph1.get_component("59d632").arcs))
+        # print("N7 Arcs:", len(graph1.get_component("567071").arcs))
+        # print("G1 Arcs:", len(graph1.get_component("365bb9").arcs))
 
 
 if __name__ == "__main__":

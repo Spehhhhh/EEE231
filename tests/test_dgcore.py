@@ -17,7 +17,6 @@ from directedgraph.dgcore import (
     SourceNode,
     GroundNode,
     Arc,
-    create_graph,
 )
 
 logger.add(
@@ -112,79 +111,6 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(
             graph1.get_component("9a2812").get_position(), ([50, 50], [400, 500])
         )
-
-    @logger.catch
-    def test_create_graph(self):
-        graph1 = create_graph(
-            (
-                [{"name": "graph1"}],
-                [
-                    {
-                        "type": "Node",
-                        "uid": "7778da",
-                        "name": "node1",
-                        "colour": "#FFFFFF",
-                        "position_x": "100",
-                        "position_y": "105",
-                    },
-                    {
-                        "type": "Node",
-                        "uid": "32a24b",
-                        "name": "node2",
-                        "colour": "#000000",
-                        "position_x": "30",
-                        "position_y": "30",
-                    },
-                    {
-                        "type": "Node",
-                        "uid": "9a2812943a39",
-                        "name": "node3",
-                    },
-                    {
-                        "type": "SourceNode",
-                        "uid": "b20350",
-                        "name": "sourcenode1",
-                        "colour": "#000000",
-                        "position_x": "40",
-                        "position_y": "40",
-                        "user_defined_attribute": "0",
-                    },
-                    {
-                        "type": "SourceNode",
-                        "uid": "e26c04",
-                        "name": "sourcenode2",
-                        "colour": "#000000",
-                        "position_x": "200",
-                        "position_y": "200",
-                        "user_defined_attribute": "Test",
-                    },
-                    {
-                        "type": "SourceNode",
-                        "uid": "3d8cc5",
-                        "name": "sourcenode3",
-                        "colour": "#000000",
-                        "position_x": "500",
-                        "position_y": "500",
-                        "user_defined_attribute": "Foo",
-                    },
-                    {
-                        "type": "GroundNode",
-                        "uid": "365bb9",
-                        "name": "groundnode",
-                    },
-                    {
-                        "type": "Arc",
-                        "uid": "b7c567",
-                        "name": "arc1",
-                        "node1": "365bb9",
-                        "node2": "3d8cc5",
-                    },
-                ],
-            )
-        )
-        self.assertEqual(graph1.name, "graph1")
-        self.assertEqual(graph1.get_component("b7c567").name, "arc1")
-        self.assertEqual(len(graph1.components), 8)
 
     @logger.catch
     def test_generate_component_uid(self):

@@ -7,6 +7,8 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
+from directedgraph.dgcore import Graph
+
 
 class FileManager:
     def __init__(self):
@@ -24,6 +26,10 @@ class FileManager:
                 pass
 
     def read_graph(self, filepath):
+        new_graph = self.create_graph(self.read_graph_raw_data(filepath))
+        return new_graph
+
+    def read_graph_raw_data(self, filepath):
         dom1 = minidom.parse(filepath)
         graph_attribute = []
         graph_components = []
@@ -74,13 +80,19 @@ class FileManager:
         graph = (graph_attribute, graph_components)
         return graph
 
-    def save_graph(self, filepath, graph):
+    def create_graph(self, graph_raw_data):
+        new_graph = Graph(graph_raw_data[0][0].get("name"))
+        for item in graph_raw_data[1]:
+            new_graph.create_component(item)
+        return new_graph
+
+    def export_graph(self, filepath, import_graph):
+        import_graph.get()
+
+    def export_graph_png(self, filepath, import_graph):
         pass
 
-    def export_graph_png(self, filepath, graph):
-        pass
-
-    def export_graph_pdf(self, filepath, graph):
+    def export_graph_pdf(self, filepath, import_graph):
         pass
 
 
