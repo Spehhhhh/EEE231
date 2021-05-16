@@ -77,6 +77,12 @@ class GraphComponent:
     def update_connected_gui(self, connected_gui_new):
         self.connected_gui = connected_gui_new
 
+    def delete(self):
+        if self.connected_graph != None:
+            return self.connected_graph.delete_component(self.uid)
+        else:
+            return False
+
 
 class Node(GraphComponent):
     def __init__(
