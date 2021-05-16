@@ -206,7 +206,7 @@ def main():
         headers = "#" + "Arc_type" + " node1" + " node2" + " value"
         f.write(headers)
         f.write("\n")
-        f.write('\n')
+        f.write("\n")
         for component in graph.components.values():
             if isinstance(component, Arc):
                 f.write(
