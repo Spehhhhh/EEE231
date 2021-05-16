@@ -9,8 +9,8 @@ sys.path.append(father_folder)
 
 
 class GraphComponent:
-    def __init__(self, parent_graph=None, uid=None, name=None, colour=None):
-        self.parent_graph = parent_graph  # connected_graph
+    def __init__(self, connected_graph=None, uid=None, name=None, colour=None):
+        self.connected_graph = connected_graph  # connected_graph
         self.connected_gui = None  # connected_graph
 
         self.uid = None
@@ -22,18 +22,18 @@ class GraphComponent:
     # If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
     def generate_uid(self, uid_old=None):
         UID_LENGTH = 12
-        if self.parent_graph == None:
+        if self.connected_graph == None:
             self.uid = uuid.uuid4().hex[:UID_LENGTH]
         else:
             if uid_old == None:
                 uid_new = uuid.uuid4().hex[:UID_LENGTH]
-                while uid_new in self.parent_graph.components:
+                while uid_new in self.connected_graph.components:
                     uid_new = uuid.uuid4().hex[:UID_LENGTH]
                     self.uid = uid_new
                 self.uid = uid_new
                 return uid_new
             else:
-                if uid_old not in self.parent_graph.components:
+                if uid_old not in self.connected_graph.components:
                     self.uid = uid_old
                     return uid_old
                 else:
@@ -43,7 +43,7 @@ class GraphComponent:
                         "Try to reassign UID...",
                     )
                     uid_new = uuid.uuid4().hex[:UID_LENGTH]
-                    while uid_new in self.parent_graph.components:
+                    while uid_new in self.connected_graph.components:
                         uid_new = uuid.uuid4().hex[:UID_LENGTH]
                         self.uid = uid_new
                     self.uid = uid_new
@@ -57,8 +57,8 @@ class GraphComponent:
         else:
             return vars(self).get(element_attribute, None)
 
-    def get_parent_graph(self):
-        return self.parent_graph
+    def get_connected_graph(self):
+        return self.connected_graph
 
     def get_uid(self):
         return self.uid
@@ -81,13 +81,13 @@ class GraphComponent:
 class Node(GraphComponent):
     def __init__(
         self,
-        parent_graph=None,
+        connected_graph=None,
         uid=None,
         name=None,
         colour=None,
         position=None,
     ):
-        super().__init__(parent_graph, uid, name, colour)
+        super().__init__(connected_graph, uid, name, colour)
         self.position = position if position else [0, 0]
         # it won't get any value which can be obtained from the simulator
         # The user cannot change (Default is 0)
@@ -119,7 +119,7 @@ class Node(GraphComponent):
 class SourceNode(Node):
     def __init__(
         self,
-        parent_graph=None,
+        connected_graph=None,
         uid=None,
         name=None,
         colour=None,
@@ -127,7 +127,7 @@ class SourceNode(Node):
         user_defined_attribute=None,
         current=None,
     ):
-        super().__init__(parent_graph, uid, name, colour, position)
+        super().__init__(connected_graph, uid, name, colour, position)
         self.user_defined_attribute = (
             user_defined_attribute if user_defined_attribute else "0"
         )
@@ -146,20 +146,20 @@ class SourceNode(Node):
 class GroundNode(Node):
     def __init__(
         self,
-        parent_graph=None,
+        connected_graph=None,
         uid=None,
         name=None,
         colour=None,
         position=None,
     ):
-        super().__init__(parent_graph, uid, name, colour, position)
+        super().__init__(connected_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
 
-        if parent_graph != None:
-            self.parent_graph.groundnode_counter += 1
+        if connected_graph != None:
+            self.connected_graph.groundnode_counter += 1
 
     def get_groundnode_counter(self):
-        return self.parent_graph.groundnode_counter
+        return self.connected_graph.groundnode_counter
 
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
@@ -171,7 +171,7 @@ class GroundNode(Node):
 class Arc(GraphComponent):
     def __init__(
         self,
-        parent_graph=None,
+        connected_graph=None,
         uid=None,
         name=None,
         colour=None,
@@ -181,7 +181,7 @@ class Arc(GraphComponent):
         user_define_attribute=None,
         user_define_arc_type="",
     ):
-        super().__init__(parent_graph, uid, name, colour)
+        super().__init__(connected_graph, uid, name, colour)
         self.nodes = []
         self.node1 = node1
         self.node2 = node2
@@ -204,15 +204,15 @@ class Arc(GraphComponent):
     def update_position(self, node1=None, node2=None):
         if node1 is not None:
             if isinstance(node1, str):
-                if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_component(node1))
+                if len(node2) == 12 and self.connected_graph != None:
+                    self.nodes.append(self.connected_graph.get_component(node1))
             elif isinstance(node1, Node) or issubclass(node1, Node):
                 self.nodes.append(node1)
 
         if node2 is not None:
-            if isinstance(node2, str) and self.parent_graph != None:
-                if len(node2) == 12 and self.parent_graph != None:
-                    self.nodes.append(self.parent_graph.get_component(node2))
+            if isinstance(node2, str) and self.connected_graph != None:
+                if len(node2) == 12 and self.connected_graph != None:
+                    self.nodes.append(self.connected_graph.get_component(node2))
             elif isinstance(node2, Node) or issubclass(node2, Node):
                 self.nodes.append(node2)
 

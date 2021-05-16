@@ -70,7 +70,7 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(len(graph1.components), 2)
         self.assertEqual(graph1.get_component("b911b214f553"), node1)
         self.assertEqual(graph1.get_component("b911b214f553").name, "node1")
-        self.assertEqual(graph1.get_component("9a2812943a39").parent_graph, graph1)
+        self.assertEqual(graph1.get_component("9a2812943a39").connected_graph, graph1)
 
     @logger.catch
     def test_create_component(self):

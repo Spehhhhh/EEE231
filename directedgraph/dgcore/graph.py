@@ -70,7 +70,7 @@ class Graph:
 
     def get_component(self, uid):
         # print(self.components[uid].get_name())
-        # print("parent_graph:", self.components[uid].get_parent_graph())
+        # print("connected_graph:", self.components[uid].get_connected_graph())
         # print(vars(self.components[uid])) # 可以返回对象也可以返回字典
         return self.components[uid]
 
@@ -148,7 +148,7 @@ class Graph:
         if isinstance(arc1, Arc):
             arc1.update_position(node1, node2)
         elif isinstance(arc1, str):
-            if len(node2) == 12 and self.parent_graph == self:
+            if len(node2) == 12 and self.connected_graph == self:
                 self.get_component["arc1"].update_position(node1, node2)
 
     # #TODO 需要写误删除逻辑
