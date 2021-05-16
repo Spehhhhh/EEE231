@@ -1,4 +1,5 @@
 #Arc_type node1 node2 value
+
 resistor connected between n2 and n3
 r1 n2 n3 150
 
