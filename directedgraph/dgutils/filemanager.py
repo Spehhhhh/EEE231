@@ -58,7 +58,16 @@ class FileManager:
                 elif component_type == "GroundNode":
                     self.parse_attribute(component, temp, ["position_x", "position_y"])
                 elif component_type == "Arc":
-                    self.parse_attribute(component, temp, ["node1", "node2"])
+                    self.parse_attribute(
+                        component,
+                        temp,
+                        [
+                            "node1_uid",
+                            "node2_uid",
+                            "user_defined_attribute",
+                            "user_define_arc_type",
+                        ],
+                    )
                 graph_components.append(temp)
 
         # Return Data as Tuple
@@ -84,4 +93,8 @@ if __name__ == "__main__":
     #     .joinpath("test.xml")
     # )
     # dom1 = minidom.parse(str(path))
-    pass
+
+    import unittest
+    from tests.test_dgutils import TestFileManager
+
+    unittest.main()
