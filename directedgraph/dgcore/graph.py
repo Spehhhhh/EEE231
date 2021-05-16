@@ -15,6 +15,9 @@ class Graph:
     """
 
     def __init__(self, name=None):
+        self.connected_gui = None
+        self.groundnode_counter = 0
+
         self.name = name if name else "Untitled"
         self.components = {}
 
