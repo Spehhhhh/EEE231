@@ -32,7 +32,7 @@ class Graph:
 
         graph_components = []
         for component in self.components.values():
-            if isinstance(component, Arc):
+            if type(component) == Arc:
                 component_dict = {}
                 component_dict["type"] = "Arc"
                 component_dict["uid"] = str(component.uid)
@@ -47,7 +47,7 @@ class Graph:
                     component.user_defined_arc_type
                 )
                 graph_components.append(component_dict)
-            elif isinstance(component, Node):
+            elif type(component) == Node:
                 component_dict = {}
                 component_dict["type"] = "Node"
                 component_dict["uid"] = str(component.uid)
@@ -56,7 +56,7 @@ class Graph:
                 component_dict["position_x"] = str(component.position[0])
                 component_dict["position_y"] = str(component.position[1])
                 graph_components.append(component_dict)
-            elif isinstance(component, SourceNode):
+            elif type(component) == SourceNode:
                 component_dict = {}
                 component_dict["type"] = "SourceNode"
                 component_dict["uid"] = str(component.uid)
@@ -68,7 +68,7 @@ class Graph:
                     component.user_defined_attribute
                 )
                 graph_components.append(component_dict)
-            elif isinstance(component, GroundNode):
+            elif type(component) == GroundNode:
                 component_dict = {}
                 component_dict["type"] = "GroundNode"
                 component_dict["uid"] = str(component.uid)
@@ -92,13 +92,11 @@ class Graph:
         compoments_values = self.components.values()
 
         for compoment_inst in compoments_values:
-            if isinstance(compoment_inst, Node) or issubclass(
-                type(compoment_inst), Node
-            ):
+            if isinstance(compoment_inst, Node):
                 compoment_inst.arcs.clear()
 
         for compoment_inst in compoments_values:
-            if isinstance(compoment_inst, Arc):
+            if type(compoment_inst) == Arc:
                 self.arc_counter += 1
                 compoment_inst.nodes[0].arcs.append(compoment_inst)
                 compoment_inst.nodes[1].arcs.append(compoment_inst)
@@ -112,7 +110,7 @@ class Graph:
 
         # Only one Ground Node is allowed
         for compoment_inst in compoments_values:
-            if isinstance(compoment_inst, GroundNode):
+            if type(compoment_inst) == GroundNode:
                 self.groundnode_counter += 1
         if self.groundnode_counter != 1:
             return_list.append("Only one Ground Node is allowed")
@@ -123,7 +121,7 @@ class Graph:
         self.update_compoment_node_arcs()
 
         for compoment_inst in compoments_values:
-            if isinstance(compoment_inst, SourceNode):
+            if type(compoment_inst) == SourceNode:
                 if len(compoment_inst.arcs) > 1:
                     return_list.append("Source only allows single arcs")
 
@@ -232,7 +230,7 @@ class Graph:
     # def update_arc_position(uid, node1, node2):
     # def update_arc_position(arc1, node1, node2):
     def update_arc_position(self, arc1, node1, node2):
-        if isinstance(arc1, Arc):
+        if type(arc1) == Arc:
             arc1.update_position(node1, node2)
         elif isinstance(arc1, str):
             if len(node2) == 12 and self.connected_graph == self:
