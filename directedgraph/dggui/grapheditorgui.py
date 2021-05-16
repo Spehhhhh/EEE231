@@ -49,7 +49,7 @@ class NodeItem(QGraphicsEllipseItem):
 
     def __init__(self, node_instance, main_window_instance):
         self.node = node_instance
-        self.window = main_window_instance
+        self.connected_window = main_window_instance
 
         self.node_radius = 30.0
 
@@ -206,7 +206,7 @@ class NodeItem(QGraphicsEllipseItem):
 
     def on_name_action(self):
         text, result = QInputDialog.getText(
-            self.window,
+            self.connected_window,
             "Input",
             "Enter Name",
             QtWidgets.QLineEdit.Normal,
@@ -230,7 +230,7 @@ class NodeItem(QGraphicsEllipseItem):
 
     def on_delete_action(self):
         self.node.connected_graph.delete_component(self.node.uid)  # #TODO
-        self.window.scene.removeItem(self)
+        self.connected_window.scene.removeItem(self)
 
 
 class SourceNodeItem(QGraphicsEllipseItem):
