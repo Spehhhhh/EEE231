@@ -21,7 +21,7 @@ class GraphComponent:
     # If the instance does not have a UID, a UID is generated.
     # If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
     def generate_uid(self, uid_old=None):
-        UID_LENGTH = 12
+        UID_LENGTH = 6
         if self.connected_graph == None:
             self.uid = uuid.uuid4().hex[:UID_LENGTH]
         else:

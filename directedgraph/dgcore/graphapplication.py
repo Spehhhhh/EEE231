@@ -41,9 +41,9 @@ def load_graph(path):
 def test_create_graph():
     graph_attribute = [{"name": "graph1"}]
     graph_components = [
-        {"type": "Node", "name": "node1", "uid": "7778da0a0a0a"},
-        {"type": "Node", "name": "node2", "uid": "32a24bfcfefe"},
-        {"type": "Node", "uid": "32a24bfcfefe"},
+        {"type": "Node", "name": "node1", "uid": "7778da"},
+        {"type": "Node", "name": "node2", "uid": "32a24b"},
+        {"type": "Node", "uid": "32a24b"},
     ]
     graph_raw_data = (graph_attribute, graph_components)
     graph1 = create_graph(graph_raw_data)

@@ -18,16 +18,16 @@ def test_arc_init_case_1():
     from directedgraph.dgcore.graph import Graph
 
     graph1 = Graph("graph1")
-    graph1.create_component({"type": "Node", "name": "Node 1", "uid": "859e4b2ec309"})
-    graph1.create_component({"type": "Node", "name": "Node 2", "uid": "7778da0a0a0a"})
+    graph1.create_component({"type": "Node", "name": "Node 1", "uid": "859e4b"})
+    graph1.create_component({"type": "Node", "name": "Node 2", "uid": "7778da"})
     # graph1.print_graph_details()
     arc1 = Arc(
         graph1,
         "123",
         None,
         "arc1",
-        "859e4b2ec309",
-        "7778da0a0a0a",
+        "859e4b",
+        "7778da",
     )
     print(arc1.get())
     # print(arc1.nodes)
@@ -64,12 +64,10 @@ def test_arc_function():
     from directedgraph.dgcore.graph import Graph
 
     graph1 = Graph("graph1")
-    graph1.create_component({"type": "Node", "name": "Node 1", "uid": "859e4b2ec309"})
-    graph1.create_component({"type": "Node", "name": "Node 2", "uid": "7778da0a0a0a"})
+    graph1.create_component({"type": "Node", "name": "Node 1", "uid": "859e4b"})
+    graph1.create_component({"type": "Node", "name": "Node 2", "uid": "7778da"})
     # graph1.print_graph_details()
-    arc2 = Arc(
-        graph1, "123", None, "arc2", "859e4b2ec309", "7778da0a0a0a", "resistance", 5
-    )
+    arc2 = Arc(graph1, "123", None, "arc2", "859e4b", "7778da0", "resistance", 5)
     arc2.get_function()
     print(arc2.get())
     arc2.update_function("resistance")

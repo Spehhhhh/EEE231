@@ -42,14 +42,14 @@ class Arc(GraphComponent):
     def update_position(self, node1=None, node2=None):
         if node1 is not None:
             if isinstance(node1, str):
-                if len(node1) == 12 and self.connected_graph != None:
+                if len(node1) == 6 and self.connected_graph != None:
                     self.nodes[0] = self.connected_graph.get_component(node1)
             elif isinstance(node1, Node) or issubclass(type(node1), Node):
                 self.nodes[0] = node1
 
         if node2 is not None:
             if isinstance(node2, str) and self.connected_graph != None:
-                if len(node2) == 12 and self.connected_graph != None:
+                if len(node2) == 6 and self.connected_graph != None:
                     self.nodes[1] = self.connected_graph.get_component(node2)
             elif isinstance(node2, Node) or issubclass(type(node2), Node):
                 self.nodes[1] = node2

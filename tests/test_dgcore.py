@@ -49,9 +49,7 @@ class TestGraph(unittest.TestCase):
     def test_id(self):
         graph1 = Graph("graph1")
         graph1.create_component({"type": "Node", "name": "Node without UID"})
-        graph1.create_component(
-            {"type": "Node", "name": "Node 1", "uid": "7778da0a0a0a"}
-        )
+        graph1.create_component({"type": "Node", "name": "Node 1", "uid": "7778da"})
 
         graph2 = Graph("graph2")
 
@@ -62,15 +60,15 @@ class TestGraph(unittest.TestCase):
     def test_insert_component(self):
         graph1 = Graph("graph1")
 
-        node1 = Node(graph1, "b911b214f553", "node1")
+        node1 = Node(graph1, "b911b2", "node1")
         graph1.insert_component(node1)
-        node2 = Node(graph1, "9a2812943a39", "node2")
+        node2 = Node(graph1, "9a2812", "node2")
         graph1.insert_component(node2)
 
         self.assertEqual(len(graph1.components), 2)
-        self.assertEqual(graph1.get_component("b911b214f553"), node1)
-        self.assertEqual(graph1.get_component("b911b214f553").name, "node1")
-        self.assertEqual(graph1.get_component("9a2812943a39").connected_graph, graph1)
+        self.assertEqual(graph1.get_component("b911b2"), node1)
+        self.assertEqual(graph1.get_component("b911b2").name, "node1")
+        self.assertEqual(graph1.get_component("9a2812").connected_graph, graph1)
 
     @logger.catch
     def test_create_component(self):
@@ -78,7 +76,7 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Node",
-                "uid": "7778da0a0a0a",
+                "uid": "7778da",
                 "name": "node1",
                 "colour": "#0000",
                 "position_x": "50",
@@ -86,13 +84,13 @@ class TestGraph(unittest.TestCase):
             }
         )
 
-        self.assertEqual(graph1.get_component("7778da0a0a0a").name, "node1")
-        self.assertIsInstance(graph1.get_component("7778da0a0a0a"), Node)
+        self.assertEqual(graph1.get_component("7778da").name, "node1")
+        self.assertIsInstance(graph1.get_component("7778da"), Node)
 
         graph1.create_component(
             {
                 "type": "Node",
-                "uid": "7778da0a0a0b",
+                "uid": "0a0a0b",
                 "name": "node2",
                 "colour": "#0000",
                 "position_x": "400",
@@ -102,17 +100,17 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Arc",
-                "uid": "9a2812943a39",
+                "uid": "9a2812",
                 "name": "Arc 1",
                 "colour": "#0000",
-                "node1_uid": "7778da0a0a0a",
-                "node2_uid": "7778da0a0a0b",
+                "node1_uid": "7778da",
+                "node2_uid": "0a0a0b",
                 "user_define_attribute": None,
                 "user_define_arc_type": None,
             }
         )
         self.assertEqual(
-            graph1.get_component("9a2812943a39").get_position(), ([50, 50], [400, 500])
+            graph1.get_component("9a2812").get_position(), ([50, 50], [400, 500])
         )
 
     @logger.catch
@@ -123,7 +121,7 @@ class TestGraph(unittest.TestCase):
                 [
                     {
                         "type": "Node",
-                        "uid": "7778da0a0a0a",
+                        "uid": "7778da",
                         "name": "node1",
                         "colour": "#FFFFFF",
                         "position_x": "100",
@@ -131,7 +129,7 @@ class TestGraph(unittest.TestCase):
                     },
                     {
                         "type": "Node",
-                        "uid": "32a24bfcfefe",
+                        "uid": "32a24b",
                         "name": "node2",
                         "colour": "#000000",
                         "position_x": "30",
@@ -144,7 +142,7 @@ class TestGraph(unittest.TestCase):
                     },
                     {
                         "type": "SourceNode",
-                        "uid": "b203507d9ef3",
+                        "uid": "b20350",
                         "name": "sourcenode1",
                         "colour": "#000000",
                         "position_x": "40",
@@ -153,7 +151,7 @@ class TestGraph(unittest.TestCase):
                     },
                     {
                         "type": "SourceNode",
-                        "uid": "e26c0487a31f",
+                        "uid": "e26c04",
                         "name": "sourcenode2",
                         "colour": "#000000",
                         "position_x": "200",
@@ -162,7 +160,7 @@ class TestGraph(unittest.TestCase):
                     },
                     {
                         "type": "SourceNode",
-                        "uid": "3d8cc5a3ce64",
+                        "uid": "3d8cc5",
                         "name": "sourcenode3",
                         "colour": "#000000",
                         "position_x": "500",
@@ -171,21 +169,21 @@ class TestGraph(unittest.TestCase):
                     },
                     {
                         "type": "GroundNode",
-                        "uid": "365bb94004f2",
+                        "uid": "365bb9",
                         "name": "groundnode",
                     },
                     {
                         "type": "Arc",
-                        "uid": "b7c567add4ff",
+                        "uid": "b7c567",
                         "name": "arc1",
-                        "node1": "365bb94004f2",
-                        "node2": "3d8cc5a3ce64",
+                        "node1": "365bb9",
+                        "node2": "3d8cc5",
                     },
                 ],
             )
         )
         self.assertEqual(graph1.name, "graph1")
-        self.assertEqual(graph1.get_component("b7c567add4ff").name, "arc1")
+        self.assertEqual(graph1.get_component("b7c567").name, "arc1")
         self.assertEqual(len(graph1.components), 8)
 
     @logger.catch
@@ -194,18 +192,18 @@ class TestGraph(unittest.TestCase):
         graph1.create_component({"type": "Node", "name": "Node without UID 1"})
         graph1.create_component({"type": "Node", "name": "Node without UID 2"})
         graph1.create_component(
-            {"type": "Node", "name": "Node with UID", "uid": "7778da0a0a0a"}
+            {"type": "Node", "name": "Node with UID", "uid": "7778da"}
         )
         graph1.create_component(
-            {"type": "Node", "name": "Node with duplicate UID", "uid": "7778da0a0a0a"}
+            {"type": "Node", "name": "Node with duplicate UID", "uid": "7778da"}
         )
 
         self.assertEqual(len(graph1.components), 4)
 
     @logger.catch
     def test_error(self):
-        # graph1.create_component({"type": "Arc", "name": "Arc 1", "uid": "7778da0a0a0a"})
-        # graph1.create_component({"name": "Fooo", "uid": "7778da0a0a0a"})
+        # graph1.create_component({"type": "Arc", "name": "Arc 1", "uid": "7778da"})
+        # graph1.create_component({"name": "Fooo", "uid": "7778da"})
         pass
 
     @logger.catch
@@ -214,17 +212,17 @@ class TestGraph(unittest.TestCase):
         graph1 = Graph("graph1")
         graph1.create_component({"type": "Node", "name": "Node without UID 1"})
         graph1.create_component({"type": "Node", "name": "Node without UID 2"})
-        graph1.create_component({"type": "Node", "name": "Foo", "uid": "7778da0a0a0a"})
-        graph1.create_component({"type": "Node", "uid": "32a24bfcfefe"})
+        graph1.create_component({"type": "Node", "name": "Foo", "uid": "7778da"})
+        graph1.create_component({"type": "Node", "uid": "32a24b"})
         self.assertEqual(len(graph1.components), 4)
 
         # print("---Try Get Node---")
-        self.assertEqual(graph1.get_component("7778da0a0a0a").name, "Foo")
-        self.assertEqual(graph1.get_component("32a24bfcfefe").name, "Untitled")
+        self.assertEqual(graph1.get_component("7778da").name, "Foo")
+        self.assertEqual(graph1.get_component("32a24b").name, "Untitled")
 
         # print("---Try Delete---")
-        self.assertTrue(graph1.delete_component("32a24bfcfefe"))
-        self.assertFalse(graph1.delete_component("32a24bfcfefe"))
+        self.assertTrue(graph1.delete_component("32a24b"))
+        self.assertFalse(graph1.delete_component("32a24b"))
         self.assertFalse(graph1.delete_component("31233"))
         self.assertEqual(len(graph1.components), 3)
 
@@ -233,7 +231,7 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "GroundNode",
-                "uid": "7778da0a0a0a",
+                "uid": "7778da",
                 "name": "Node 1",
                 "colour": "#0000",
                 "position_x": "50",
@@ -243,7 +241,7 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "GroundNode",
-                "uid": "7778da0a0a0a",
+                "uid": "7778da",
                 "name": "Node 1",
                 "colour": "#0000",
                 "position_x": "50",
@@ -253,7 +251,7 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "SourceNode",
-                "uid": "9a2812943a39",
+                "uid": "9a2812",
                 "name": "SourceNode 1",
                 "colour": "#0000",
                 "position_x": "1000",
@@ -263,7 +261,7 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Node",
-                "uid": "7778da0a0a0a",
+                "uid": "7778da",
                 "name": "Node 1",
                 "colour": "#0000",
                 "position_x": "50",
@@ -273,7 +271,7 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Node",
-                "uid": "7778da0a0a0b",
+                "uid": "7778da",
                 "name": "Node 2",
                 "colour": "#0000",
                 "position_x": "400",
@@ -283,11 +281,11 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Arc",
-                "uid": "9a2812943a39",
+                "uid": "9a2812",
                 "name": "Arc 1",
                 "colour": "#0000",
-                "node1_uid": "7778da0a0a0a",
-                "node2_uid": "7778da0a0a0b",
+                "node1_uid": "7778da",
+                "node2_uid": "7778da",
                 "user_define_attribute": None,
                 "user_define_arc_type": None,
             }
@@ -295,11 +293,11 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Arc",
-                "uid": "b7c567add4ff",
+                "uid": "b7c567",
                 "name": "Arc 2",
                 "colour": "#0000",
-                "node1_uid": "7778da0a0a0a",
-                "node2_uid": "9a2812943a39",
+                "node1_uid": "7778da",
+                "node2_uid": "9a2812",
                 "user_define_attribute": None,
                 "user_define_arc_type": None,
             }
@@ -307,11 +305,11 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Arc",
-                "uid": "365bb94004f2",
+                "uid": "365bb9",
                 "name": "Arc 3",
                 "colour": "#0000",
-                "node1_uid": "7778da0a0a0a",
-                "node2_uid": "9a2812943a39",
+                "node1_uid": "7778da",
+                "node2_uid": "9a2812",
                 "user_define_attribute": None,
                 "user_define_arc_type": None,
             }
