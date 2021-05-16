@@ -1,6 +1,7 @@
 import uuid
 import sys
 from pathlib import Path
+
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
@@ -214,25 +215,28 @@ class Arc(GraphComponent):
                 self.nodes.append(node2)
 
     def update_user_define_attribute(self, new_user_define_attribute):
-        str_can_be_usde=["p","u","k","n","m"]
+        str_can_be_usde = ["p", "u", "k", "n", "m"]
         if new_user_define_attribute.isdigit() is True:
-           if self.user_define_arc_type.lower()=="resistor":
-              if len(new_user_define_attribute)>1 and new_user_define_attribute[0]=="0" or new_user_define_attribute=="-":
-                  raise ValueError("wrong input!!!")
+            if self.user_define_arc_type.lower() == "resistor":
+                if (
+                    len(new_user_define_attribute) > 1
+                    and new_user_define_attribute[0] == "0"
+                    or new_user_define_attribute == "-"
+                ):
+                    raise ValueError("wrong input!!!")
         elif new_user_define_attribute.isdigit() is False:
-            if new_user_define_attribute[0]=="0":
+            if new_user_define_attribute[0] == "0":
                 raise ValueError("wrong input!!!")
             for j in new_user_define_attribute:
                 if j.isdigit() is False:
                     if j.lower() not in str_can_be_usde:
                         raise ValueError("wrong input!!!")
                     else:
-                        index=new_user_define_attribute.index(j)
-                        if (len(new_user_define_attribute[index:])>1):
-                            raise  ValueError("wrong input!!!")
+                        index = new_user_define_attribute.index(j)
+                        if len(new_user_define_attribute[index:]) > 1:
+                            raise ValueError("wrong input!!!")
         else:
-            self.user_define_attribute=new_user_define_attribute
-
+            self.user_define_attribute = new_user_define_attribute
 
         self.user_define_attribute = new_user_define_attribute
 
@@ -339,10 +343,8 @@ class Arc(GraphComponent):
 if __name__ == "__main__":
     node1 = SourceNode(None, None, "Node1", None, [200, 300], 8, 2)
     node2 = Node(None, None, "Node2", None, [300, 300])
-    arc1 = Arc(None, None, None, None, node1, node2, 5,"resistor")
-    print(
-        arc1.get()
-    )
+    arc1 = Arc(None, None, None, None, node1, node2, 5, "resistor")
+    print(arc1.get())
     arc1.update_user_define_attribute("-55")
     print(arc1.get())
     # if arc1.user_define_attribute == "resistance":
