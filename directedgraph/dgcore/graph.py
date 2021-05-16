@@ -40,12 +40,12 @@ class Graph:
                 component_dict["colour"] = str(component.colour)
                 component_dict["node1_uid"] = str(component.nodes[0].uid)
                 component_dict["node2_uid"] = str(component.nodes[1].uid)
-                component_dict[
-                    "user_defined_attribute"
-                ] = str(component.user_defined_attribute)
-                component_dict[
-                    "user_defined_arc_type"
-                ] = str(component.user_defined_arc_type)
+                component_dict["user_defined_attribute"] = str(
+                    component.user_defined_attribute
+                )
+                component_dict["user_defined_arc_type"] = str(
+                    component.user_defined_arc_type
+                )
                 graph_components.append(component_dict)
             elif isinstance(component, Node):
                 component_dict = {}
@@ -64,9 +64,9 @@ class Graph:
                 component_dict["colour"] = str(component.colour)
                 component_dict["position_x"] = str(component.position[0])
                 component_dict["position_y"] = str(component.position[1])
-                component_dict[
-                    "user_defined_attribute"
-                ] = str(component.user_defined_attribute)
+                component_dict["user_defined_attribute"] = str(
+                    component.user_defined_attribute
+                )
                 graph_components.append(component_dict)
             elif isinstance(component, GroundNode):
                 component_dict = {}
