@@ -17,6 +17,7 @@ class Graph:
     def __init__(self, name=None):
         self.connected_gui = None
         self.groundnode_counter = 0
+        self.arc_counter = 0
 
         self.name = name if name else "Untitled"
         self.components = {}
@@ -35,15 +36,45 @@ class Graph:
         self.name = name
 
     # #TODO
+
     def verify_graph_integrity(self):
-        groundnode_counter = 0
-        for key in self.components:
-            if self.components[key]["type"] == "GroundNode":
-                groundnode_counter += 1
-        if groundnode_counter != 1:
-            return False
+        return_list = []
+        return_list.clear()
+        compoments_values = self.components.values()
+        self.groundnode_counter = 0
+        self.arc_counter = 0
+
+        # Only one Ground Node is allowed
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, GroundNode):
+                self.groundnode_counter += 1
+        if self.groundnode_counter != 1:
+            return_list.append("Only one Ground Node is allowed")
         else:
-            return True
+            pass
+
+        # Source only allows single arcs
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, Node) or issubclass(
+                type(compoment_inst), Node
+            ):
+                compoment_inst.arcs.clear()
+
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, Arc):
+                self.arc_counter += 1
+                compoment_inst.nodes[0].arcs.append(compoment_inst)
+                compoment_inst.nodes[1].arcs.append(compoment_inst)
+
+        for compoment_inst in compoments_values:
+            if isinstance(compoment_inst, SourceNode):
+                if len(compoment_inst.arcs) > 1:
+                    return_list.append("Source only allows single arcs")
+
+        if self.arc_counter > 50:
+            return_list.append("Too many Arcs")
+
+        return return_list
 
     # For debugging Graph
     def print_graph_details(self):
@@ -108,11 +139,11 @@ class Graph:
                 self,
                 parameters.get("uid", None),
                 parameters.get("name", None),
+                parameters.get("colour", None),
                 [
                     int(parameters.get("position_x", 0)),
                     int(parameters.get("position_y", 0)),
                 ],
-                parameters.get("position", None),
             )
             self.insert_component(component)
             return component
@@ -122,8 +153,8 @@ class Graph:
                 parameters.get("uid", None),
                 parameters.get("name", None),
                 parameters.get("colour", None),
-                parameters.get("node1", None),
-                parameters.get("node2", None),
+                parameters.get("node1_uid", None),
+                parameters.get("node2_uid", None),
                 parameters.get("user_define_attribute", None),
                 parameters.get("user_define_arc_type", None),
             )

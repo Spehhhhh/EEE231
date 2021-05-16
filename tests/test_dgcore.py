@@ -78,31 +78,41 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Node",
+                "uid": "7778da0a0a0a",
                 "name": "node1",
-                "uid": "b911b214f553",
-                "position_x": "10",
-                "position_y": "5",
+                "colour": "#0000",
+                "position_x": "50",
+                "position_y": "50",
             }
         )
 
-        self.assertEqual(graph1.get_component("b911b214f553").name, "node1")
-        # self.assertEqual(type(graph1.get_component("b911b214f553")), Node)
-        self.assertIsInstance(graph1.get_component("b911b214f553"), Node)
+        self.assertEqual(graph1.get_component("7778da0a0a0a").name, "node1")
+        self.assertIsInstance(graph1.get_component("7778da0a0a0a"), Node)
 
         graph1.create_component(
-            {"type": "GroundNode", "name": "groundnode", "uid": "9a2812943a39"}
+            {
+                "type": "Node",
+                "uid": "7778da0a0a0b",
+                "name": "node2",
+                "colour": "#0000",
+                "position_x": "400",
+                "position_y": "500",
+            }
         )
         graph1.create_component(
             {
                 "type": "Arc",
-                "name": "arc1",
-                "node1": "b911b214f553",
-                "node2": "9a2812943a39",
-                "uid": "7778da0a0a0a",
+                "uid": "9a2812943a39",
+                "name": "Arc 1",
+                "colour": "#0000",
+                "node1_uid": "7778da0a0a0a",
+                "node2_uid": "7778da0a0a0b",
+                "user_define_attribute": None,
+                "user_define_arc_type": None,
             }
         )
         self.assertEqual(
-            graph1.get_component("7778da0a0a0a").get_position(), ([10, 5], [0, 0])
+            graph1.get_component("9a2812943a39").get_position(), ([50, 50], [400, 500])
         )
 
     @logger.catch
@@ -218,14 +228,112 @@ class TestGraph(unittest.TestCase):
         self.assertFalse(graph1.delete_component("31233"))
         self.assertEqual(len(graph1.components), 3)
 
+    def test_verify_graph_integrity(self):
+        graph1 = Graph("graph1")
+        graph1.create_component(
+            {
+                "type": "GroundNode",
+                "uid": "7778da0a0a0a",
+                "name": "Node 1",
+                "colour": "#0000",
+                "position_x": "50",
+                "position_y": "50",
+            }
+        )
+        graph1.create_component(
+            {
+                "type": "GroundNode",
+                "uid": "7778da0a0a0a",
+                "name": "Node 1",
+                "colour": "#0000",
+                "position_x": "50",
+                "position_y": "50",
+            }
+        )
+        graph1.create_component(
+            {
+                "type": "SourceNode",
+                "uid": "9a2812943a39",
+                "name": "SourceNode 1",
+                "colour": "#0000",
+                "position_x": "1000",
+                "position_y": "500",
+            }
+        )
+        graph1.create_component(
+            {
+                "type": "Node",
+                "uid": "7778da0a0a0a",
+                "name": "Node 1",
+                "colour": "#0000",
+                "position_x": "50",
+                "position_y": "50",
+            }
+        )
+        graph1.create_component(
+            {
+                "type": "Node",
+                "uid": "7778da0a0a0b",
+                "name": "Node 2",
+                "colour": "#0000",
+                "position_x": "400",
+                "position_y": "500",
+            }
+        )
+        graph1.create_component(
+            {
+                "type": "Arc",
+                "uid": "9a2812943a39",
+                "name": "Arc 1",
+                "colour": "#0000",
+                "node1_uid": "7778da0a0a0a",
+                "node2_uid": "7778da0a0a0b",
+                "user_define_attribute": None,
+                "user_define_arc_type": None,
+            }
+        )
+        graph1.create_component(
+            {
+                "type": "Arc",
+                "uid": "b7c567add4ff",
+                "name": "Arc 2",
+                "colour": "#0000",
+                "node1_uid": "7778da0a0a0a",
+                "node2_uid": "9a2812943a39",
+                "user_define_attribute": None,
+                "user_define_arc_type": None,
+            }
+        )
+        graph1.create_component(
+            {
+                "type": "Arc",
+                "uid": "365bb94004f2",
+                "name": "Arc 3",
+                "colour": "#0000",
+                "node1_uid": "7778da0a0a0a",
+                "node2_uid": "9a2812943a39",
+                "user_define_attribute": None,
+                "user_define_arc_type": None,
+            }
+        )
+        # graph1.print_graph_details()
+        # print(graph1.get_component("9a2812943a39").get_position())
+        self.assertEqual(
+            graph1.verify_graph_integrity(),
+            ["Only one Ground Node is allowed", "Source only allows single arcs"],
+        )
+        # print(graph1.verify_graph_integrity())
+        # graph1.print_graph_details()
+        # print(graph1.get_component("7778da0a0a0a").get())
+
     @logger.catch
-    def test_graph_efficiency(self):
+    def test_query_and_delete_efficiency(self):
         start_time = time.time()
         for _ in itertools.repeat(None, 100):
             self.test_query_and_delete()
         end_time = time.time()
         print(
-            "test_graph_efficiency() Elapsed time was %g seconds"
+            "test_query_and_delete_efficiency() Elapsed time was %g seconds"
             % (end_time - start_time)
         )
 

@@ -10,8 +10,8 @@ sys.path.append(father_folder)
 
 class GraphComponent:
     def __init__(self, connected_graph=None, uid=None, name=None, colour=None):
-        self.connected_graph = connected_graph  # connected_graph
-        self.connected_gui = None  # connected_graph
+        self.connected_graph = connected_graph if connected_graph else None
+        self.connected_gui = None
 
         self.uid = None
         self.generate_uid(uid)
@@ -37,11 +37,11 @@ class GraphComponent:
                     self.uid = uid_old
                     return uid_old
                 else:
-                    print(
-                        "Error: Duplicate uid occurs",
-                        uid_old,
-                        "Try to reassign UID...",
-                    )
+                    # print(
+                    #     "Error: Duplicate uid occurs",
+                    #     uid_old,
+                    #     "Try to reassign UID...",
+                    # )
                     uid_new = uuid.uuid4().hex[:UID_LENGTH]
                     while uid_new in self.connected_graph.components:
                         uid_new = uuid.uuid4().hex[:UID_LENGTH]
@@ -89,9 +89,11 @@ class Node(GraphComponent):
     ):
         super().__init__(connected_graph, uid, name, colour)
         self.position = position if position else [0, 0]
+
         # it won't get any value which can be obtained from the simulator
         # The user cannot change (Default is 0)
         self.value = 0
+
         # Objects of the arc connected to this node
         # #TODO 此处要注意的是 Node 当中这个 List 可能有多个，而 Source Node 中只能有一个
         self.arcs = []
@@ -124,17 +126,12 @@ class SourceNode(Node):
         name=None,
         colour=None,
         position=None,
-        user_defined_attribute=None,
-        current=None,
+        user_defined_attribute=None,  # Current
     ):
         super().__init__(connected_graph, uid, name, colour, position)
         self.user_defined_attribute = (
             user_defined_attribute if user_defined_attribute else "0"
         )
-        if current == None:
-            self.current = 0
-        else:
-            self.current = current
 
     def get_user_defined_attribute(self):
         return self.user_defined_attribute
@@ -175,28 +172,25 @@ class Arc(GraphComponent):
         uid=None,
         name=None,
         colour=None,
-        node1=None,
-        node2=None,
-        #     属性是啥：纯电阻？电容？
+        node1_uid=None,
+        node2_uid=None,
         user_define_attribute=None,
-        user_define_arc_type="",
+        user_define_arc_type=None,
     ):
         super().__init__(connected_graph, uid, name, colour)
-        self.nodes = []
-        self.node1 = node1
-        self.node2 = node2
+
+        self.nodes = [None, None]
+        self.update_position(node1_uid, node2_uid)
+
         self.user_define_attribute = user_define_attribute
         self.user_define_arc_type = user_define_arc_type
-        self.update_position(node1, node2)
-        self.function = {}
+
+        # self.function = {}
 
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
     def get_position(self):
         return (self.nodes[0].get_position(), self.nodes[1].get_position())
-
-    def update_user_defined_arc_type(self, new_user_defined_arc_type):
-        self.user_define_arc_type = new_user_defined_arc_type
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
@@ -204,17 +198,20 @@ class Arc(GraphComponent):
     def update_position(self, node1=None, node2=None):
         if node1 is not None:
             if isinstance(node1, str):
-                if len(node2) == 12 and self.connected_graph != None:
-                    self.nodes.append(self.connected_graph.get_component(node1))
-            elif isinstance(node1, Node) or issubclass(node1, Node):
-                self.nodes.append(node1)
+                if len(node1) == 12 and self.connected_graph != None:
+                    self.nodes[0] = self.connected_graph.get_component(node1)
+            elif isinstance(node1, Node) or issubclass(type(node1), Node):
+                self.nodes[0] = node1
 
         if node2 is not None:
             if isinstance(node2, str) and self.connected_graph != None:
                 if len(node2) == 12 and self.connected_graph != None:
-                    self.nodes.append(self.connected_graph.get_component(node2))
-            elif isinstance(node2, Node) or issubclass(node2, Node):
-                self.nodes.append(node2)
+                    self.nodes[1] = self.connected_graph.get_component(node2)
+            elif isinstance(node2, Node) or issubclass(type(node2), Node):
+                self.nodes[1] = node2
+
+    def update_user_defined_arc_type(self, new_user_defined_arc_type):
+        self.user_define_arc_type = new_user_defined_arc_type
 
     def update_user_define_attribute(self, new_user_define_attribute):
         str_can_be_usde = ["p", "u", "k", "n", "m"]
@@ -343,35 +340,6 @@ class Arc(GraphComponent):
 
 
 if __name__ == "__main__":
-    node1 = SourceNode(None, None, "Node1", None, [200, 300], 8, 2)
-    node2 = Node(None, None, "Node2", None, [300, 300])
-    arc1 = Arc(None, None, None, None, node1, node2, 5, "resistor")
-    print(arc1.get())
-    arc1.update_user_define_attribute("-55")
-    print(arc1.get())
-    # if arc1.user_define_attribute == "resistance":
-    #     print(
-    #         "r1:"
-    #         + str(arc1.impedance)
-    #         + "\t\t"
-    #         + str(arc1.node1.value)
-    #         + "\t \t"
-    #         + str(arc1.node2.value)
-    #     )
-    # else:
-    #     print(
-    #         "c1:"
-    #         + str(arc1.impedance)
-    #         + "\t\t"
-    #         + str(arc1.node1.value)
-    #         + "\t \t"
-    #         + str(arc1.node2.value)
-    #     )
-    # print(node2.get())
-    # arc1.update_function()
-    # arc1.update_node()
-    # print(node2.get())
-
     import unittest
     from tests.test_dgcore_graphcomponent import TestGraphComponent
 
