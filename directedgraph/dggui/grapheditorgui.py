@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QDialog,
     QLabel,
+    QColorDialog,
 )
 from PySide6 import QtWidgets
 from PySide6.QtWidgets import QMenuBar, QMenu
@@ -211,14 +212,15 @@ class NodeItem(QGraphicsEllipseItem):
             self.node.name = str(text)
 
     def on_colour_action(self):
-        text, result = QInputDialog.getText(
-            self.window,
-            "Input",
-            "Enter Colour",
-            QtWidgets.QLineEdit.Normal,
+        color = QColorDialog.getColor()
+        print(color.getRgb())
+        self.node.colour = (
+            "#"
+            + str(hex(color.getRgb()[0])[2:4]).zfill(2)
+            + str(hex(color.getRgb()[1])[2:4]).zfill(2)
+            + str(hex(color.getRgb()[2])[2:4]).zfill(2)
         )
-        if result == True:
-            self.node.colour = str(text)
+        print(self.node.colour)
 
 
 class SourceNodeItem(QGraphicsEllipseItem):
