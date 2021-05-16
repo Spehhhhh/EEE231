@@ -154,7 +154,9 @@ class GroundNode(Node):
     ):
         super().__init__(parent_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
-        self.parent_graph.groundnode_counter += 1
+
+        if parent_graph != None:
+            self.parent_graph.groundnode_counter += 1
 
     def get_groundnode_counter(self):
         return self.parent_graph.groundnode_counter
@@ -325,6 +327,7 @@ if __name__ == "__main__":
         arc1.user_define_attribute
         + " connceted between {} and {}".format(arc1.node1.name, arc1.node2.name)
     )
+
     # if arc1.user_define_attribute == "resistance":
     #     print(
     #         "r1:"
@@ -347,7 +350,8 @@ if __name__ == "__main__":
     # arc1.update_function()
     # arc1.update_node()
     # print(node2.get())
-    # import unittest
-    # from tests.test_dgcore_graphcomponent import TestGraphComponent
-    #
-    # unittest.main()
+
+    import unittest
+    from tests.test_dgcore_graphcomponent import TestGraphComponent
+
+    unittest.main()
