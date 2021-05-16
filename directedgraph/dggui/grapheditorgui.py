@@ -187,17 +187,17 @@ class NodeItem(QGraphicsEllipseItem):
         popmenu.addAction(colourAction)
         colourAction.triggered.connect(self.on_colour_action)
 
-        # Value
-        # valueAction = QAction("Value")
-        # popmenu.addAction(valueAction)
-        # valueaction.triggered.connect()
-
         popmenu.addSeparator()
+
+        # Duplicate
+        duplicateAction = QAction("Duplicate")
+        popmenu.addAction(duplicateAction)
+        duplicateAction.triggered.connect(self.on_duplicate_action)
 
         # Delete
         deleteAction = QAction("Delete")
         popmenu.addAction(deleteAction)
-        # deleteaction.triggered.connect()
+        deleteAction.triggered.connect(self.on_delete_action)
 
         # Excute at node Position, so it won't collide with Main windows pop-up menu
         popmenu.exec_(event.screenPos())
@@ -224,6 +224,13 @@ class NodeItem(QGraphicsEllipseItem):
             + str(hex(color.getRgb()[2])[2:4]).zfill(2)
         )
         print(self.node.colour)
+
+    def on_duplicate_action(self):
+        pass  # #TODO
+
+    def on_delete_action(self):
+        self.node.connected_graph.delete_component(self.node.uid)  # #TODO
+        self.window.scene.removeItem(self)
 
 
 class SourceNodeItem(QGraphicsEllipseItem):
