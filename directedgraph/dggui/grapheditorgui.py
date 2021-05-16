@@ -1,9 +1,11 @@
 from os import name
+from typing import Text
 from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
 from PySide6.QtGui import QAction
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics
 from PySide6.QtWidgets import (
     QApplication,
+    QInputDialog,
     QMainWindow,
     QHBoxLayout,
     QVBoxLayout,
@@ -44,8 +46,9 @@ from directedgraph.dgutils import FileManager
 class NodeItem(QGraphicsEllipseItem):
     # Global Config
 
-    def __init__(self, node_instance):
+    def __init__(self, node_instance, main_window_instance):
         self.node = node_instance
+        self.window = main_window_instance
 
         self.node_radius = 30.0
 
@@ -92,6 +95,13 @@ class NodeItem(QGraphicsEllipseItem):
             painter.drawRect(boundingRect)
 
         # Paint node circle
+        self.node_fill_colour = QColor(
+            int(self.node.colour[1:3], 16),
+            int(self.node.colour[3:5], 16),
+            int(self.node.colour[5:7], 16),
+        )
+        self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
+        self.node_fill_brush.setColor(self.node_fill_colour)
         painter.setBrush(self.node_fill_brush)
         painter.drawEllipse(boundingRect)
 
@@ -173,11 +183,11 @@ class NodeItem(QGraphicsEllipseItem):
         # Colour
         colourAction = QAction("Colour")
         popmenu.addAction(colourAction)
-        # colouraction.triggered.connect()
+        colourAction.triggered.connect(self.on_colour_action)
 
         # Value
-        valueAction = QAction("Value")
-        popmenu.addAction(valueAction)
+        # valueAction = QAction("Value")
+        # popmenu.addAction(valueAction)
         # valueaction.triggered.connect()
 
         popmenu.addSeparator()
@@ -191,7 +201,24 @@ class NodeItem(QGraphicsEllipseItem):
         popmenu.exec_(event.screenPos())
 
     def on_name_action(self):
-        print(self.node.name)
+        text, result = QInputDialog.getText(
+            self.window,
+            "Input",
+            "Enter Name",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            self.node.name = str(text)
+
+    def on_colour_action(self):
+        text, result = QInputDialog.getText(
+            self.window,
+            "Input",
+            "Enter Colour",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            self.node.colour = str(text)
 
 
 class SourceNodeItem(QGraphicsEllipseItem):
@@ -689,7 +716,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
         for compoment in graph1.components.values():
             if isinstance(compoment, Node):  # #TODO 要用 Type 改造
-                self.scene.addItem(NodeItem(compoment))
+                self.scene.addItem(NodeItem(compoment, self))
 
         # self.scene.addItem(NodeItem(Node(None, None, "N1", "#FF0000", [200, 200])))
         # self.scene.addItem(NodeItem(Node(None, None, "N2", "#FF0000", [100, 100])))
