@@ -108,6 +108,15 @@ def main():
         "user_define_attribute": 40,
         "user_define_arc_type": "resistor"
     })
+    r7=graph.create_component({
+        "type": "Arc",
+        "name": "r7",
+        "uid": str(uuid4()),
+        "node1": node5,
+        "node2": node7,
+        "user_define_attribute": 170,
+        "user_define_arc_type": "resistor"
+    })
     graph.insert_component(r2)
 
     c1 = graph.create_component(
@@ -167,31 +176,25 @@ def main():
         }
     )
     # Output txt
-    with open("../dgcore/DemoGraph.csv", "w", newline="", encoding="utf-8") as f:
-        headers = ["#", "Arc_type", "node1", "node2", "value"]
-        f_csv = csv.writer(f, delimiter=" ")
-        f_csv.writerow(headers)
-        f_csv.writerow(["\n"])
+    with open("../dgcore/DemoGraph.txt", "w", newline="", encoding="utf-8") as f:
+        headers = "#"+"Arc_type"+" node1"+" node2"+" value"
+        f.write(headers)
+        f.write("\n")
         for component in graph.components.values():
             if isinstance(component, Arc):
-                f_csv.writerow(
-                    [
-                        component.get("user_define_arc_type"),
+                f.write(
+                        component.get("user_define_arc_type")+" "+
                         "connected between {} and {}".format(
                             component.get("node1").name, component.get("node2").name
-                        ),
-                    ]
-                )
-                f_csv.writerow(
-                    [
-                        component.name,
-                        graph.components[component.uid].node1.name,
-                        graph.components[component.uid].node2.name,
-                        component.user_define_attribute
-                    ]
-                )
-                f_csv.writerow(['\n'])
-        f_csv.writerow([".end"])
+                        )
+
+                ),
+                f.write('\n'),
+                f.write(
+                        component.name+" "+graph.components[component.uid].node1.name+" "+graph.components[component.uid].node2.name+" "+str(component.user_define_attribute))
+                f.write('\n')
+                f.write('\n')
+        f.write(".end")
 
 
 if __name__ == "__main__":
