@@ -87,6 +87,7 @@ class Node(GraphComponent):
         colour=None,
         position=None,
     ):
+        self.colour = colour if colour else "#fd5455"
         super().__init__(connected_graph, uid, name, colour)
         self.position = position if position else [0, 0]
 
@@ -128,6 +129,7 @@ class SourceNode(Node):
         position=None,
         user_defined_attribute=None,  # Current
     ):
+        self.colour = colour if colour else "#0f8080"
         super().__init__(connected_graph, uid, name, colour, position)
         self.user_defined_attribute = (
             user_defined_attribute if user_defined_attribute else "0"
@@ -149,6 +151,7 @@ class GroundNode(Node):
         colour=None,
         position=None,
     ):
+        self.colour = colour if colour else "#d4aa01"
         super().__init__(connected_graph, uid, name, colour, position)
         self.user_defined_attribute = "0"
 
