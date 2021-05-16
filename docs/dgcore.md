@@ -151,14 +151,14 @@ if node1 is not None:
     if isinstance(node1, str):
         if len(node2) == 12 and self.connected_graph != None:
             self.nodes.append(self.connected_graph.get_component(node1))
-    elif isinstance(node1, Node) or issubclass(node1, Node):
+    elif isinstance(node1, Node):
           self.nodes.append(node1)
 
 if node2 is not None:
     if isinstance(node2, str) and self.connected_graph != None:
         if len(node2) == 12 and self.connected_graph != None:
             self.nodes.append(self.connected_graph.get_component(node2))
-    elif isinstance(node2, Node) or issubclass(node2, Node):
+    elif isinstance(node2, Node):
         self.nodes.append(node2)
 ```
 ## `directedgraph.dgcore` Module Usage
