@@ -23,29 +23,45 @@ def main():
     # Build graph
     graph = Graph("DemoGraph")
 
-    source_node=graph.create_component({"type":"SourceNode","name":"s1","color":"#0123123"})
+    source_node = graph.create_component(
+        {"type": "SourceNode", "name": "s1", "color": "#0123123"}
+    )
 
-    node4 = graph.create_component({"type": "Node", "name": "n4","position":[200,300]})
+    node4 = graph.create_component(
+        {"type": "Node", "name": "n4", "position": [200, 300]}
+    )
     graph.insert_component(node4)
 
-
-    node1 = graph.create_component({"type": "Node", "name": "n1","position":[300,400]})
+    node1 = graph.create_component(
+        {"type": "Node", "name": "n1", "position": [300, 400]}
+    )
     graph.insert_component(node1)
 
-
-    node2 = graph.create_component({"type": "Node", "name": "n2","position":[400,500]})
+    node2 = graph.create_component(
+        {"type": "Node", "name": "n2", "position": [400, 500]}
+    )
     graph.insert_component(node2)
 
-    node3 = graph.create_component({"type": "Node", "name": "n3", "position": [700, 500]})
+    node3 = graph.create_component(
+        {"type": "Node", "name": "n3", "position": [700, 500]}
+    )
     graph.insert_component(node3)
 
-    node5=graph.create_component({"type": "Node", "name": "n5", "position": [800, 500]})
+    node5 = graph.create_component(
+        {"type": "Node", "name": "n5", "position": [800, 500]}
+    )
 
-    node6=graph.create_component({"type": "Node", "name": "n6", "position": [900, 500]})
+    node6 = graph.create_component(
+        {"type": "Node", "name": "n6", "position": [900, 500]}
+    )
 
-    node7=graph.create_component({"type": "Node", "name": "n7", "position": [1000, 500]})
+    node7 = graph.create_component(
+        {"type": "Node", "name": "n7", "position": [1000, 500]}
+    )
 
-    ground_node=graph.create_component({"type": "GroundNode", "name": "g1", "position": [2000, 500]})
+    ground_node = graph.create_component(
+        {"type": "GroundNode", "name": "g1", "position": [2000, 500]}
+    )
 
     r1 = graph.create_component(
         {
@@ -55,7 +71,7 @@ def main():
             "node1": node2,
             "node2": node3,
             "user_define_arc_type": "resistor",
-            "user_define_attribute": 150
+            "user_define_attribute": 150,
         }
     )
     graph.insert_component(r1)
@@ -68,55 +84,65 @@ def main():
             "node1": node2,
             "node2": node3,
             "user_define_attribute": 15,
-            "user_define_arc_type": "resistor"
+            "user_define_arc_type": "resistor",
         }
     )
-    r3=graph.create_component({
+    r3 = graph.create_component(
+        {
             "type": "Arc",
             "name": "r3",
             "uid": str(uuid4()),
             "node1": node3,
             "node2": node4,
             "user_define_attribute": "255k",
-            "user_define_arc_type": "resistor"
-        })
-    r4 = graph.create_component({
-        "type": "Arc",
-        "name": "r4",
-        "uid": str(uuid4()),
-        "node1": node3,
-        "node2": node4,
-        "user_define_attribute": "200k",
-        "user_define_arc_type": "resistor"
-    })
-    r5 = graph.create_component({
-        "type": "Arc",
-        "name": "r5",
-        "uid": str(uuid4()),
-        "node1": node3,
-        "node2": node4,
-        "user_define_attribute": "120k",
-        "user_define_arc_type": "resistor"
-    })
+            "user_define_arc_type": "resistor",
+        }
+    )
+    r4 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "r4",
+            "uid": str(uuid4()),
+            "node1": node3,
+            "node2": node4,
+            "user_define_attribute": "200k",
+            "user_define_arc_type": "resistor",
+        }
+    )
+    r5 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "r5",
+            "uid": str(uuid4()),
+            "node1": node3,
+            "node2": node4,
+            "user_define_attribute": "120k",
+            "user_define_arc_type": "resistor",
+        }
+    )
 
-    r6 = graph.create_component({
-        "type": "Arc",
-        "name": "r6",
-        "uid": str(uuid4()),
-        "node1": node4,
-        "node2": node5,
-        "user_define_attribute": 40,
-        "user_define_arc_type": "resistor"
-    })
-    r7=graph.create_component({
-        "type": "Arc",
-        "name": "r7",
-        "uid": str(uuid4()),
-        "node1": node5,
-        "node2": node7,
-        "user_define_attribute": 170,
-        "user_define_arc_type": "resistor"
-    })
+    r6 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "r6",
+            "uid": str(uuid4()),
+            "node1": node4,
+            "node2": node5,
+            "user_define_attribute": 40,
+            "user_define_arc_type": "resistor",
+        }
+    )
+    r7 = graph.create_component(
+        {
+            "type": "Arc",
+            "name": "r7",
+            "uid": str(uuid4()),
+            "node1": node5,
+            "node2": node7,
+            "user_define_attribute": 170,
+            "user_define_arc_type": "resistor",
+        }
+    )
     graph.insert_component(r2)
 
     c1 = graph.create_component(
@@ -127,7 +153,7 @@ def main():
             "node1": source_node,
             "node2": node1,
             "user_define_attribute": 20,
-            "user_define_arc_type":"capacitor"
+            "user_define_arc_type": "capacitor",
         }
     )
     graph.insert_component(c1)
@@ -139,7 +165,7 @@ def main():
             "node1": node1,
             "node2": node2,
             "user_define_attribute": "20u",
-            "user_define_arc_type":"capacitor"
+            "user_define_arc_type": "capacitor",
         }
     )
     c3 = graph.create_component(
@@ -150,7 +176,7 @@ def main():
             "node1": node4,
             "node2": node6,
             "user_define_attribute": "100p",
-            "user_define_arc_type": "capacitor"
+            "user_define_arc_type": "capacitor",
         }
     )
     c4 = graph.create_component(
@@ -161,7 +187,7 @@ def main():
             "node1": node6,
             "node2": node7,
             "user_define_attribute": "220u",
-            "user_define_arc_type": "capacitor"
+            "user_define_arc_type": "capacitor",
         }
     )
     c5 = graph.create_component(
@@ -172,29 +198,36 @@ def main():
             "node1": node7,
             "node2": ground_node,
             "user_define_attribute": "120 nF",
-            "user_define_arc_type": "capacitor"
+            "user_define_arc_type": "capacitor",
         }
     )
     # Output txt
     with open("../dgcore/DemoGraph.txt", "w", newline="", encoding="utf-8") as f:
-        headers = "#"+"Arc_type"+" node1"+" node2"+" value"
+        headers = "#" + "Arc_type" + " node1" + " node2" + " value"
         f.write(headers)
         f.write("\n")
         f.write('\n')
         for component in graph.components.values():
             if isinstance(component, Arc):
                 f.write(
-                        component.get("user_define_arc_type")+" "+
-                        "connected between {} and {}".format(
-                            component.get("node1").name, component.get("node2").name
-                        )
-
+                    component.get("user_define_arc_type")
+                    + " "
+                    + "connected between {} and {}".format(
+                        component.get("node1").name, component.get("node2").name
+                    )
                 ),
-                f.write('\n'),
+                f.write("\n"),
                 f.write(
-                        component.name+" "+graph.components[component.uid].node1.name+" "+graph.components[component.uid].node2.name+" "+str(component.user_define_attribute))
-                f.write('\n')
-                f.write('\n')
+                    component.name
+                    + " "
+                    + graph.components[component.uid].node1.name
+                    + " "
+                    + graph.components[component.uid].node2.name
+                    + " "
+                    + str(component.user_define_attribute)
+                )
+                f.write("\n")
+                f.write("\n")
         f.write(".end")
 
 
