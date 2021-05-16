@@ -28,6 +28,7 @@ from PySide6.QtWidgets import (
 )
 
 import sys
+import os
 from pathlib import Path
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
@@ -37,6 +38,7 @@ sys.path.append(father_folder)
 
 from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc, graph
 from directedgraph.dgcore import GroundNodeNumberError
+from directedgraph.dgutils import FileManager
 
 
 class NodeItem(QGraphicsEllipseItem):
@@ -136,9 +138,11 @@ class NodeItem(QGraphicsEllipseItem):
         # Handler for mouseMoveEvent
         self.prepareGeometryChange()
         scenePosition = event.scenePos()
+        self.setPos(scenePosition)
+
         self.node.position[0] = scenePosition.x()
         self.node.position[1] = scenePosition.y()
-        self.setPos(scenePosition)
+
         print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
         # self.update()
         return
@@ -675,9 +679,6 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         pass
 
     def init_graph(self):
-        from directedgraph.dgutils import FileManager
-        import os
-
         fm = FileManager()
         path = (
             Path(os.path.dirname(__file__))
@@ -687,7 +688,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         graph1 = fm.read_graph(str(path))
 
         for compoment in graph1.components.values():
-            if isinstance(compoment, Node):
+            if isinstance(compoment, Node):  # #TODO 要用 Type 改造
                 self.scene.addItem(NodeItem(compoment))
 
         # self.scene.addItem(NodeItem(Node(None, None, "N1", "#FF0000", [200, 200])))
