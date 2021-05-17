@@ -29,7 +29,6 @@ from PySide6.QtWidgets import (
 )
 
 import sys
-import os
 from pathlib import Path
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
@@ -277,6 +276,21 @@ class SourceNodeItem(NodeItem):
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
         print(self.node.user_defined_attribute)
         return
+
+    def on_duplicate_action(self):
+        self.connected_window.scene.addItem(
+            NodeItem(
+                self.node.connected_graph.create_component(
+                    {
+                        "type": "SourceNode",
+                        "name": self.node.name + " Copy",
+                        "position_x": self.node.position[0],
+                        "position_y": self.node.position[1],
+                    }
+                ),
+                self.connected_window,
+            )
+        )
 
 
 class GroundNodeItem(NodeItem):
