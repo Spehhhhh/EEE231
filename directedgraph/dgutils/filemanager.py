@@ -92,6 +92,111 @@ class FileManager:
 
     def export_graph(self, filepath, import_graph):
         graph_raw_data = import_graph.get()
+        graph_attribute = graph_raw_data[0]
+        graph_components = graph_raw_data[1]
+
+        doc = minidom.Document()
+        directedgraph = doc.createElement("DirectedGraph")
+        doc.appendChild(directedgraph)
+
+        graph_node = doc.createElement("Graph")
+        directedgraph.appendChild(graph_node)
+        name = doc.createElement("name")
+        graph_node.appendChild(name)
+        graph_node_name = doc.createTextNode(graph_attribute[0]["name"])
+        name.appendChild(graph_node_name)
+
+        components_node = doc.createElement("Component")
+        directedgraph.appendChild(components_node)
+
+        for component in graph_components:
+            component_node = doc.createElement(component["type"])
+            component_node.setAttribute("uid", component["uid"])
+
+            component_node_name = doc.createElement("name")
+            component_node.appendChild(component_node_name)
+            component_node_name_value = doc.createTextNode(component["name"])
+            component_node_name.appendChild(component_node_name_value)
+
+            component_node_colour = doc.createElement("colour")
+            component_node.appendChild(component_node_colour)
+            component_node_colour_value = doc.createTextNode(component["colour"])
+            component_node_colour.appendChild(component_node_colour_value)
+
+            if (
+                component["type"] == "Node"
+                or component["type"] == "GroundNode"
+                or component["type"] == "SourceNode"
+            ):
+                attribute = ["position_x", "position_y"]
+                component_node_position_x = doc.createElement("position_x")
+                component_node.appendChild(component_node_position_x)
+                component_node_position_x_value = doc.createTextNode(
+                    component["position_x"]
+                )
+                component_node_position_x.appendChild(component_node_position_x_value)
+
+                component_node_position_y = doc.createElement("position_y")
+                component_node.appendChild(component_node_position_y)
+                component_node_position_y_value = doc.createTextNode(
+                    component["position_y"]
+                )
+                component_node_position_y.appendChild(component_node_position_y_value)
+
+            if component["type"] == "SourceNode":
+                component_node_user_defined_attribute = doc.createElement(
+                    "user_defined_attribute"
+                )
+                component_node.appendChild(component_node_user_defined_attribute)
+                component_node_user_defined_attribute_value = doc.createTextNode(
+                    component["user_defined_attribute"]
+                )
+                component_node_user_defined_attribute.appendChild(
+                    component_node_user_defined_attribute_value
+                )
+
+            if component["type"] == "Arc":
+                component_node_node1_uid = doc.createElement("node1_uid")
+                component_node.appendChild(component_node_node1_uid)
+                component_node_node1_uid_value = doc.createTextNode(
+                    component["node1_uid"]
+                )
+                component_node_node1_uid.appendChild(component_node_node1_uid_value)
+
+                component_node_node2_uid = doc.createElement("node2_uid")
+                component_node.appendChild(component_node_node2_uid)
+                component_node_node2_uid_value = doc.createTextNode(
+                    component["node2_uid"]
+                )
+                component_node_node2_uid.appendChild(component_node_node2_uid_value)
+
+                component_node_user_defined_attribute = doc.createElement(
+                    "user_defined_attribute"
+                )
+                component_node.appendChild(component_node_user_defined_attribute)
+                component_node_user_defined_attribute_value = doc.createTextNode(
+                    component["user_defined_attribute"]
+                )
+                component_node_user_defined_attribute.appendChild(
+                    component_node_user_defined_attribute_value
+                )
+
+                component_node_user_defined_arc_type = doc.createElement(
+                    "user_defined_arc_type"
+                )
+                component_node.appendChild(component_node_user_defined_arc_type)
+                component_node_user_defined_arc_type_value = doc.createTextNode(
+                    component["user_defined_arc_type"]
+                )
+                component_node_user_defined_arc_type.appendChild(
+                    component_node_user_defined_arc_type_value
+                )
+
+            components_node.appendChild(component_node)
+
+        f = open(filepath, "w")
+        f.write(doc.toprettyxml(indent="    "))
+        f.close()
 
     def export_graph_png(self, filepath, import_graph):
         pass
@@ -101,15 +206,6 @@ class FileManager:
 
 
 if __name__ == "__main__":
-    # import os
-
-    # path = (
-    #     Path(os.path.dirname(__file__))
-    #     .parent.parent.joinpath("tests")
-    #     .joinpath("test.xml")
-    # )
-    # dom1 = minidom.parse(str(path))
-
     import unittest
     from tests.test_dgutils_filemanager import TestFileManager
 

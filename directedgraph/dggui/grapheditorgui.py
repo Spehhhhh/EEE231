@@ -1,5 +1,3 @@
-from os import name
-from typing import Text
 from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
 from PySide6.QtGui import QAction
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics
@@ -51,7 +49,7 @@ class NodeItem(QGraphicsEllipseItem):
         self.node = node_instance
         self.connected_window = main_window_instance
 
-        self.node_radius = 30.0
+        self.node_radius = 40.0
 
         self.node_fill_colour = QColor(
             int(self.node.colour[1:3], 16),
@@ -110,7 +108,10 @@ class NodeItem(QGraphicsEllipseItem):
 
         # Paint node text
         painter.setPen(Qt.black)
+        boundingRect.adjust(0, 20, 0, 20)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
+        boundingRect.adjust(0, -40, 0, -40)
+        painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
 
         print("paint called")
         return
