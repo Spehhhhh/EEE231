@@ -94,7 +94,8 @@ class Node(GraphComponent):
         position=None,
     ):
         self.colour = colour if colour else "#fd5455"
-        super().__init__(connected_graph, uid, name, colour)
+        super().__init__(connected_graph, uid, name, self.colour)
+
         self.position = position if position else [0, 0]
 
         # it won't get any value which can be obtained from the simulator
@@ -136,7 +137,8 @@ class SourceNode(Node):
         user_defined_attribute=None,  # Current
     ):
         self.colour = colour if colour else "#0f8080"
-        super().__init__(connected_graph, uid, name, colour, position)
+        super().__init__(connected_graph, uid, name, self.colour, position)
+
         self.user_defined_attribute = (
             user_defined_attribute if user_defined_attribute else "0"
         )
