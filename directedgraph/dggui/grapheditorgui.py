@@ -218,6 +218,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
         # #TODO
         self.file_path = ""
+        self.graph = Graph()
 
     # Menu =========================================================
     def contextMenuEvent(self, event):
@@ -268,6 +269,8 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
                 self.scene.addItem(SourceNodeItem(component, self))
             if type(component) == GroundNode:
                 self.scene.addItem(GroundNodeItem(component, self))
+
+        self.graph = graph1
         return
 
     def on_save_action(self):
@@ -275,8 +278,10 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         pass
 
     def on_save_as_action(self):
+        fm = FileManager()
         file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
-        print(file_name[0])
+        print(self.graph)
+        fm.export_graph(file_name[0], self.graph)
         return
 
     def on_preferences_action(self):

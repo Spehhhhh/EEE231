@@ -168,8 +168,8 @@ class Graph:
                 parameters.get("name", None),
                 parameters.get("colour", None),
                 [
-                    int(parameters.get("position_x", 0)),
-                    int(parameters.get("position_y", 0)),
+                    int(float(parameters.get("position_x", 0))),
+                    int(float(parameters.get("position_y", 0))),
                 ],
             )
             self.insert_component(component)
@@ -181,8 +181,8 @@ class Graph:
                 parameters.get("name", None),
                 parameters.get("colour", None),
                 [
-                    int(parameters.get("position_x", 0)),
-                    int(parameters.get("position_y", 0)),
+                    int(float(parameters.get("position_x", 0))),
+                    int(float(parameters.get("position_y", 0))),
                 ],
                 parameters.get("user_defined_attribute", None),
             )
@@ -195,8 +195,8 @@ class Graph:
                 parameters.get("name", None),
                 parameters.get("colour", None),
                 [
-                    int(parameters.get("position_x", 0)),
-                    int(parameters.get("position_y", 0)),
+                    int(float(parameters.get("position_x", 0))),
+                    int(float(parameters.get("position_y", 0))),
                 ],
             )
             self.insert_component(component)
