@@ -1,8 +1,7 @@
 import sys
+import os
 from pathlib import Path
-from xml.dom import minidom
-import csv
-from uuid import uuid4
+from xml.dom.minidom import parseString
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
@@ -10,6 +9,7 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import Graph, Node, SourceNode, GroundNode, Arc
+from directedgraph.dgutils import FileManager
 
 
 def main():
@@ -225,4 +225,50 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    fm = FileManager()
+    path = (
+        Path(os.path.dirname(__file__))
+        .parent.parent.joinpath("tests")
+        .joinpath("test.xml")
+    )
+    graph1 = fm.read_graph(str(path))
+
+    arc_list = []
+    node_uid_list = []
+    sourcenode_list = []
+    resistor_count = 1
+    capacitor_count = 1
+
+    for component in graph1.components.values():
+        if type(component) == Arc:
+            arc_list.append(component)
+        if type(component) == SourceNode:
+            sourcenode_list.append(component)
+        if isinstance(component, Node):
+            node_uid_list.append(component.uid)
+
+    for sourcenode in sourcenode_list:
+        pass
+
+    for arc in arc_list:
+        if arc.user_defined_arc_type == "Resistor":
+            print("R" + str(resistor_count))
+            resistor_count = resistor_count + 1
+            pass
+        if arc.user_defined_arc_type == "Capacitor":
+            print(
+                "C"
+                + str(capacitor_count)
+                + " "
+                + arc.nodes[0].uid
+                + " "
+                + arc.nodes[1].uid
+                + " "
+                + arc.user_defined_attribute
+            )
+            capacitor_count = capacitor_count + 1
+            pass
+        if arc.user_defined_arc_type == "None":
+            pass
+    # 批量替换 UID
+    print(node_uid_list)
