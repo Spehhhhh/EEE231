@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import timeit
 import itertools
@@ -18,6 +19,7 @@ from directedgraph.dgcore import (
     GroundNode,
     Arc,
 )
+from directedgraph.dgutils import FileManager
 
 logger.add(
     "logs/test_dgcore.py.log",
@@ -300,6 +302,27 @@ class TestGraph(unittest.TestCase):
         # print(graph1.verify_graph_integrity())
         # graph1.print_graph_details()
         # print(graph1.get_component("7778da0a0a0a").get())
+
+    @logger.catch
+    def test_read_and_create_graph(self):
+        fm = FileManager()
+        path = Path(os.path.dirname(__file__)).joinpath("test.xml")
+        data1 = fm.read_graph_raw_data(str(path))
+        graph1 = fm.create_graph(data1)
+
+        graph1.verify_graph_integrity()
+        # graph1.print_graph_details()
+
+        self.assertEqual(len(graph1.get_component("1f9cb9").arcs), 2)  # N1 Arcs
+        self.assertEqual(len(graph1.get_component("9cf405").arcs), 3)  # N2 Arcs
+        self.assertEqual(len(graph1.get_component("59d632").arcs), 5)  # N4 Arcs
+        self.assertEqual(len(graph1.get_component("567071").arcs), 3)  # N7 Arcs
+        self.assertEqual(len(graph1.get_component("365bb9").arcs), 1)  # G1 Arcs
+        # print("N1 Arcs:", len(graph1.get_component("1f9cb9").arcs))
+        # print("N2 Arcs:", len(graph1.get_component("9cf405").arcs))
+        # print("N4 Arcs:", len(graph1.get_component("59d632").arcs))
+        # print("N7 Arcs:", len(graph1.get_component("567071").arcs))
+        # print("G1 Arcs:", len(graph1.get_component("365bb9").arcs))
 
     @logger.catch
     def test_query_and_delete_efficiency(self):
