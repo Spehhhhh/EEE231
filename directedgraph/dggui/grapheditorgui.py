@@ -538,12 +538,53 @@ class GroundNodeItem(QGraphicsEllipseItem):
         popmenu.exec_(event.screenPos())
 
 
-class ArcItem(QGraphicsPathItem):
+class ArcItem(QGraphicsEllipseItem):
     def __init__(self, arc_instance,graph=None):
-        self.ar_instance=arc_instance
+        self.arc_instance=arc_instance
+        self.graph = graph
+        # 根据两端的uid获取查询所在图中两个node对象
+        self.node1=self.arc_instance.nodes[0]
+        self.node2=self.arc_instance.nodes[1]
+
+        #再根据两个node对象得到两个node对象的位置
+        self.node1_position=self.node1.get_position()
+        self.node2_position=self.node2.get_position()
+
+        self.arc_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
+        bounding_shape = QRectF(
+            self.node1_position[0],self.node1_position[1],self.node2_position[0]-self.node1_position[0],self.node2_position[1]-self.node1_position[1]
+        )
+        super().__init__(bounding_shape)
+
+        self.setZValue(0)
+        self.setBrush(self.arc_fill_brush)
+
+        # Set node attributes
+        self.ItemIsSelectable = True
+        self.ItemIsMovable = True
+        self.ItemSendsGeometryChanges = True
+        self.setAcceptHoverEvents(True)  # Make the Node accpect the Hover Event
+
+        # Create selection rectangle shown when node is selected
+        self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
+        self.selectionRectangle.setVisible(False)
 
     def paint(self, painter, option, parent):
-        pass
+        boundingRect = self.boundingRect()
+
+        if self.selectionRectangle.isVisible():
+            # Paint selection rectangle
+            painter.setPen(Qt.DashLine)
+            painter.setBrush(Qt.NoBrush)
+            self.selectionRectangle.setRect(boundingRect)
+            painter.drawRect(boundingRect)
+
+        # Paint node circle
+        painter.setBrush(self.arc_fill_brush)
+        painter.drawArc(boundingRect,30*16,120*16)
+        print("paint called")
+        return
+
     def hoverEnterEvent(self, event):
         # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
         app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
@@ -570,6 +611,12 @@ class ArcItem(QGraphicsPathItem):
         # self.update()
         return
 
+    def mouseMoveEvent(self, event):
+
+        self.prepareGeometryChange()
+        scenePosition = event.scenePos()
+        self.setPos(scenePosition)
+        return
     def mouseDoubleClickEvent(self, event):
         # Handler for mouseDoubleClickEvent
         self.prepareGeometryChange()
@@ -578,8 +625,10 @@ class ArcItem(QGraphicsPathItem):
         # self.update()
         return
     def setPos(self, pos):
-
-        pass
+        bounding = self.boundingRect()
+        offset = bounding.center()
+        super().setPos(pos - offset)
+        return
 
     def contextMenuEvent(self, event):
         # Pop up menu for Node
@@ -812,10 +861,22 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         )
 
     def on_arc(self):
-       input_arc=Arc_Input()
-       input_arc.show()
-       input_arc.exec_()
-       print(input_arc.confirm())
+       # input_arc=Arc_Input()
+       # input_arc.show()
+       # input_arc.exec_()
+       uid1="321231"
+       uid2="12312"
+       graph1=graph.Graph()
+       node1=Node(None,uid1,'n1',None,[300,400])
+       node2=Node(None,uid2,'n2',None,[600,700])
+       arc1=Arc(graph1,None,'arc1',None,node1,node2,None,None)
+
+       # print(arc1.nodes[0])
+       print(node2.get_position())
+       self.scene.addItem(ArcItem(arc1,graph1))
+       self.scene.addItem(NodeItem(node1,None))
+       self.scene.addItem(NodeItem(node2,None))
+
     def on_save_file(self):
         name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
         file = open(name[0], "w")
