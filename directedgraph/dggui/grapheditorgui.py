@@ -525,7 +525,28 @@ class GroundNodeItem(QGraphicsEllipseItem):
 
 class ArcItem:
     def __init__(self, arc_instance):
+        self.ar_instance=arc_instance
+        
+    def mouseReleaseEvent(self, event):
         pass
+
+    def setPos(self, pos):
+        pass
+    def contextMenuEvent(self, event):
+        pass
+
+    def mouseDoubleClickEvent(self,event):
+        pass
+
+    def mouseMoveEvent(self,event):
+        pass
+
+    def hoverEnterEvent(self,event):
+        pass
+
+    def paint(self, painter, option, parent):
+        pass
+
 
 
 class InputFormSourceNode(QDialog, QMainWindow):
