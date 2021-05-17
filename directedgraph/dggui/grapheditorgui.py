@@ -856,24 +856,9 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         )
         graph1 = fm.read_graph(str(path))
 
-        for compoment in graph1.components.values():
-            if isinstance(compoment, Node):  # #TODO 要用 Type 改造
-                self.scene.addItem(NodeItem(compoment, self))
-
-        # self.scene.addItem(NodeItem(Node(None, None, "N1", "#FF0000", [200, 200])))
-        # self.scene.addItem(NodeItem(Node(None, None, "N2", "#FF0000", [100, 100])))
-        # test = NodeItem(Node(None, None, "N3", "#FF0000", [300, 300]))
-        # self.scene.addItem(
-        #     GroundNodeTestItem(Node(None, None, "Test", "#FF0000", [400, 400]))
-        # )
-        # self.scene.addItem(test)
-
-        # menu = QMenu()
-        # menu.addAction("Action 1")
-        # menu.addAction("Action 2")
-        # menu.addAction("Action 3")
-        # menu.exec_()
-        # self.scene.addItem(menu)
+        for component in graph1.components.values():
+            if type(component) == Node:
+                self.scene.addItem(NodeItem(component, self))
 
 
 class DirectedGraphApplication:
@@ -891,5 +876,4 @@ class DirectedGraphApplication:
 
 
 if __name__ == "__main__":
-
     app = DirectedGraphApplication()
