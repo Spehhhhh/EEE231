@@ -174,7 +174,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
     def __init__(self):
         super().__init__()
         # Title of the Windows
-        self.setWindowTitle("GUI editor")
+        self.setWindowTitle("Graph Editor")
         self.ground_node_count = 0
 
         # Initialise the QGraphicScene
@@ -187,55 +187,36 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         self.layout.addWidget(self.view)
         self.widget = QWidget()
         self.widget.setLayout(self.layout)
+        self.setCentralWidget(self.widget)
 
-        # Set up the Menu Bar============================================================
+        # Set up the Menu Bar
         self.fileMenu = self.menuBar().addMenu("&File")
 
         self.openMenuAction = self.fileMenu.addAction("&Open")
-        self.openMenuAction.triggered.connect(self.on_open_action)  # New-style connect!
+        self.openMenuAction.triggered.connect(self.on_open_action)
 
-        self.fileMenu.addSeparator()
+        self.saveMenuAction = self.fileMenu.addAction("&Save")
+        self.saveMenuAction.triggered.connect(self.on_save_action)
 
-        self.quitMenuAction = self.fileMenu.addAction("&Quit")
-        self.quitMenuAction.triggered.connect(self.on_quit_action)
+        self.saveAsMenuAction = self.fileMenu.addAction("&Save As...")
+        self.saveAsMenuAction.triggered.connect(self.on_save_as_action)
 
-        # Setup Tools menu==============================================================
-        self.toolsMenu = self.menuBar().addMenu("&Tools")
-        self.preferencesMenuAction = self.toolsMenu.addAction("&Preferences")
-        self.preferencesMenuAction.triggered.connect(self.on_preferences_action)
+        # Setup Graph Component menu
+        self.GraphComponentMenu = self.menuBar().addMenu("&Add")
 
-        # Setup About menu==============================================================
-        self.aboutMenu = self.menuBar().addMenu("&About")
-        self.aboutMenuAction = self.aboutMenu.addAction("&About")
-        self.aboutMenuAction.triggered.connect(self.on_about_action)
-        self.setCentralWidget(self.widget)
-
-        # Setup GraphComponent menu====================================================
-        self.GraphComponentMenu = self.menuBar().addMenu("&GraphComponent")
         self.NodeAction = self.GraphComponentMenu.addAction("&Node")
-        self.NodeAction.triggered.connect(self.on_node)
-        self.GroundNodeAction = self.GraphComponentMenu.addAction("&GroundNode")
-        self.GroundNodeAction.triggered.connect(self.on_groundnode)
-        self.SourceNodeAction = self.GraphComponentMenu.addAction("&SourceNode")
-        self.SourceNodeAction.triggered.connect(self.on_sourcenode)
+        self.NodeAction.triggered.connect(self.on_node_action)
+
+        self.SourceNodeAction = self.GraphComponentMenu.addAction("&Source Node")
+        self.SourceNodeAction.triggered.connect(self.on_sourcenode_action)
+
+        self.GroundNodeAction = self.GraphComponentMenu.addAction("&Ground Node")
+        self.GroundNodeAction.triggered.connect(self.on_groundnode_action)
+
         self.ArcAction = self.GraphComponentMenu.addAction("&Arc")
-        self.ArcAction.triggered.connect(self.on_arc)
+        self.ArcAction.triggered.connect(self.on_arc_action)
 
-        self.mainToolBar = QToolBar()
-        self.mainToolBar.setMovable(False)
-        self.newToolButton = self.mainToolBar.addAction("New")
-        self.openToolButton = self.mainToolBar.addAction("Open")
-        self.openToolButton.triggered.connect(self.on_open_action)
-        self.saveToolButton = self.mainToolBar.addAction("Save")
-        self.saveToolButton.setShortcut("Ctrl+S")
-        self.saveToolButton.setStatusTip("Save File")
-        self.saveToolButton.triggered.connect(self.on_save_file)
-        self.saveAsToolButton = self.mainToolBar.addAction("Save As")
-        self.addToolBar(self.mainToolBar)
-        self.layout.addWidget(self.mainToolBar)
         self.init_graph()
-
-        # Pop out menu for the graph================================================
 
     # Menu =========================================================
     def contextMenuEvent(self, event):
@@ -275,10 +256,16 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         print("opening ", fileName[0])
         return
 
-    def on_quit_action(self):
-        """Handler for 'Quit' action"""
-        print("quitting application")
-        self.close()
+    def on_save_action(self):
+        pass
+
+    def on_save_as_action(self):
+        name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
+        file = open(name[0], "w")
+        # 传输xml格式，使用filemanager
+        text = "sasd"
+        file.write(text)
+        file.close()
         return
 
     def on_preferences_action(self):
@@ -295,12 +282,11 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         )
         return
 
-    def on_node(self):
-        self.scene.addItem(
-            NodeItem(Node(None, None, "I", None, [500, 300]), self)
-        )  # #TODO
+    def on_node_action(self):
+        self.scene.addItem(NodeItem(Node(None, None, "I", None, [500, 300]), self))
+        # #TODO
 
-    def on_groundnode(self):
+    def on_groundnode_action(self):
         self.ground_node_count += 1
         if self.ground_node_count > 1:
             msg = QMessageBox()
@@ -314,7 +300,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
                 GroundNodeItem(GroundNode(None, None, "G1", None, [500, 300]))
             )
 
-    def on_sourcenode(self):
+    def on_sourcenode_action(self):
         form = InputFormSourceNode()
         form.show()
         form.exec_()
@@ -324,22 +310,11 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
             SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         )
 
-    def on_arc(self):
+    def on_arc_action(self):
         input_arc = Arc_Input()
         input_arc.show()
         input_arc.exec_()
         print(input_arc.confirm())
-
-    def on_save_file(self):
-        name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
-        file = open(name[0], "w")
-        # 传输xml格式，使用filemanager
-        text = "sasd"
-        file.write(text)
-        file.close()
-
-    def event_filter(self, source, event):
-        pass
 
     def init_graph(self):
         fm = FileManager()
