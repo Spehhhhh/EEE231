@@ -37,7 +37,7 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc, graph
+from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc, Graph
 from directedgraph.dgcore import GroundNodeNumberError
 from directedgraph.dgutils import FileManager
 
