@@ -856,7 +856,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
             SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         )
 
-    def on_arc(self):
+    def on_arc_action(self):
         # input_arc=Arc_Input()
         # input_arc.show()
         # input_arc.exec_()
