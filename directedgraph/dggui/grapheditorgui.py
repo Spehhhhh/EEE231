@@ -290,7 +290,6 @@ class SourceNodeItem(QGraphicsEllipseItem):
         painter.setPen(Qt.black)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
 
-
         print("paint called")
         return
 
@@ -377,15 +376,15 @@ class SourceNodeItem(QGraphicsEllipseItem):
         popmenu.exec_(event.screenPos())
 
     def on_colour_action(self):
-            color = QColorDialog.getColor()
-            print(color.getRgb())
-            self.node.colour = (
-                    "#"
-                    + str(hex(color.getRgb()[0])[2:4]).zfill(2)
-                    + str(hex(color.getRgb()[1])[2:4]).zfill(2)
-                    + str(hex(color.getRgb()[2])[2:4]).zfill(2)
-            )
-            print(self.node.colour)
+        color = QColorDialog.getColor()
+        print(color.getRgb())
+        self.node.colour = (
+            "#"
+            + str(hex(color.getRgb()[0])[2:4]).zfill(2)
+            + str(hex(color.getRgb()[1])[2:4]).zfill(2)
+            + str(hex(color.getRgb()[2])[2:4]).zfill(2)
+        )
+        print(self.node.colour)
 
 
 class GroundNodeTestItem(NodeItem):
@@ -539,11 +538,12 @@ class GroundNodeItem(QGraphicsEllipseItem):
 
 
 class ArcItem(QGraphicsPathItem):
-    def __init__(self, arc_instance,graph=None):
-        self.ar_instance=arc_instance
+    def __init__(self, arc_instance, graph=None):
+        self.ar_instance = arc_instance
 
     def paint(self, painter, option, parent):
         pass
+
     def hoverEnterEvent(self, event):
         # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
         app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
@@ -553,6 +553,7 @@ class ArcItem(QGraphicsPathItem):
         # Change back the cursor when mouse is not point to the node
         app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
         app.instance().restoreOverrideCursor()
+
     def mouseReleaseEvent(self, event):
         self.prepareGeometryChange()
         mousePos = event.pos()
@@ -577,6 +578,7 @@ class ArcItem(QGraphicsPathItem):
         print("mouseDoubleClickEvent")
         # self.update()
         return
+
     def setPos(self, pos):
 
         pass
@@ -611,7 +613,6 @@ class ArcItem(QGraphicsPathItem):
         popmenu.exec_(event.screenPos())
 
 
-
 class InputFormSourceNode(QDialog, QMainWindow):
     def __init__(self, parent=None):
         super(InputFormSourceNode, self).__init__(parent)
@@ -638,13 +639,14 @@ class InputFormSourceNode(QDialog, QMainWindow):
             msg.exec_()
             return
 
+
 class Arc_Input(QDialog, QMainWindow):
     def __init__(self, parent=None):
         super(Arc_Input, self).__init__(parent)
         self.setWindowTitle("Input two linked nodes' uid")
         self.edit1 = QLineEdit(self)
         self.edit1.placeholderText()
-        self.edit2=QLineEdit(self)
+        self.edit2 = QLineEdit(self)
         self.edit2.placeholderText()
         self.button = QPushButton("confirm")
         layout = QVBoxLayout()
@@ -655,10 +657,13 @@ class Arc_Input(QDialog, QMainWindow):
         self.setLayout(layout)
         # Add button signal to greetings slot
         self.button.clicked.connect(self.confirm)
+
     def confirm(self):
         print(self.edit1.text())
         print(self.edit2.text())
-        return [self.edit1.text(),self.edit2.text()]
+        return [self.edit1.text(), self.edit2.text()]
+
+
 class DirectedGraphMainWindow(QMainWindow, QDialog):
     def __init__(self):
         super().__init__()
@@ -785,7 +790,9 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         return
 
     def on_node(self):
-        self.scene.addItem(NodeItem(Node(None, None, "I", None, [500, 300]),self ))  # #TODO
+        self.scene.addItem(
+            NodeItem(Node(None, None, "I", None, [500, 300]), self)
+        )  # #TODO
 
     def on_groundnode(self):
         self.ground_node_count += 1
@@ -812,10 +819,11 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         )
 
     def on_arc(self):
-       input_arc=Arc_Input()
-       input_arc.show()
-       input_arc.exec_()
-       print(input_arc.confirm())
+        input_arc = Arc_Input()
+        input_arc.show()
+        input_arc.exec_()
+        print(input_arc.confirm())
+
     def on_save_file(self):
         name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
         file = open(name[0], "w")
