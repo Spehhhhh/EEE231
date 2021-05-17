@@ -16,7 +16,7 @@ class GraphComponent:
         self.uid = None
         self.generate_uid(uid)
         self.name = name if name else "Untitled"
-        # self.colour = colour if colour else "#000000"
+        self.colour = colour if colour else "#000000"
 
     # If the instance does not have a UID, a UID is generated.
     # If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
