@@ -290,7 +290,6 @@ class SourceNodeItem(QGraphicsEllipseItem):
         painter.setPen(Qt.black)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
 
-
         print("paint called")
         return
 
@@ -377,15 +376,15 @@ class SourceNodeItem(QGraphicsEllipseItem):
         popmenu.exec_(event.screenPos())
 
     def on_colour_action(self):
-            color = QColorDialog.getColor()
-            print(color.getRgb())
-            self.node.colour = (
-                    "#"
-                    + str(hex(color.getRgb()[0])[2:4]).zfill(2)
-                    + str(hex(color.getRgb()[1])[2:4]).zfill(2)
-                    + str(hex(color.getRgb()[2])[2:4]).zfill(2)
-            )
-            print(self.node.colour)
+        color = QColorDialog.getColor()
+        print(color.getRgb())
+        self.node.colour = (
+            "#"
+            + str(hex(color.getRgb()[0])[2:4]).zfill(2)
+            + str(hex(color.getRgb()[1])[2:4]).zfill(2)
+            + str(hex(color.getRgb()[2])[2:4]).zfill(2)
+        )
+        print(self.node.colour)
 
 
 class GroundNodeTestItem(NodeItem):
@@ -539,20 +538,23 @@ class GroundNodeItem(QGraphicsEllipseItem):
 
 
 class ArcItem(QGraphicsEllipseItem):
-    def __init__(self, arc_instance,graph=None):
-        self.arc_instance=arc_instance
+    def __init__(self, arc_instance, graph=None):
+        self.arc_instance = arc_instance
         self.graph = graph
         # 根据两端的uid获取查询所在图中两个node对象
-        self.node1=self.arc_instance.nodes[0]
-        self.node2=self.arc_instance.nodes[1]
+        self.node1 = self.arc_instance.nodes[0]
+        self.node2 = self.arc_instance.nodes[1]
 
-        #再根据两个node对象得到两个node对象的位置
-        self.node1_position=self.node1.get_position()
-        self.node2_position=self.node2.get_position()
+        # 再根据两个node对象得到两个node对象的位置
+        self.node1_position = self.node1.get_position()
+        self.node2_position = self.node2.get_position()
 
         self.arc_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
         bounding_shape = QRectF(
-            self.node1_position[0],self.node1_position[1],self.node2_position[0]-self.node1_position[0],self.node2_position[1]-self.node1_position[1]
+            self.node1_position[0],
+            self.node1_position[1],
+            self.node2_position[0] - self.node1_position[0],
+            self.node2_position[1] - self.node1_position[1],
         )
         super().__init__(bounding_shape)
 
@@ -581,7 +583,7 @@ class ArcItem(QGraphicsEllipseItem):
 
         # Paint node circle
         painter.setBrush(self.arc_fill_brush)
-        painter.drawArc(boundingRect,30*16,120*16)
+        painter.drawArc(boundingRect, 30 * 16, 120 * 16)
         print("paint called")
         return
 
@@ -594,6 +596,7 @@ class ArcItem(QGraphicsEllipseItem):
         # Change back the cursor when mouse is not point to the node
         app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
         app.instance().restoreOverrideCursor()
+
     def mouseReleaseEvent(self, event):
         self.prepareGeometryChange()
         mousePos = event.pos()
@@ -617,6 +620,7 @@ class ArcItem(QGraphicsEllipseItem):
         scenePosition = event.scenePos()
         self.setPos(scenePosition)
         return
+
     def mouseDoubleClickEvent(self, event):
         # Handler for mouseDoubleClickEvent
         self.prepareGeometryChange()
@@ -624,6 +628,7 @@ class ArcItem(QGraphicsEllipseItem):
         print("mouseDoubleClickEvent")
         # self.update()
         return
+
     def setPos(self, pos):
         bounding = self.boundingRect()
         offset = bounding.center()
@@ -660,7 +665,6 @@ class ArcItem(QGraphicsEllipseItem):
         popmenu.exec_(event.screenPos())
 
 
-
 class InputFormSourceNode(QDialog, QMainWindow):
     def __init__(self, parent=None):
         super(InputFormSourceNode, self).__init__(parent)
@@ -687,13 +691,14 @@ class InputFormSourceNode(QDialog, QMainWindow):
             msg.exec_()
             return
 
+
 class Arc_Input(QDialog, QMainWindow):
     def __init__(self, parent=None):
         super(Arc_Input, self).__init__(parent)
         self.setWindowTitle("Input two linked nodes' uid")
         self.edit1 = QLineEdit(self)
         self.edit1.placeholderText()
-        self.edit2=QLineEdit(self)
+        self.edit2 = QLineEdit(self)
         self.edit2.placeholderText()
         self.button = QPushButton("confirm")
         layout = QVBoxLayout()
@@ -704,10 +709,13 @@ class Arc_Input(QDialog, QMainWindow):
         self.setLayout(layout)
         # Add button signal to greetings slot
         self.button.clicked.connect(self.confirm)
+
     def confirm(self):
         print(self.edit1.text())
         print(self.edit2.text())
-        return [self.edit1.text(),self.edit2.text()]
+        return [self.edit1.text(), self.edit2.text()]
+
+
 class DirectedGraphMainWindow(QMainWindow, QDialog):
     def __init__(self):
         super().__init__()
@@ -834,7 +842,9 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         return
 
     def on_node(self):
-        self.scene.addItem(NodeItem(Node(None, None, "I", None, [500, 300]),self ))  # #TODO
+        self.scene.addItem(
+            NodeItem(Node(None, None, "I", None, [500, 300]), self)
+        )  # #TODO
 
     def on_groundnode(self):
         self.ground_node_count += 1
@@ -861,21 +871,21 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         )
 
     def on_arc(self):
-       # input_arc=Arc_Input()
-       # input_arc.show()
-       # input_arc.exec_()
-       uid1="321231"
-       uid2="12312"
-       graph1=graph.Graph()
-       node1=Node(None,uid1,'n1',None,[300,400])
-       node2=Node(None,uid2,'n2',None,[600,700])
-       arc1=Arc(graph1,None,'arc1',None,node1,node2,None,None)
+        # input_arc=Arc_Input()
+        # input_arc.show()
+        # input_arc.exec_()
+        uid1 = "321231"
+        uid2 = "12312"
+        graph1 = graph.Graph()
+        node1 = Node(None, uid1, "n1", None, [300, 400])
+        node2 = Node(None, uid2, "n2", None, [600, 700])
+        arc1 = Arc(graph1, None, "arc1", None, node1, node2, None, None)
 
-       # print(arc1.nodes[0])
-       print(node2.get_position())
-       self.scene.addItem(ArcItem(arc1,graph1))
-       self.scene.addItem(NodeItem(node1,None))
-       self.scene.addItem(NodeItem(node2,None))
+        # print(arc1.nodes[0])
+        print(node2.get_position())
+        self.scene.addItem(ArcItem(arc1, graph1))
+        self.scene.addItem(NodeItem(node1, None))
+        self.scene.addItem(NodeItem(node2, None))
 
     def on_save_file(self):
         name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
