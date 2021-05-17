@@ -159,7 +159,7 @@ class NodeItem(QGraphicsEllipseItem):
         self.node.position[0] = scenePosition.x()
         self.node.position[1] = scenePosition.y()
 
-        print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
+        # print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
         return
 
     # Handler for mouseDoubleClickEvent
@@ -274,7 +274,6 @@ class SourceNodeItem(NodeItem):
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
         boundingRect.adjust(0, -40, 0, -40)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
-        print(self.node.user_defined_attribute)
         return
 
     def on_duplicate_action(self):
