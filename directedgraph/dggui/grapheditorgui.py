@@ -290,6 +290,7 @@ class SourceNodeItem(QGraphicsEllipseItem):
         painter.setPen(Qt.black)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
 
+
         print("paint called")
         return
 
@@ -358,7 +359,7 @@ class SourceNodeItem(QGraphicsEllipseItem):
         # Colour
         colouraction = QAction("Colour")
         popmenu.addAction(colouraction)
-        # colouraction.triggered.connect()
+        colouraction.triggered.connect(self.on_colour_action)
 
         # Value
         valueaction = QAction("Value")
@@ -374,6 +375,17 @@ class SourceNodeItem(QGraphicsEllipseItem):
 
         # Excute at node Position, so it won't collide with Main windows pop-up menu
         popmenu.exec_(event.screenPos())
+
+    def on_colour_action(self):
+            color = QColorDialog.getColor()
+            print(color.getRgb())
+            self.node.colour = (
+                    "#"
+                    + str(hex(color.getRgb()[0])[2:4]).zfill(2)
+                    + str(hex(color.getRgb()[1])[2:4]).zfill(2)
+                    + str(hex(color.getRgb()[2])[2:4]).zfill(2)
+            )
+            print(self.node.colour)
 
 
 class GroundNodeTestItem(NodeItem):
@@ -432,8 +444,10 @@ class GroundNodeItem(QGraphicsEllipseItem):
 
         # Paint node text
         painter.setPen(Qt.black)
+        boundingRect.adjust(0, 20, 0, 20)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
-
+        boundingRect.adjust(0, -50, 0, -40)
+        painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
         print("paint called")
         return
 
@@ -518,35 +532,83 @@ class GroundNodeItem(QGraphicsEllipseItem):
         # Delete
         deleteaction = QAction("Delete")
         popmenu.addAction(deleteaction)
-        # deleteaction.triggered.connect()
+        # deleteaction.triggered.conn ect()
 
         # Excute at node Position, so it won't collide with Main windows pop-up menu
         popmenu.exec_(event.screenPos())
 
 
-class ArcItem:
-    def __init__(self, arc_instance):
+class ArcItem(QGraphicsPathItem):
+    def __init__(self, arc_instance,graph=None):
         self.ar_instance=arc_instance
-        
-    def mouseReleaseEvent(self, event):
-        pass
-
-    def setPos(self, pos):
-        pass
-    def contextMenuEvent(self, event):
-        pass
-
-    def mouseDoubleClickEvent(self,event):
-        pass
-
-    def mouseMoveEvent(self,event):
-        pass
-
-    def hoverEnterEvent(self,event):
-        pass
 
     def paint(self, painter, option, parent):
         pass
+    def hoverEnterEvent(self, event):
+        # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
+        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
+        app.instance().setOverrideCursor(Qt.OpenHandCursor)
+
+    def hoverLeaveEvent(self, event):
+        # Change back the cursor when mouse is not point to the node
+        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
+        app.instance().restoreOverrideCursor()
+    def mouseReleaseEvent(self, event):
+        self.prepareGeometryChange()
+        mousePos = event.pos()
+        self.selectionRectangle.setVisible(False)
+        print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
+        # self.update()
+        return
+
+    def mousePressEvent(self, event):
+        # Handler for mousePressEvent
+        self.prepareGeometryChange()
+        mousePos = event.pos()
+        self.selectionRectangle.setVisible(True)
+        print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
+        # self.update()
+        return
+
+    def mouseDoubleClickEvent(self, event):
+        # Handler for mouseDoubleClickEvent
+        self.prepareGeometryChange()
+        # self.setVisible(False)
+        print("mouseDoubleClickEvent")
+        # self.update()
+        return
+    def setPos(self, pos):
+
+        pass
+
+    def contextMenuEvent(self, event):
+        # Pop up menu for Node
+        popmenu = QMenu()
+
+        # Name
+        nameaction = QAction("Name")
+        popmenu.addAction(nameaction)
+        # nameaction.triggered.connect()
+
+        # Colour
+        colouraction = QAction("Colour")
+        popmenu.addAction(colouraction)
+        # colouraction.triggered.connect()
+
+        # Value
+        valueaction = QAction("Value")
+        popmenu.addAction(valueaction)
+        # valueaction.triggered.connect()
+
+        popmenu.addSeparator()
+
+        # Delete
+        deleteaction = QAction("Delete")
+        popmenu.addAction(deleteaction)
+        # deleteaction.triggered.conn ect()
+
+        # Excute at node Position, so it won't collide with Main windows pop-up menu
+        popmenu.exec_(event.screenPos())
 
 
 
@@ -576,7 +638,27 @@ class InputFormSourceNode(QDialog, QMainWindow):
             msg.exec_()
             return
 
-
+class Arc_Input(QDialog, QMainWindow):
+    def __init__(self, parent=None):
+        super(Arc_Input, self).__init__(parent)
+        self.setWindowTitle("Input two linked nodes' uid")
+        self.edit1 = QLineEdit(self)
+        self.edit1.placeholderText()
+        self.edit2=QLineEdit(self)
+        self.edit2.placeholderText()
+        self.button = QPushButton("confirm")
+        layout = QVBoxLayout()
+        layout.addWidget(self.edit1)
+        layout.addWidget(self.edit2)
+        layout.addWidget(self.button)
+        # Set dialog layout
+        self.setLayout(layout)
+        # Add button signal to greetings slot
+        self.button.clicked.connect(self.confirm)
+    def confirm(self):
+        print(self.edit1.text())
+        print(self.edit2.text())
+        return [self.edit1.text(),self.edit2.text()]
 class DirectedGraphMainWindow(QMainWindow, QDialog):
     def __init__(self):
         super().__init__()
@@ -626,6 +708,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         self.SourceNodeAction = self.GraphComponentMenu.addAction("&SourceNode")
         self.SourceNodeAction.triggered.connect(self.on_sourcenode)
         self.ArcAction = self.GraphComponentMenu.addAction("&Arc")
+        self.ArcAction.triggered.connect(self.on_arc)
 
         self.mainToolBar = QToolBar()
         self.mainToolBar.setMovable(False)
@@ -702,7 +785,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         return
 
     def on_node(self):
-        self.scene.addItem(NodeItem(Node(None, None, "I", None, [500, 300])))  # #TODO
+        self.scene.addItem(NodeItem(Node(None, None, "I", None, [500, 300]),self ))  # #TODO
 
     def on_groundnode(self):
         self.ground_node_count += 1
@@ -715,7 +798,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
             raise GroundNodeNumberError("oops!!")
         else:
             self.scene.addItem(
-                GroundNodeItem(GroundNode(None, None, "groundnode1", None, [500, 300]))
+                GroundNodeItem(GroundNode(None, None, "G1", None, [500, 300]))
             )
 
     def on_sourcenode(self):
@@ -728,6 +811,11 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
             SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         )
 
+    def on_arc(self):
+       input_arc=Arc_Input()
+       input_arc.show()
+       input_arc.exec_()
+       print(input_arc.confirm())
     def on_save_file(self):
         name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
         file = open(name[0], "w")
