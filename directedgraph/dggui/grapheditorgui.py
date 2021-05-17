@@ -113,7 +113,7 @@ class NodeItem(QGraphicsEllipseItem):
         boundingRect.adjust(0, -40, 0, -40)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
 
-        print("paint called")
+        # print("paint called")
         return
 
     def setPos(self, pos):
@@ -138,23 +138,23 @@ class NodeItem(QGraphicsEllipseItem):
     # Handler for mousePressEvent
     def mousePressEvent(self, event):
         self.prepareGeometryChange()
-        mousePos = event.pos()
+        # mousePos = event.pos()
         # self.selectionRectangle.setVisible(True)
-        print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
+        # print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
         return
 
     # Handler for mouseReleaseEvent
     def mouseReleaseEvent(self, event):
         self.prepareGeometryChange()
-        mousePos = event.pos()
+        # mousePos = event.pos()
         # self.selectionRectangle.setVisible(False)
-        print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
+        # print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
         return
 
     # Handler for mouseMoveEvent
     def mouseMoveEvent(self, event):
-
         self.prepareGeometryChange()
+
         scenePosition = event.scenePos()
         self.setPos(scenePosition)
 
@@ -168,7 +168,7 @@ class NodeItem(QGraphicsEllipseItem):
     def mouseDoubleClickEvent(self, event):
         self.prepareGeometryChange()
         # self.setVisible(False)
-        print("mouseDoubleClickEvent")
+        # print("mouseDoubleClickEvent")
         return
 
     # ------------------------- Pop -------------------------
@@ -179,12 +179,12 @@ class NodeItem(QGraphicsEllipseItem):
         popmenu = QMenu()
 
         # Name
-        nameAction = QAction("Name")
+        nameAction = QAction("Edit Name")
         popmenu.addAction(nameAction)
         nameAction.triggered.connect(self.on_name_action)
 
         # Colour
-        colourAction = QAction("Colour")
+        colourAction = QAction("Edit Colour")
         popmenu.addAction(colourAction)
         colourAction.triggered.connect(self.on_colour_action)
 
@@ -227,7 +227,19 @@ class NodeItem(QGraphicsEllipseItem):
         print(self.node.colour)
 
     def on_duplicate_action(self):
-        pass  # #TODO
+        self.connected_window.scene.addItem(
+            NodeItem(
+                self.node.connected_graph.create_component(
+                    {
+                        "type": "Node",
+                        "name": self.node.name + "Copy",
+                        "position_x": self.node.position[0],
+                        "position_y": self.node.position[1],
+                    }
+                ),
+                self.connected_window,
+            )
+        )
 
     def on_delete_action(self):
         self.node.connected_graph.delete_component(self.node.uid)  # #TODO
