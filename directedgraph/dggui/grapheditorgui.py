@@ -125,7 +125,6 @@ class NodeItem(QGraphicsEllipseItem):
 
     # Override cursor shape into Openhand to indicate that drag is allowed
     # also indicate that you have selected a node (read to move)
-    # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
     def hoverEnterEvent(self, event):
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().setOverrideCursor(Qt.OpenHandCursor)
@@ -217,14 +216,15 @@ class NodeItem(QGraphicsEllipseItem):
 
     def on_colour_action(self):
         color = QColorDialog.getColor()
-        print(color.getRgb())
-        self.node.colour = (
-            "#"
-            + str(hex(color.getRgb()[0])[2:4]).zfill(2)
-            + str(hex(color.getRgb()[1])[2:4]).zfill(2)
-            + str(hex(color.getRgb()[2])[2:4]).zfill(2)
-        )
-        print(self.node.colour)
+        if (color.red() + color.green() + color.blue()) != 0:
+            print("error")
+            self.node.colour = (
+                "#"
+                + str(hex(color.getRgb()[0])[2:4]).zfill(2)
+                + str(hex(color.getRgb()[1])[2:4]).zfill(2)
+                + str(hex(color.getRgb()[2])[2:4]).zfill(2)
+            )
+            print(self.node.colour)
 
     def on_duplicate_action(self):
         self.connected_window.scene.addItem(
@@ -232,7 +232,7 @@ class NodeItem(QGraphicsEllipseItem):
                 self.node.connected_graph.create_component(
                     {
                         "type": "Node",
-                        "name": self.node.name + "Copy",
+                        "name": self.node.name + " Copy",
                         "position_x": self.node.position[0],
                         "position_y": self.node.position[1],
                     }
