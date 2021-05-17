@@ -581,7 +581,7 @@ class ArcItem(QGraphicsEllipseItem):
 
         # Paint node circle
         painter.setBrush(self.arc_fill_brush)
-        painter.drawArc(boundingRect,30*16,120*16)
+        painter.drawArc(boundingRect,60*16,120*16)
         print("paint called")
         return
 
