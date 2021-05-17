@@ -321,21 +321,12 @@ class TestFileManager(unittest.TestCase):
         self.assertEqual(len(graph1.components), 8)
 
     @logger.catch
-    def export_graph(self):
+    def test_export_graph(self):
         fm = FileManager()
-        path = (
-            Path(os.path.dirname(__file__))
-            .parent.parent.joinpath("tests")
-            .joinpath("test.xml")
-        )
-        graph1 = fm.read_graph(str(path))
+        graph1 = fm.read_graph(str(self.path))
 
-        path_output = (
-            Path(os.path.dirname(__file__))
-            .parent.parent.joinpath("tests")
-            .joinpath("test_out.xml")
-        )
-
+        path_output = Path(os.path.dirname(__file__)).joinpath("test_out.xml")
+        print("test")
         fm.export_graph(str(path_output), graph1)
 
 
