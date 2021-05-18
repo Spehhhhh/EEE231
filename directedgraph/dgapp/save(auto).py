@@ -9,11 +9,13 @@ sys.path.append(father_folder)
 from directedgraph.dggui.grapheditorgui import DirectedGraphMainWindow
 from threading import Timer
 
-#循环定时器
-class RepeatingTimer(Timer): 
+# 循环定时器
+class RepeatingTimer(Timer):
     def run(self):
         while not self.finished.is_set():
             self.function(*self.args, **self.kwargs)
             self.finished.wait(self.interval)
-t = RepeatingTimer(600.0, DirectedGraphMainWindow().file_save())#10分钟运行一次file_save
+
+
+t = RepeatingTimer(600.0, DirectedGraphMainWindow().file_save())  # 10分钟运行一次file_save
 t.start()
