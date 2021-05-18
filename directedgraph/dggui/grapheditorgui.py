@@ -86,7 +86,6 @@ class ArcItem(QGraphicsPathItem):
         return
 
     def setPos(self, pos):
-
         pass
 
     def contextMenuEvent(self, event):
@@ -119,9 +118,9 @@ class ArcItem(QGraphicsPathItem):
         popmenu.exec_(event.screenPos())
 
 
-class InputFormSourceNode(QDialog, QMainWindow):
+class InputDialogArc(QDialog, QMainWindow):
     def __init__(self, parent=None):
-        super(InputFormSourceNode, self).__init__(parent)
+        super(InputDialogArc, self).__init__(parent)
         self.setWindowTitle("Input source node value")
         self.edit = QLineEdit(self)
         self.edit.placeholderText()
@@ -146,10 +145,10 @@ class InputFormSourceNode(QDialog, QMainWindow):
             return
 
 
-class Arc_Input(QDialog, QMainWindow):
+class InputDialogArc(QDialog, QMainWindow):
     def __init__(self, parent=None):
-        super(Arc_Input, self).__init__(parent)
-        self.setWindowTitle("Input two linked nodes' uid")
+        super(InputDialogArc, self).__init__(parent)
+        self.setWindowTitle("Input two linked nodes uid")
         self.edit1 = QLineEdit(self)
         self.edit1.placeholderText()
         self.edit2 = QLineEdit(self)
@@ -220,7 +219,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         self.file_path = ""
         self.graph = Graph()
 
-    # Menu =========================================================
+    # Menu
     def contextMenuEvent(self, event):
         contextmenu = QMenu(self)
 
@@ -251,12 +250,16 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         # Excute the pop menu at all the graph area, but won't conflit with node pop meun
         action = contextmenu.exec_(self.mapToGlobal(event.pos()))
 
-    # Trigger Fcuntions =========================================================
+    # Trigger Function
     def on_open_action(self):
         """Handler for 'Open' action"""
+
         file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
 
         self.file_path = str(file_name[0])
+
+        self.reset_scene()
+
         print("opening ", file_name[0])
 
         fm = FileManager()
@@ -301,34 +304,40 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         # #TODO
 
     def on_sourcenode_action(self):
-        form = InputFormSourceNode()
+        form = InputDialogArc()
         form.show()
         form.exec_()
         value = str(form.confirm())
         print("value:", value)
-        self.scene.addItem(
-            SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
-        )
+
+        # text, result = QInputDialog.getText(
+        #     self,
+        #     "Input",
+        #     "Enter Name",
+        #     QtWidgets.QLineEdit.Normal,
+        # )
+
+        # if result == True:
+        #     self.node.name = str(text)
+        # self.scene.addItem(
+        #     SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
+        # )
+        pass
 
     def on_groundnode_action(self):
-        self.ground_node_count += 1
-        if self.ground_node_count > 1:
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Warning)
-            msg.setText("Only one ground_node is allowed!!!")
-            msg.show()
-            msg.exec_()
-            raise GroundNodeNumberError("oops!!")
-        else:
-            self.scene.addItem(
-                GroundNodeItem(GroundNode(None, None, "G1", None, [500, 300]))
-            )
+        self.init_graph()
+        pass
 
     def on_arc_action(self):
-        input_arc = Arc_Input()
+        input_arc = InputDialogArc()
         input_arc.show()
         input_arc.exec_()
         print(input_arc.confirm())
+
+    # Other Function
+    def reset_scene(self):
+        for item in self.scene.items():
+            item.on_delete_action()
 
 
 class DirectedGraphApplication:
