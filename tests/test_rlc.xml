@@ -7,27 +7,27 @@
         <Node uid="7778da">
             <name>Node 2</name>
             <colour>#fd5455</colour>
-            <position_x>100</position_x>
-            <position_y>105</position_y>
+            <position_x>805.0</position_x>
+            <position_y>246.0</position_y>
         </Node>
         <Node uid="32a24b">
             <name>Node 3</name>
             <colour>#fd5455</colour>
-            <position_x>30</position_x>
-            <position_y>30</position_y>
+            <position_x>811.0</position_x>
+            <position_y>416.0</position_y>
         </Node>
         <SourceNode uid="b20350">
             <name>SourceNode 1</name>
             <colour>#0f8080</colour>
-            <position_x>40</position_x>
-            <position_y>40</position_y>
+            <position_x>585.0</position_x>
+            <position_y>247.0</position_y>
             <user_defined_attribute>10</user_defined_attribute>
         </SourceNode>
         <GroundNode uid="365bb9">
             <name>GroundNode 0</name>
             <colour>#d4aa01</colour>
-            <position_x>40</position_x>
-            <position_y>40</position_y>
+            <position_x>375.0</position_x>
+            <position_y>247.0</position_y>
         </GroundNode>
         <Arc uid="2f7002">
             <name>Resistor 1</name>
