@@ -41,7 +41,7 @@ from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
 from directedgraph.dgutils import FileManager
 
 
-class InputDialogNode(QDialog, QMainWindow):
+class InputDialogNode(QDialog):
     def __init__(self, parent=None):
         super(InputDialogNode, self).__init__(parent)
         self.setWindowTitle("Please Input Source Node Value")
@@ -68,7 +68,7 @@ class InputDialogNode(QDialog, QMainWindow):
             return
 
 
-class InputDialogArc(QDialog, QMainWindow):
+class InputDialogArc(QDialog):
     def __init__(self, parent=None):
         super(InputDialogArc, self).__init__(parent)
         self.setWindowTitle("Please Input Linked Nodes UID")
@@ -89,7 +89,7 @@ class InputDialogArc(QDialog, QMainWindow):
         return (self.edit1.text(), self.edit2.text())
 
 
-class DirectedGraphMainWindow(QMainWindow, QDialog):
+class DirectedGraphMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         # Title of the Windows
@@ -135,14 +135,35 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
         self.graph = Graph()
         self.file_path = ""
+        self.mouse_position = None
 
     # Menu
     def contextMenuEvent(self, event):
         contextmenu = QMenu(self)
 
-        newaction = QAction("New Component")
-        contextmenu.addAction(newaction)
+        self.mouse_position = self.mapToParent(event.pos())
+
+        print("contextMenuEvent", self.mouse_position)
+
+        # newaction = QAction("New Component")
+        # contextmenu.addAction(newaction)
         # newaction.triggered.connect()
+
+        newnodeaction = QAction("New Node")
+        contextmenu.addAction(newnodeaction)
+        newnodeaction.triggered.connect(self.on_node_action)
+
+        newsourcenodeaction = QAction("New Source Node")
+        contextmenu.addAction(newsourcenodeaction)
+        newsourcenodeaction.triggered.connect(self.on_sourcenode_action)
+
+        newgroundnodeaction = QAction("New Ground Node")
+        contextmenu.addAction(newgroundnodeaction)
+        newgroundnodeaction.triggered.connect(self.on_groundnode_action)
+
+        newarcaction = QAction("New Arc")
+        contextmenu.addAction(newarcaction)
+        newarcaction.triggered.connect(self.on_arc_action)
 
         contextmenu.addSeparator()
 
@@ -164,7 +185,6 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         contextmenu.addAction(helpaction)
         helpaction.triggered.connect(self.on_about_action)
 
-        # Excute the pop menu at all the graph area, but won't conflit with node pop meun
         action = contextmenu.exec_(self.mapToGlobal(event.pos()))
 
     # Trigger Function
@@ -199,6 +219,12 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
         print(self.graph)
         fm.export_graph(file_name[0], self.graph)
+
+        QMessageBox.about(  # Add Alert
+            self,
+            "About this program",
+            "https://github.com/pirlite2/EEE231-group-B",
+        )
         return
 
     def on_preferences_action(self):
@@ -213,7 +239,31 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         return
 
     def on_node_action(self):
-        # self.scene.addItem(NodeItem())
+        name = ""
+        text, result = QInputDialog.getText(
+            self,
+            "Input",
+            "Enter Name",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            name = str(text)
+
+        print("on_node_action", self.mouse_position)
+
+        self.scene.addItem(
+            NodeItem(
+                self.graph.create_component(
+                    {
+                        "type": "Node",
+                        "name": name,
+                        "position_x": self.mouse_position.x(),
+                        "position_y": self.mouse_position.y(),
+                    }
+                ),
+                self,
+            )
+        )
         return
 
     def on_sourcenode_action(self):
@@ -235,9 +285,10 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         # self.scene.addItem(
         #     SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         # )
+
         return
 
-    def on_groundnode_action(self):
+    def on_groundnode_action(self, event):
         return
 
     def on_arc_action(self):
@@ -258,7 +309,8 @@ class DirectedGraphApplication:
     def __init__(self):
         app = QApplication([])
         mainwindow = DirectedGraphMainWindow()
-        mainwindow.showMaximized()
+        # mainwindow.showMaximized()
+        mainwindow.show()
         sys.exit(app.exec_())
 
     def main(self):
