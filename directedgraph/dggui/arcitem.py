@@ -38,504 +38,10 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc, graph
+from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc, Graph, graph
 from directedgraph.dgcore import GroundNodeNumberError
 from directedgraph.dgutils import FileManager
-
-
-class NodeItem(QGraphicsEllipseItem):
-    # Global Config
-
-    def __init__(self, node_instance, main_window_instance):
-        self.node = node_instance
-        self.connected_window = main_window_instance
-
-        self.node_radius = 40.0
-
-        self.node_fill_colour = QColor(
-            int(self.node.colour[1:3], 16),
-            int(self.node.colour[3:5], 16),
-            int(self.node.colour[5:7], 16),
-        )
-
-        self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-        self.node_fill_brush.setColor(self.node_fill_colour)
-
-        bounding_shape = QRectF(
-            self.node.position[0] - self.node_radius,
-            self.node.position[1] - self.node_radius,
-            2.0 * self.node_radius,
-            2.0 * self.node_radius,
-        )
-        # Bounding rectangle of node 'ellipse' i.e. circle
-        super().__init__(bounding_shape)
-
-        self.setZValue(0)
-        self.setBrush(self.node_fill_brush)
-
-        # Set node attributes
-        self.ItemIsSelectable = True
-        self.ItemIsMovable = True
-        self.ItemSendsGeometryChanges = True
-        self.setAcceptHoverEvents(True)  # Make the Node accpect the Hover Event
-
-        # Create selection rectangle shown when node is selected
-        self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
-        self.selectionRectangle.setVisible(False)
-
-    # ------------------------- paint -------------------------
-
-    def paint(self, painter, option, parent):
-        # Paint the node instance - called by QGraphicView instance
-        boundingRect = self.boundingRect()
-
-        if self.selectionRectangle.isVisible():
-            # Paint selection rectangle
-            painter.setPen(Qt.DashLine)
-            painter.setBrush(Qt.NoBrush)
-            self.selectionRectangle.setRect(boundingRect)
-            painter.drawRect(boundingRect)
-
-        # Paint node circle
-        self.node_fill_colour = QColor(
-            int(self.node.colour[1:3], 16),
-            int(self.node.colour[3:5], 16),
-            int(self.node.colour[5:7], 16),
-        )
-        self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-        self.node_fill_brush.setColor(self.node_fill_colour)
-        painter.setBrush(self.node_fill_brush)
-        painter.drawEllipse(boundingRect)
-
-        # Paint node text
-        painter.setPen(Qt.black)
-        boundingRect.adjust(0, 20, 0, 20)
-        painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
-        boundingRect.adjust(0, -40, 0, -40)
-        painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
-
-        print("paint called")
-        return
-
-    def setPos(self, pos):
-        bounding = self.boundingRect()
-        offset = bounding.center()
-        super().setPos(pos - offset)
-
-    # ------------------------- Mouse Event -------------------------
-
-    # Override cursor shape into Openhand to indicate that drag is allowed
-    # also indicate that you have selected a node (read to move)
-    # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
-    def hoverEnterEvent(self, event):
-        app = QApplication.instance()  # Obtain the Q application instance
-        app.instance().setOverrideCursor(Qt.OpenHandCursor)
-
-    # This Method is used to change back the cursor when mouse is not point to the node
-    def hoverLeaveEvent(self, event):
-        app = QApplication.instance()  # Obtain the Q application instance
-        app.instance().restoreOverrideCursor()
-
-    # Handler for mousePressEvent
-    def mousePressEvent(self, event):
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        # self.selectionRectangle.setVisible(True)
-        print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        return
-
-    # Handler for mouseReleaseEvent
-    def mouseReleaseEvent(self, event):
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        # self.selectionRectangle.setVisible(False)
-        print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        return
-
-    # Handler for mouseMoveEvent
-    def mouseMoveEvent(self, event):
-
-        self.prepareGeometryChange()
-        scenePosition = event.scenePos()
-        self.setPos(scenePosition)
-
-        self.node.position[0] = scenePosition.x()
-        self.node.position[1] = scenePosition.y()
-
-        print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-        return
-
-    # Handler for mouseDoubleClickEvent
-    def mouseDoubleClickEvent(self, event):
-        self.prepareGeometryChange()
-        # self.setVisible(False)
-        print("mouseDoubleClickEvent")
-        return
-
-    # ------------------------- Pop -------------------------
-
-    # Pop Menu
-    def contextMenuEvent(self, event):
-        # Pop up menu for Node
-        popmenu = QMenu()
-
-        # Name
-        nameAction = QAction("Name")
-        popmenu.addAction(nameAction)
-        nameAction.triggered.connect(self.on_name_action)
-
-        # Colour
-        colourAction = QAction("Colour")
-        popmenu.addAction(colourAction)
-        colourAction.triggered.connect(self.on_colour_action)
-
-        popmenu.addSeparator()
-
-        # Duplicate
-        duplicateAction = QAction("Duplicate")
-        popmenu.addAction(duplicateAction)
-        duplicateAction.triggered.connect(self.on_duplicate_action)
-
-        # Delete
-        deleteAction = QAction("Delete")
-        popmenu.addAction(deleteAction)
-        deleteAction.triggered.connect(self.on_delete_action)
-
-        # Excute at node Position, so it won't collide with Main windows pop-up menu
-        popmenu.exec_(event.screenPos())
-
-    # ------------------------- Action -------------------------
-
-    def on_name_action(self):
-        text, result = QInputDialog.getText(
-            self.connected_window,
-            "Input",
-            "Enter Name",
-            QtWidgets.QLineEdit.Normal,
-        )
-        if result == True:
-            self.node.name = str(text)
-
-    def on_colour_action(self):
-        color = QColorDialog.getColor()
-        print(color.getRgb())
-        self.node.colour = (
-            "#"
-            + str(hex(color.getRgb()[0])[2:4]).zfill(2)
-            + str(hex(color.getRgb()[1])[2:4]).zfill(2)
-            + str(hex(color.getRgb()[2])[2:4]).zfill(2)
-        )
-        print(self.node.colour)
-
-    def on_duplicate_action(self):
-        pass  # #TODO
-
-    def on_delete_action(self):
-        self.node.connected_graph.delete_component(self.node.uid)  # #TODO
-        self.connected_window.scene.removeItem(self)
-
-
-class SourceNodeItem(QGraphicsEllipseItem):
-    # Global Config
-
-    def __init__(self, node_instance):
-        self.node = node_instance
-        self.node_radius = 40.0
-        self.node_fill_colour = QColor(
-            int(self.node.colour[1:3], 16),
-            int(self.node.colour[3:5], 16),
-            int(self.node.colour[5:7], 16),
-        )
-        self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-        self.node_fill_brush.setColor(self.node_fill_colour)
-
-        bounding_shape = QRectF(
-            self.node.position[0] - self.node_radius,
-            self.node.position[1] - self.node_radius,
-            2.0 * self.node_radius,
-            2.0 * self.node_radius,
-        )
-
-        # Bounding rectangle of node 'ellipse' i.e. circle
-        super().__init__(bounding_shape)
-
-        self.setZValue(0)
-        self.setBrush(self.node_fill_brush)
-
-        # Set node attributes
-        self.ItemIsSelectable = True
-        self.ItemIsMovable = True
-        self.ItemSendsGeometryChanges = True
-        self.setAcceptHoverEvents(True)  # Make the Node accpect the Hover Event
-
-        # Create selection rectangle shown when node is selected
-        self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
-        self.selectionRectangle.setVisible(False)
-
-    def paint(self, painter, option, parent):
-        # Paint the node instance - called by QGraphicView instance
-        boundingRect = self.boundingRect()
-
-        if self.selectionRectangle.isVisible():
-            # Paint selection rectangle
-            painter.setPen(Qt.DashLine)
-            painter.setBrush(Qt.NoBrush)
-            self.selectionRectangle.setRect(boundingRect)
-            painter.drawRect(boundingRect)
-
-        # Paint node circle
-        painter.setBrush(self.node_fill_brush)
-        painter.drawEllipse(boundingRect)
-
-        # Paint node text
-        painter.setPen(Qt.black)
-        painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
-
-        print("paint called")
-        return
-
-    # Mouse Event===================================================================
-    def hoverEnterEvent(self, event):
-        # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
-        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
-        app.instance().setOverrideCursor(Qt.OpenHandCursor)
-
-    def hoverLeaveEvent(self, event):
-        # Change back the cursor when mouse is not point to the node
-        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
-        app.instance().restoreOverrideCursor()
-
-    def mousePressEvent(self, event):
-        # Handler for mousePressEvent
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        self.selectionRectangle.setVisible(True)
-        print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        # self.update()
-        return
-
-    def mouseReleaseEvent(self, event):
-        # Handler for mouseReleaseEvent
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        self.selectionRectangle.setVisible(False)
-        print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        # self.update()
-        return
-
-    def mouseMoveEvent(self, event):
-        # Handler for mouseMoveEvent
-        self.prepareGeometryChange()
-        scenePosition = event.scenePos()
-        self.node.position[0] = scenePosition.x()
-        self.node.position[1] = scenePosition.y()
-        self.setPos(scenePosition)
-        print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-        # self.update()
-        return [scenePosition.x(),scenePosition.y()]
-
-    def mouseDoubleClickEvent(self, event):
-        # Handler for mouseDoubleClickEvent
-        self.prepareGeometryChange()
-        # self.setVisible(False)
-        print("mouseDoubleClickEvent")
-        # self.update()
-        return
-
-    def setPos(self, pos):
-        bounding = self.boundingRect()
-        offset = bounding.center()
-        super().setPos(pos - offset)
-
-    def contextMenuEvent(self, event):
-        # Pop up menu for Node
-        popmenu = QMenu()
-
-        # Name
-        nameaction = QAction("Name")
-        popmenu.addAction(nameaction)
-        # nameaction.triggered.connect()
-
-        # Colour
-        colouraction = QAction("Colour")
-        popmenu.addAction(colouraction)
-        colouraction.triggered.connect(self.on_colour_action)
-
-        # Value
-        valueaction = QAction("Value")
-        popmenu.addAction(valueaction)
-        # valueaction.triggered.connect()
-
-        popmenu.addSeparator()
-
-        # Delete
-        deleteaction = QAction("Delete")
-        popmenu.addAction(deleteaction)
-        # deleteaction.triggered.connect()
-
-        # Excute at node Position, so it won't collide with Main windows pop-up menu
-        popmenu.exec_(event.screenPos())
-
-    def on_colour_action(self):
-        color = QColorDialog.getColor()
-        print(color.getRgb())
-        self.node.colour = (
-            "#"
-            + str(hex(color.getRgb()[0])[2:4]).zfill(2)
-            + str(hex(color.getRgb()[1])[2:4]).zfill(2)
-            + str(hex(color.getRgb()[2])[2:4]).zfill(2)
-        )
-        print(self.node.colour)
-
-
-class GroundNodeTestItem(NodeItem):
-    def __init__(self, node_instance):
-        super().__init__(node_instance)
-        self.node_radius = 10.0
-
-
-class GroundNodeItem(QGraphicsEllipseItem):
-    # Global Config
-
-    def __init__(self, node_instance):
-        self.node = node_instance
-        self.node_radius = 40.0
-        self.node_fill_colour = QColor(255, 215, 0)
-        self.node_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-        self.node_fill_brush.setColor(self.node_fill_colour)
-
-        bounding_shape = QRectF(
-            self.node.position[0] - self.node_radius,
-            self.node.position[1] - self.node_radius,
-            2.0 * self.node_radius,
-            2.0 * self.node_radius,
-        )
-
-        # Bounding rectangle of node 'ellipse' i.e. circle
-        super().__init__(bounding_shape)
-
-        self.setZValue(0)
-        self.setBrush(self.node_fill_brush)
-
-        # Set node attributes
-        self.ItemIsSelectable = True
-        self.ItemIsMovable = True
-        self.ItemSendsGeometryChanges = True
-        self.setAcceptHoverEvents(True)  # Make the Node accpect the Hover Event
-
-        # Create selection rectangle shown when node is selected
-        self.selectionRectangle = QGraphicsRectItem(self.boundingRect())
-        self.selectionRectangle.setVisible(False)
-
-    def paint(self, painter, option, parent):
-        # Paint the node instance - called by QGraphicView instance
-        boundingRect = self.boundingRect()
-
-        if self.selectionRectangle.isVisible():
-            # Paint selection rectangle
-            painter.setPen(Qt.DashLine)
-            painter.setBrush(Qt.NoBrush)
-            self.selectionRectangle.setRect(boundingRect)
-            painter.drawRect(boundingRect)
-
-        # Paint node circle
-        painter.setBrush(self.node_fill_brush)
-        painter.drawEllipse(boundingRect)
-
-        # Paint node text
-        painter.setPen(Qt.black)
-        boundingRect.adjust(0, 20, 0, 20)
-        painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
-        boundingRect.adjust(0, -50, 0, -40)
-        painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
-        print("paint called")
-        return
-
-    # Mouse Event ===============================================================
-
-    # Override cursor shape into Openhand to indicate that drag is allowed,
-    # also indicate that you have selected a node (read to move)
-    def hoverEnterEvent(self, event):
-        # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
-        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
-        app.instance().setOverrideCursor(Qt.OpenHandCursor)
-
-    def hoverLeaveEvent(self, event):
-        # Change back the cursor when mouse is not point to the node
-        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
-        app.instance().restoreOverrideCursor()
-
-    def mousePressEvent(self, event):
-        # Handler for mousePressEvent
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        self.selectionRectangle.setVisible(True)
-        print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        # self.update()
-        return
-
-    def mouseReleaseEvent(self, event):
-        # Handler for mouseReleaseEvent
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        self.selectionRectangle.setVisible(False)
-        print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        # self.update()
-        return
-
-    def mouseMoveEvent(self, event):
-        # Handler for mouseMoveEvent
-        self.prepareGeometryChange()
-        scenePosition = event.scenePos()
-        self.node.position[0] = scenePosition.x()
-        self.node.position[1] = scenePosition.y()
-        self.setPos(scenePosition)
-        print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-        # self.update()
-        return
-
-    def mouseDoubleClickEvent(self, event):
-        # Handler for mouseDoubleClickEvent
-        self.prepareGeometryChange()
-        # self.setVisible(False)
-        print("mouseDoubleClickEvent")
-        # self.update()
-        return
-
-    def setPos(self, pos):
-        bounding = self.boundingRect()
-        offset = bounding.center()
-        super().setPos(pos - offset)
-
-    # Pop Menu ==================================================================
-    def contextMenuEvent(self, event):
-        # Pop up menu for Node
-        popmenu = QMenu()
-
-        # Name
-        nameaction = QAction("Name")
-        popmenu.addAction(nameaction)
-        # nameaction.triggered.connect()
-
-        # Colour
-        colouraction = QAction("Colour")
-        popmenu.addAction(colouraction)
-        # colouraction.triggered.connect()
-
-        # Value
-        valueaction = QAction("Value")
-        popmenu.addAction(valueaction)
-        # valueaction.triggered.connect()
-
-        popmenu.addSeparator()
-
-        # Delete
-        deleteaction = QAction("Delete")
-        popmenu.addAction(deleteaction)
-        # deleteaction.triggered.conn ect()
-
-        # Excute at node Position, so it won't collide with Main windows pop-up menu
-        popmenu.exec_(event.screenPos())
+from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
 
 
 class ArcItem(QGraphicsEllipseItem):
@@ -552,12 +58,12 @@ class ArcItem(QGraphicsEllipseItem):
 
         self.arc_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
         bounding_shape = QRectF(
-            self.node1_position[0]-(self.node2_position[0]-self.node1_position[0]),
+            self.node1_position[0] - (self.node2_position[0] - self.node1_position[0]),
             self.node1_position[1],
-            2*(abs(self.node1_position[0]-self.node2_position[0])),
-            2*(abs(self.node1_position[1]-self.node2_position[1]))
+            2 * (abs(self.node1_position[0] - self.node2_position[0])),
+            2 * (abs(self.node1_position[1] - self.node2_position[1])),
         )
-        print("bounding_shape:",bounding_shape.center())
+        # print("bounding_shape:", bounding_shape.center())
         super().__init__(bounding_shape)
 
         self.setZValue(0)
@@ -574,6 +80,11 @@ class ArcItem(QGraphicsEllipseItem):
         self.selectionRectangle.setVisible(False)
 
     def paint(self, painter, option, parent):
+        self.node1_position = self.node1.get_position()
+        self.node2_position = self.node2.get_position()
+
+        print("node1_position at Arc", self.node1.get_position())
+
         boundingRect = self.boundingRect()
 
         if self.selectionRectangle.isVisible():
@@ -586,9 +97,13 @@ class ArcItem(QGraphicsEllipseItem):
         # Paint node circle
         painter.setBrush(self.arc_fill_brush)
 
-        degree1=(math.atan(self.node1_position[1]/self.node1_position[0])/math.pi)*180
-        degree2=(math.atan(self.node2_position[1]/self.node2_position[0])/math.pi)*180
-        painter.drawArc(boundingRect,0,90*16)
+        degree1 = (
+            math.atan(self.node1_position[1] / self.node1_position[0]) / math.pi
+        ) * 180
+        degree2 = (
+            math.atan(self.node2_position[1] / self.node2_position[0]) / math.pi
+        ) * 180
+        painter.drawArc(boundingRect, 0, 90 * 16)
 
         return
 
@@ -717,7 +232,6 @@ class Arc_Input(QDialog, QMainWindow):
 
     def confirm(self):
         return [self.edit1.text(), self.edit2.text()]
-
 
 
 class DirectedGraphMainWindow(QMainWindow, QDialog):
@@ -861,55 +375,133 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         )
 
     def on_arc_action(self):
-        input_arc=Arc_Input()
+        input_arc = Arc_Input()
         input_arc.show()
         input_arc.exec_()
         uid1 = input_arc.confirm()[0]
         uid2 = input_arc.confirm()[1]
         graph1 = graph.Graph()
         node1 = graph1.create_component(
-        {"type": "Node", "name": "n1","uid":uid1, "position_x": "200",
-                        "position_y": "300" }
-    )
-        node2=graph1.create_component(
-        {"type": "Node", "name": "n2","uid":uid2, "position_x": "300",
-                        "position_y": "400"}
-    )
+            {
+                "type": "Node",
+                "name": "n1",
+                "uid": uid1,
+                "position_x": "200",
+                "position_y": "300",
+            }
+        )
+        node2 = graph1.create_component(
+            {
+                "type": "Node",
+                "name": "n2",
+                "uid": uid2,
+                "position_x": "300",
+                "position_y": "400",
+            }
+        )
         arc1 = Arc(graph1, None, "arc1", None, node1, node2, None, None)
 
         # print(arc1.nodes[0])
         print(node2.get_position())
-        self.scene.addItem(ArcItem(arc1, graph1))
+        self.scene.addItem(ArcItem(arc1, self))
         self.scene.addItem(NodeItem(node1, None))
         self.scene.addItem(NodeItem(node2, None))
 
     def init_graph(self):
-        fm = FileManager()
-        path = (
-            Path(os.path.dirname(__file__))
-            .parent.parent.joinpath("tests")
-            .joinpath("test.xml")
+        graph1 = Graph()
+        self.scene.addItem(
+            NodeItem(
+                graph1.create_component(
+                    {
+                        "type": "Node",
+                        "uid": "7778da",
+                        "name": "Node 1",
+                        "colour": "#fd5455",
+                        "position_x": "300",
+                        "position_y": "300",
+                    }
+                ),
+                self,
+            )
         )
-        graph1 = fm.read_graph(str(path))
+        self.scene.addItem(
+            NodeItem(
+                graph1.create_component(
+                    {
+                        "type": "Node",
+                        "uid": "b911b2",
+                        "name": "Node 2",
+                        "colour": "#fd5455",
+                        "position_x": "800",
+                        "position_y": "800",
+                    }
+                ),
+                self,
+            )
+        )
+        self.scene.addItem(
+            NodeItem(
+                graph1.create_component(
+                    {
+                        "type": "Node",
+                        "uid": "127409",
+                        "name": "Node 3",
+                        "colour": "#fd5455",
+                        "position_x": "1000",
+                        "position_y": "1000",
+                    }
+                ),
+                self,
+            )
+        )
+        self.scene.addItem(
+            ArcItem(
+                graph1.create_component(
+                    {
+                        "type": "Arc",
+                        "uid": "9a2812",
+                        "name": "Arc 1",
+                        "colour": "#000000",
+                        "node1_uid": "7778da",
+                        "node2_uid": "b911b2",
+                        "user_defined_attribute": "5",
+                        "user_defined_arc_type": "Resistor",
+                    }
+                ),
+                self,
+            )
+        )
+        self.scene.addItem(
+            ArcItem(
+                graph1.create_component(
+                    {
+                        "type": "Arc",
+                        "uid": "9a2813",
+                        "name": "Arc 2",
+                        "colour": "#000000",
+                        "node1_uid": "7778da",
+                        "node2_uid": "127409",
+                        "user_defined_attribute": "5",
+                        "user_defined_arc_type": "Resistor",
+                    }
+                ),
+                self,
+            )
+        )
+        # file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
+        # fm = FileManager()
+        # graph1 = fm.read_graph(str(file_name[0]))
 
-        for compoment in graph1.components.values():
-            if isinstance(compoment, Node):  # #TODO 要用 Type 改造
-                self.scene.addItem(NodeItem(compoment, self))
-
-        # self.scene.addItem(NodeItem(Node(None, None, "N1", "#FF0000", [200, 200])))
-        # self.scene.addItem(NodeItem(Node(None, None, "N2", "#FF0000", [100, 100])))
-        # test = NodeItem(Node(None, None, "N3", "#FF0000", [300, 300]))
-        # self.scene.addItem(
-        #     GroundNodeTestItem(Node(None, None, "Test", "#FF0000", [400, 400]))
-        # )
-        # self.scene.addItem(test)
-
-        # menu = QMenu()
-        # menu.addAction("Action 1")
-        # menu.addAction("Action 2")
-        # menu.addAction("Action 3")
-        # menu.exec_()
-        # self.scene.addItem(menu)
+        # for component in graph1.components.values():
+        #     if type(component) == Node:
+        #         self.scene.addItem(NodeItem(component, self))
+        #     if type(component) == SourceNode:
+        #         self.scene.addItem(SourceNodeItem(component, self))
+        #     if type(component) == GroundNode:
+        #         self.scene.addItem(GroundNodeItem(component, self))
+        #     if type(component) == Arc:
+        #         self.scene.addItem(ArcItem(component, self))
+        #         print(component.get())
 
 
 class DirectedGraphApplication:
