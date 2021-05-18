@@ -335,7 +335,7 @@ class DirectedGraphApplication:
     def __init__(self):
         app = QApplication([])
         mainwindow = DirectedGraphMainWindow()
-        mainwindow.show()
+        mainwindow.showMaximized()
         sys.exit(app.exec_())
 
     def main(self):
