@@ -29,7 +29,6 @@ from PySide6.QtWidgets import (
 )
 
 import sys
-import os
 from pathlib import Path
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
@@ -37,85 +36,9 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import GroundNodeNumberError
 from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc, Graph
 from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
 from directedgraph.dgutils import FileManager
-
-
-class ArcItem(QGraphicsPathItem):
-    def __init__(self, arc_instance, graph=None):
-        self.ar_instance = arc_instance
-
-    def paint(self, painter, option, parent):
-        pass
-
-    def hoverEnterEvent(self, event):
-        # 如果鼠标变成一个手说明可以准备移动 , 也可以表示你选中了一个节点，可以准备有动作
-        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
-        app.instance().setOverrideCursor(Qt.OpenHandCursor)
-
-    def hoverLeaveEvent(self, event):
-        # Change back the cursor when mouse is not point to the node
-        app = QtWidgets.QApplication.instance()  # Obtain the Qapplication instance
-        app.instance().restoreOverrideCursor()
-
-    def mouseReleaseEvent(self, event):
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        self.selectionRectangle.setVisible(False)
-        print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        # self.update()
-        return
-
-    def mousePressEvent(self, event):
-        # Handler for mousePressEvent
-        self.prepareGeometryChange()
-        mousePos = event.pos()
-        self.selectionRectangle.setVisible(True)
-        print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        # self.update()
-        return
-
-    def mouseDoubleClickEvent(self, event):
-        # Handler for mouseDoubleClickEvent
-        self.prepareGeometryChange()
-        # self.setVisible(False)
-        print("mouseDoubleClickEvent")
-        # self.update()
-        return
-
-    def setPos(self, pos):
-        pass
-
-    def contextMenuEvent(self, event):
-        # Pop up menu for Node
-        popmenu = QMenu()
-
-        # Name
-        nameaction = QAction("Name")
-        popmenu.addAction(nameaction)
-        # nameaction.triggered.connect()
-
-        # Colour
-        colouraction = QAction("Colour")
-        popmenu.addAction(colouraction)
-        # colouraction.triggered.connect()
-
-        # Value
-        valueaction = QAction("Value")
-        popmenu.addAction(valueaction)
-        # valueaction.triggered.connect()
-
-        popmenu.addSeparator()
-
-        # Delete
-        deleteaction = QAction("Delete")
-        popmenu.addAction(deleteaction)
-        # deleteaction.triggered.conn ect()
-
-        # Excute at node Position, so it won't collide with Main windows pop-up menu
-        popmenu.exec_(event.screenPos())
 
 
 class InputDialogArc(QDialog, QMainWindow):
@@ -174,13 +97,11 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         super().__init__()
         # Title of the Windows
         self.setWindowTitle("Graph Editor")
-        self.ground_node_count = 0
 
         # Initialise the QGraphicScene
         self.scene = QGraphicsScene(0, 0, 1980, 1080, self)
         self.view = QGraphicsView(self.scene)
 
-        # self.view.resize(1000, 1000)
         self.view.setRenderHints(QPainter.Antialiasing)
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.view)
@@ -191,7 +112,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         # Set up the Menu Bar
         self.fileMenu = self.menuBar().addMenu("&File")
 
-        self.openMenuAction = self.fileMenu.addAction("&Open")
+        self.openMenuAction = self.fileMenu.addAction("&Open...")
         self.openMenuAction.triggered.connect(self.on_open_action)
 
         self.saveMenuAction = self.fileMenu.addAction("&Save")
@@ -201,33 +122,34 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         self.saveAsMenuAction.triggered.connect(self.on_save_as_action)
 
         # Setup Graph Component menu
-        self.GraphComponentMenu = self.menuBar().addMenu("&Add")
+        self.GraphComponentMenu = self.menuBar().addMenu("&Edit")
 
-        self.NodeAction = self.GraphComponentMenu.addAction("&Node")
+        self.NodeAction = self.GraphComponentMenu.addAction("&Add Node")
         self.NodeAction.triggered.connect(self.on_node_action)
 
-        self.SourceNodeAction = self.GraphComponentMenu.addAction("&Source Node")
+        self.SourceNodeAction = self.GraphComponentMenu.addAction("&Add Source Node")
         self.SourceNodeAction.triggered.connect(self.on_sourcenode_action)
 
-        self.GroundNodeAction = self.GraphComponentMenu.addAction("&Ground Node")
+        self.GroundNodeAction = self.GraphComponentMenu.addAction("&Add Ground Node")
         self.GroundNodeAction.triggered.connect(self.on_groundnode_action)
 
-        self.ArcAction = self.GraphComponentMenu.addAction("&Arc")
+        self.ArcAction = self.GraphComponentMenu.addAction("&Add Arc")
         self.ArcAction.triggered.connect(self.on_arc_action)
 
-        # #TODO
-        self.file_path = ""
         self.graph = Graph()
+        self.file_path = ""
 
     # Menu
     def contextMenuEvent(self, event):
         contextmenu = QMenu(self)
 
-        newaction = QAction("New")
+        newaction = QAction("New Component")
         contextmenu.addAction(newaction)
         # newaction.triggered.connect()
 
-        openaction = QAction("Open")
+        contextmenu.addSeparator()
+
+        openaction = QAction("Open...")
         contextmenu.addAction(openaction)
         # openaction.triggered.connect()
 
@@ -235,13 +157,11 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         contextmenu.addAction(saveaction)
         # saveaction.triggered.connect()
 
-        copyaction = QAction("Copy")
-        contextmenu.addAction(copyaction)
-        # copyaction.triggered.connect()
+        saveasaction = QAction("Save As...")
+        contextmenu.addAction(saveasaction)
+        # saveasaction.triggered.connect()
 
-        pastaction = contextmenu.addAction("Past")
-        contextmenu.addAction(pastaction)
-        # copyaction.triggered.connect()
+        contextmenu.addSeparator()
 
         helpaction = QAction("Help...")
         contextmenu.addAction(helpaction)
