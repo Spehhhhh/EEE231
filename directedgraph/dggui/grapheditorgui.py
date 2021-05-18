@@ -41,13 +41,13 @@ from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
 from directedgraph.dgutils import FileManager
 
 
-class InputDialogArc(QDialog, QMainWindow):
+class InputDialogNode(QDialog, QMainWindow):
     def __init__(self, parent=None):
-        super(InputDialogArc, self).__init__(parent)
-        self.setWindowTitle("Input source node value")
+        super(InputDialogNode, self).__init__(parent)
+        self.setWindowTitle("Please Input Source Node Value")
         self.edit = QLineEdit(self)
         self.edit.placeholderText()
-        self.button = QPushButton("confirm")
+        self.button = QPushButton("Confirm")
         layout = QVBoxLayout()
         layout.addWidget(self.edit)
         layout.addWidget(self.button)
@@ -71,25 +71,22 @@ class InputDialogArc(QDialog, QMainWindow):
 class InputDialogArc(QDialog, QMainWindow):
     def __init__(self, parent=None):
         super(InputDialogArc, self).__init__(parent)
-        self.setWindowTitle("Input two linked nodes uid")
+        self.setWindowTitle("Please Input Linked Nodes UID")
         self.edit1 = QLineEdit(self)
         self.edit1.placeholderText()
         self.edit2 = QLineEdit(self)
         self.edit2.placeholderText()
-        self.button = QPushButton("confirm")
+        self.button = QPushButton("Confirm")
         layout = QVBoxLayout()
         layout.addWidget(self.edit1)
         layout.addWidget(self.edit2)
         layout.addWidget(self.button)
-        # Set dialog layout
         self.setLayout(layout)
-        # Add button signal to greetings slot
+        self.resize(300, 100)
         self.button.clicked.connect(self.confirm)
 
     def confirm(self):
-        print(self.edit1.text())
-        print(self.edit2.text())
-        return [self.edit1.text(), self.edit2.text()]
+        return (self.edit1.text(), self.edit2.text())
 
 
 class DirectedGraphMainWindow(QMainWindow, QDialog):
@@ -151,36 +148,31 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
         openaction = QAction("Open...")
         contextmenu.addAction(openaction)
-        # openaction.triggered.connect()
+        openaction.triggered.connect(self.on_open_action)
 
         saveaction = QAction("Save")
         contextmenu.addAction(saveaction)
-        # saveaction.triggered.connect()
+        saveaction.triggered.connect(self.on_save_action)
 
         saveasaction = QAction("Save As...")
         contextmenu.addAction(saveasaction)
-        # saveasaction.triggered.connect()
+        saveasaction.triggered.connect(self.on_save_as_action)
 
         contextmenu.addSeparator()
 
         helpaction = QAction("Help...")
         contextmenu.addAction(helpaction)
-        # copyaction.triggered.connect()
+        helpaction.triggered.connect(self.on_about_action)
 
         # Excute the pop menu at all the graph area, but won't conflit with node pop meun
         action = contextmenu.exec_(self.mapToGlobal(event.pos()))
 
     # Trigger Function
     def on_open_action(self):
-        """Handler for 'Open' action"""
-
         file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
-
         self.file_path = str(file_name[0])
 
         self.reset_scene()
-
-        print("opening ", file_name[0])
 
         fm = FileManager()
         graph1 = fm.read_graph(str(file_name[0]))
@@ -194,11 +186,13 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
                 self.scene.addItem(GroundNodeItem(component, self))
 
         self.graph = graph1
+
         return
 
     def on_save_action(self):
-        print("save", self.file_path)
-        pass
+        fm = FileManager()
+        fm.export_graph(self.file_path, self.graph)
+        return
 
     def on_save_as_action(self):
         fm = FileManager()
@@ -208,26 +202,25 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         return
 
     def on_preferences_action(self):
-        print("preferences")
         return
 
     def on_about_action(self):
         QMessageBox.about(
             self,
             "About this program",
-            "some about text crediting the people who wrote this",
+            "https://github.com/pirlite2/EEE231-group-B",
         )
         return
 
     def on_node_action(self):
-        self.scene.addItem(NodeItem(Node(None, None, "I", None, [500, 300]), self))
-        # #TODO
+        # self.scene.addItem(NodeItem())
+        return
 
     def on_sourcenode_action(self):
-        form = InputDialogArc()
-        form.show()
-        form.exec_()
-        value = str(form.confirm())
+        input_dialog_node = InputDialogNode()
+        input_dialog_node.show()
+        input_dialog_node.exec_()
+        value = str(input_dialog_node.confirm())
         print("value:", value)
 
         # text, result = QInputDialog.getText(
@@ -242,22 +235,23 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         # self.scene.addItem(
         #     SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         # )
-        pass
+        return
 
     def on_groundnode_action(self):
-        self.init_graph()
-        pass
+        return
 
     def on_arc_action(self):
-        input_arc = InputDialogArc()
-        input_arc.show()
-        input_arc.exec_()
-        print(input_arc.confirm())
+        input_dialog_arc = InputDialogArc()
+        input_dialog_arc.show()
+        input_dialog_arc.exec_()
+        print(input_dialog_arc.confirm())
+        return
 
     # Other Function
     def reset_scene(self):
         for item in self.scene.items():
             item.on_delete_action()
+        return
 
 
 class DirectedGraphApplication:
