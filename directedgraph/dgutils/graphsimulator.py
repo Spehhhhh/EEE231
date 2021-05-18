@@ -16,7 +16,7 @@ class GraphSimulator:
     def __init__(self):
         pass
 
-    def export(self, graph1):
+    def export(self, filepath, import_graph):
         arc_list = []
         node_uid_list = []
         sourcenode_list = []
@@ -28,7 +28,7 @@ class GraphSimulator:
 
         uid_map = {}
 
-        for component in graph1.components.values():
+        for component in import_graph.components.values():
             if type(component) == Arc:
                 arc_list.append(component)
             if type(component) == SourceNode:
@@ -62,9 +62,9 @@ class GraphSimulator:
         ####################
 
         # Output txt
-        with open("output.cir", "w", newline="", encoding="utf-8") as f:
-            graph_name = graph1.name
-            headers = [str(graph_name), "#", "Arc", "Node1", "Node2", "Value"]
+        with open(filepath, "w", newline="", encoding="utf-8") as f:
+            graph_name = import_graph.name
+            headers = ["Arc", "Node1", "Node2", "Value", "#", str(graph_name)]
             f_csv = csv.writer(f, delimiter=" ")
             f_csv.writerow(headers)
 
@@ -190,104 +190,110 @@ class GraphSimulator:
 
 
 if __name__ == "__main__":
-    # fm = FileManager()
-    # path = (
-    #     Path(os.path.dirname(__file__))
-    #     .parent.parent.joinpath("tests")
-    #     .joinpath("test.xml")
-    # )
+    path = (
+        Path(os.path.dirname(__file__))
+        .parent.parent.joinpath("tests")
+        .joinpath("test_rlc.xml")
+    )
 
-    # graph1 = fm.read_graph(str(path))
+    path_out = (
+        Path(os.path.dirname(__file__))
+        .parent.parent.joinpath("tests")
+        .joinpath("test_rlc.cir")
+    )
 
     fm = FileManager()
-    graph_attribute = [{"name": "graph1"}]
-    graph_components = [
-        {
-            "type": "Node",
-            "uid": "7778da",
-            "name": "Node 2",
-            "colour": "#fd5455",
-            "position_x": "100",
-            "position_y": "105",
-        },
-        {
-            "type": "Node",
-            "uid": "32a24b",
-            "name": "Node 3",
-            "colour": "#fd5455",
-            "position_x": "30",
-            "position_y": "30",
-        },
-        {
-            "type": "SourceNode",
-            "uid": "b20350",
-            "name": "SourceNode 1",
-            "colour": "#0f8080",
-            "position_x": "40",
-            "position_y": "40",
-            "user_defined_attribute": "10",
-        },
-        {
-            "type": "GroundNode",
-            "uid": "365bb9",
-            "name": "GroundNode 0",
-            "colour": "#d4aa01",
-            "position_x": "40",
-            "position_y": "40",
-        },
-        {
-            "type": "Arc",
-            "uid": "2f7002",
-            "name": "Resistor 1",
-            "colour": "#0000",
-            "node1_uid": "b20350",
-            "node2_uid": "7778da",
-            "user_defined_attribute": "20",
-            "user_defined_arc_type": "Resistor",
-        },
-        {
-            "type": "Arc",
-            "uid": "0dcb2f",
-            "name": "Resistor 2",
-            "colour": "#0000",
-            "node1_uid": "365bb9",
-            "node2_uid": "7778da",
-            "user_defined_attribute": "20",
-            "user_defined_arc_type": "Resistor",
-        },
-        {
-            "type": "Arc",
-            "uid": "33ae52",
-            "name": "Resistor 3",
-            "colour": "#0000",
-            "node1_uid": "365bb9",
-            "node2_uid": "32a24b",
-            "user_defined_attribute": "4000",
-            "user_defined_arc_type": "Resistor",
-        },
-        {
-            "type": "Arc",
-            "uid": "6bf56b",
-            "name": "Capacitor 1",
-            "colour": "#0000",
-            "node1_uid": "365bb9",
-            "node2_uid": "32a24b",
-            "user_defined_attribute": "0.0000005",
-            "user_defined_arc_type": "Capacitor",
-        },
-        {
-            "type": "Arc",
-            "uid": "2201bd",
-            "name": "Inductor 1",
-            "colour": "#0000",
-            "node1_uid": "7778da",
-            "node2_uid": "32a24b",
-            "user_defined_attribute": "0.2",
-            "user_defined_arc_type": "Inductor",
-        },
-    ]
-    graph_raw_data = (graph_attribute, graph_components)
-    graph1 = fm.create_graph(graph_raw_data)
-    # graph1.print_graph_details()
+    import_graph = fm.read_graph(str(path))
     gs = GraphSimulator()
-    gs.export(graph1)
+    gs.export(path_out, import_graph)
+
+    # graph_attribute = [{"name": "import_graph"}]
+    # graph_components = [
+    #     {
+    #         "type": "Node",
+    #         "uid": "7778da",
+    #         "name": "Node 2",
+    #         "colour": "#fd5455",
+    #         "position_x": "100",
+    #         "position_y": "105",
+    #     },
+    #     {
+    #         "type": "Node",
+    #         "uid": "32a24b",
+    #         "name": "Node 3",
+    #         "colour": "#fd5455",
+    #         "position_x": "30",
+    #         "position_y": "30",
+    #     },
+    #     {
+    #         "type": "SourceNode",
+    #         "uid": "b20350",
+    #         "name": "SourceNode 1",
+    #         "colour": "#0f8080",
+    #         "position_x": "40",
+    #         "position_y": "40",
+    #         "user_defined_attribute": "10",
+    #     },
+    #     {
+    #         "type": "GroundNode",
+    #         "uid": "365bb9",
+    #         "name": "GroundNode 0",
+    #         "colour": "#d4aa01",
+    #         "position_x": "40",
+    #         "position_y": "40",
+    #     },
+    #     {
+    #         "type": "Arc",
+    #         "uid": "2f7002",
+    #         "name": "Resistor 1",
+    #         "colour": "#0000",
+    #         "node1_uid": "b20350",
+    #         "node2_uid": "7778da",
+    #         "user_defined_attribute": "20",
+    #         "user_defined_arc_type": "Resistor",
+    #     },
+    #     {
+    #         "type": "Arc",
+    #         "uid": "0dcb2f",
+    #         "name": "Resistor 2",
+    #         "colour": "#0000",
+    #         "node1_uid": "365bb9",
+    #         "node2_uid": "7778da",
+    #         "user_defined_attribute": "20",
+    #         "user_defined_arc_type": "Resistor",
+    #     },
+    #     {
+    #         "type": "Arc",
+    #         "uid": "33ae52",
+    #         "name": "Resistor 3",
+    #         "colour": "#0000",
+    #         "node1_uid": "365bb9",
+    #         "node2_uid": "32a24b",
+    #         "user_defined_attribute": "4000",
+    #         "user_defined_arc_type": "Resistor",
+    #     },
+    #     {
+    #         "type": "Arc",
+    #         "uid": "6bf56b",
+    #         "name": "Capacitor 1",
+    #         "colour": "#0000",
+    #         "node1_uid": "365bb9",
+    #         "node2_uid": "32a24b",
+    #         "user_defined_attribute": "0.0000005",
+    #         "user_defined_arc_type": "Capacitor",
+    #     },
+    #     {
+    #         "type": "Arc",
+    #         "uid": "2201bd",
+    #         "name": "Inductor 1",
+    #         "colour": "#0000",
+    #         "node1_uid": "7778da",
+    #         "node2_uid": "32a24b",
+    #         "user_defined_attribute": "0.2",
+    #         "user_defined_arc_type": "Inductor",
+    #     },
+    # ]
+    # graph_raw_data = (graph_attribute, graph_components)
+    # import_graph = fm.create_graph(graph_raw_data)
+
+    # import_graph.print_graph_details()
