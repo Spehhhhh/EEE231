@@ -267,11 +267,11 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
     def on_sourcenode_action(self):
-        input_dialog_node = InputDialogNode()
-        input_dialog_node.show()
-        input_dialog_node.exec_()
-        value = str(input_dialog_node.confirm())
-        print("value:", value)
+        # input_dialog_node = InputDialogNode()
+        # input_dialog_node.show()
+        # input_dialog_node.exec_()
+        # value = str(input_dialog_node.confirm())
+        # print("value:", value)
 
         # text, result = QInputDialog.getText(
         #     self,
@@ -286,16 +286,73 @@ class DirectedGraphMainWindow(QMainWindow):
         #     SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
         # )
 
+        name = ""
+        text, result = QInputDialog.getText(
+            self,
+            "Input",
+            "Enter Name",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            name = str(text)
+
+        user_defined_attribute = ""
+        text, result = QInputDialog.getText(
+            self,
+            "Input",
+            "Enter User Defined Attribute",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            user_defined_attribute = str(text)
+
+        self.scene.addItem(
+            SourceNodeItem(
+                self.graph.create_component(
+                    {
+                        "type": "SourceNode",
+                        "name": name,
+                        "position_x": self.mouse_position.x(),
+                        "position_y": self.mouse_position.y(),
+                        "user_defined_attribute": user_defined_attribute,
+                    }
+                ),
+                self,
+            )
+        )
         return
 
     def on_groundnode_action(self, event):
+        name = ""
+        text, result = QInputDialog.getText(
+            self,
+            "Input",
+            "Enter Name",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            name = str(text)
+
+        self.scene.addItem(
+            NodeItem(
+                self.graph.create_component(
+                    {
+                        "type": "GroundNode",
+                        "name": name,
+                        "position_x": self.mouse_position.x(),
+                        "position_y": self.mouse_position.y(),
+                    }
+                ),
+                self,
+            )
+        )
         return
 
     def on_arc_action(self):
-        input_dialog_arc = InputDialogArc()
-        input_dialog_arc.show()
-        input_dialog_arc.exec_()
-        print(input_dialog_arc.confirm())
+        # input_dialog_arc = InputDialogArc()
+        # input_dialog_arc.show()
+        # input_dialog_arc.exec_()
+        # print(input_dialog_arc.confirm())
         return
 
     # Other Function
