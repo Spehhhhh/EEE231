@@ -63,7 +63,7 @@ class ArcItem(QGraphicsEllipseItem):
             2 * (abs(self.node1_position[0] - self.node2_position[0])),
             2 * (abs(self.node1_position[1] - self.node2_position[1])),
         )
-        # print("bounding_shape:", bounding_shape.center())
+        print("bounding_shape:", bounding_shape.center())
         super().__init__(bounding_shape)
 
         self.setZValue(0)
