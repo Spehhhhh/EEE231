@@ -2,8 +2,6 @@ import sys
 import os
 from pathlib import Path
 import csv
-from uuid import UUID, uuid1
-from xml.dom.minidom import parseString
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
@@ -39,12 +37,6 @@ if __name__ == "__main__":
             groundnode_list.append(component)
         if type(component) == Node:
             node_uid_list.append(component)
-
-    for sourcenode in sourcenode_list:
-        pass
-
-    for groundnode in groundnode_list:
-        pass
 
     ####################
     i = 0
@@ -106,7 +98,7 @@ if __name__ == "__main__":
                 )
                 f_csv.writerow(
                     [
-                        f"C{resistor_count}",
+                        f"C{capacitor_count}",
                         uid_map[arc.nodes[0].uid],
                         uid_map[arc.nodes[1].uid],
                         arc.user_defined_attribute,
