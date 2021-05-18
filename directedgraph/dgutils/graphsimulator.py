@@ -64,7 +64,7 @@ class GraphSimulator:
         # Output txt
         with open("output.cir", "w", newline="", encoding="utf-8") as f:
             graph_name = graph1.name
-            headers = [str(graph_name),"#", "Arc", "Node1", "Node2", "Value"]
+            headers = [str(graph_name), "#", "Arc", "Node1", "Node2", "Value"]
             f_csv = csv.writer(f, delimiter=" ")
             f_csv.writerow(headers)
 
@@ -197,7 +197,6 @@ if __name__ == "__main__":
     #     .joinpath("test.xml")
     # )
 
-    
     # graph1 = fm.read_graph(str(path))
 
     fm = FileManager()
