@@ -716,7 +716,17 @@ class Arc_Input(QDialog, QMainWindow):
         self.button.clicked.connect(self.confirm)
 
     def confirm(self):
-        return [self.edit1.text(), self.edit2.text()]
+        len1=len(self.edit1.text())
+        len2=len(self.edit2.text())
+        if (len1 >6 or len1<=0) or (len2>6 or len2<=0):
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("The lenght of uid should be greater than 0 and  smaller than 6!!!!")
+            msg.show()
+            msg.exec_()
+            raise ValueError("Exceed the highest length!!!")
+        else:
+         return [self.edit1.text(), self.edit2.text()]
 
 
 

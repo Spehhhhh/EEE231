@@ -2,7 +2,7 @@ import sys
 import os
 from pathlib import Path
 from xml.dom.minidom import parseString
-
+from uuid import uuid4
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
