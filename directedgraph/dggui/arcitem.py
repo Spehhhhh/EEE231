@@ -332,7 +332,7 @@ class SourceNodeItem(QGraphicsEllipseItem):
         self.setPos(scenePosition)
         print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
         # self.update()
-        return [scenePosition.x(),scenePosition.y()]
+        return [scenePosition.x(), scenePosition.y()]
 
     def mouseDoubleClickEvent(self, event):
         # Handler for mouseDoubleClickEvent
@@ -552,12 +552,12 @@ class ArcItem(QGraphicsEllipseItem):
 
         self.arc_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
         bounding_shape = QRectF(
-            self.node1_position[0]-(self.node2_position[0]-self.node1_position[0]),
+            self.node1_position[0] - (self.node2_position[0] - self.node1_position[0]),
             self.node1_position[1],
-            2*(abs(self.node1_position[0]-self.node2_position[0])),
-            2*(abs(self.node1_position[1]-self.node2_position[1]))
+            2 * (abs(self.node1_position[0] - self.node2_position[0])),
+            2 * (abs(self.node1_position[1] - self.node2_position[1])),
         )
-        print("bounding_shape:",bounding_shape.center())
+        print("bounding_shape:", bounding_shape.center())
         super().__init__(bounding_shape)
 
         self.setZValue(0)
@@ -586,9 +586,13 @@ class ArcItem(QGraphicsEllipseItem):
         # Paint node circle
         painter.setBrush(self.arc_fill_brush)
 
-        degree1=(math.atan(self.node1_position[1]/self.node1_position[0])/math.pi)*180
-        degree2=(math.atan(self.node2_position[1]/self.node2_position[0])/math.pi)*180
-        painter.drawArc(boundingRect,0,90*16)
+        degree1 = (
+            math.atan(self.node1_position[1] / self.node1_position[0]) / math.pi
+        ) * 180
+        degree2 = (
+            math.atan(self.node2_position[1] / self.node2_position[0]) / math.pi
+        ) * 180
+        painter.drawArc(boundingRect, 0, 90 * 16)
 
         return
 
@@ -717,7 +721,6 @@ class Arc_Input(QDialog, QMainWindow):
 
     def confirm(self):
         return [self.edit1.text(), self.edit2.text()]
-
 
 
 class DirectedGraphMainWindow(QMainWindow, QDialog):
@@ -861,20 +864,30 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         )
 
     def on_arc_action(self):
-        input_arc=Arc_Input()
+        input_arc = Arc_Input()
         input_arc.show()
         input_arc.exec_()
         uid1 = input_arc.confirm()[0]
         uid2 = input_arc.confirm()[1]
         graph1 = graph.Graph()
         node1 = graph1.create_component(
-        {"type": "Node", "name": "n1","uid":uid1, "position_x": "200",
-                        "position_y": "300" }
-    )
-        node2=graph1.create_component(
-        {"type": "Node", "name": "n2","uid":uid2, "position_x": "300",
-                        "position_y": "400"}
-    )
+            {
+                "type": "Node",
+                "name": "n1",
+                "uid": uid1,
+                "position_x": "200",
+                "position_y": "300",
+            }
+        )
+        node2 = graph1.create_component(
+            {
+                "type": "Node",
+                "name": "n2",
+                "uid": uid2,
+                "position_x": "300",
+                "position_y": "400",
+            }
+        )
         arc1 = Arc(graph1, None, "arc1", None, node1, node2, None, None)
 
         # print(arc1.nodes[0])
