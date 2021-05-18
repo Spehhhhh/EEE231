@@ -160,7 +160,7 @@ class GroundNode(Node):
         position=None,
     ):
         self.colour = colour if colour else "#d4aa01"
-        super().__init__(connected_graph, uid, name, colour, position)
+        super().__init__(connected_graph, uid, name, self.colour, position)
         self.user_defined_attribute = "0"
 
         if connected_graph != None:

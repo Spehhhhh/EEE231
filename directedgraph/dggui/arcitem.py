@@ -1,6 +1,7 @@
 from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
 from PySide6.QtGui import QAction
 import math
+import random
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics
 from PySide6.QtWidgets import (
     QApplication,
@@ -56,14 +57,71 @@ class ArcItem(QGraphicsEllipseItem):
         self.node1_position = self.node1.get_position()
         self.node2_position = self.node2.get_position()
 
+        print("arc", self.arc_instance.name)
+        print("node1_position", self.node1.get_position())
+        print("node2_position", self.node2.get_position())
+
         self.arc_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-        bounding_shape = QRectF(
-            self.node1_position[0] - (self.node2_position[0] - self.node1_position[0]),
-            self.node1_position[1],
-            2 * (abs(self.node1_position[0] - self.node2_position[0])),
-            2 * (abs(self.node1_position[1] - self.node2_position[1])),
-        )
-        print("bounding_shape:", bounding_shape.center())
+        if (self.node1_position[0] <self.node2_position[0] and self.node1_position[1] < self.node2_position[1]):
+                bounding_shape = QRectF(
+                    self.node1_position[0]-(self.node2_position[0] - self.node1_position[0]),
+                    self.node1_position[1],
+                    2*(abs(self.node1_position[0] - self.node2_position[0])),
+                    2*(abs(self.node1_position[1] - self.node2_position[1]))
+                     # 2*(abs(self.node1_position[1] - self.node2_position[1])),
+                )
+        elif (self.node1_position[0]>self.node2_position[0] and self.node1_position[1]<self.node2_position[1]):
+            bounding_shape = QRectF(
+                self.node2_position[0],
+                self.node2_position[1]-abs(self.node2_position[1]-self.node1_position[1]),
+                2 * (abs(self.node1_position[0] - self.node2_position[0])),
+                2 * (abs(self.node1_position[1] - self.node2_position[1]))
+                # 2*(abs(self.node1_position[1] - self.node2_position[1])),
+            )
+        elif (self.node1_position[0]<self.node2_position[0] and self.node1_position[1]>self.node2_position[1]):
+            bounding_shape = QRectF(
+                self.node1_position[0],
+                self.node1_position[1] - abs(self.node1_position[1] - self.node2_position[1]),
+                2*(abs(self.node2_position[0] - self.node1_position[0])),
+                 2*(abs(self.node2_position[1] - self.node1_position[1]))
+                # 2*(abs(self.node1_position[1] - self.node2_position[1])),
+            )
+        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
+            bounding_shape = QRectF(
+                self.node2_position[0]-(self.node1_position[0] - self.node2_position[0]),
+                self.node2_position[1],
+                2 * (abs(self.node2_position[0] - self.node1_position[0])),
+                2 * (abs(self.node2_position[1] - self.node1_position[1]))
+            )
+        elif (self.node1_position[0] ==self.node2_position[0] and self.node1_position[1] <self.node2_position[1]):
+            bounding_shape = QRectF(
+                self.node1_position[0] - 0.5*abs(self.node1_position[1] - self.node2_position[1]),
+                self.node1_position[1],
+                (abs(self.node2_position[1] - self.node1_position[1])),
+                 (abs(self.node2_position[1] - self.node1_position[1]))
+            )
+        elif (self.node1_position[0] ==self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
+            bounding_shape = QRectF(
+                self.node2_position[0] - 0.5 * abs(self.node1_position[1] - self.node2_position[1]),
+                self.node2_position[1],
+                (abs(self.node2_position[1] - self.node1_position[1])),
+                (abs(self.node2_position[1] - self.node1_position[1]))
+            )
+        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] == self.node2_position[1]):
+            bounding_shape = QRectF(
+                self.node2_position[0],
+                self.node2_position[1]-0.5*abs(self.node2_position[0]-self.node1_position[0]),
+                (abs(self.node2_position[0] - self.node1_position[0])),
+                (abs(self.node2_position[0] - self.node1_position[0]))
+            )
+        elif (self.node1_position[0] <self.node2_position[0] and self.node1_position[1] == self.node2_position[1]):
+            bounding_shape = QRectF(
+                self.node1_position[0],
+                self.node1_position[1] - 0.5 * abs(self.node1_position[0] - self.node2_position[0]),
+                (abs(self.node2_position[0] - self.node1_position[0])),
+                (abs(self.node2_position[0] - self.node1_position[0]))
+            )
+        # print("bounding_shape:", bounding_shape.center())
         super().__init__(bounding_shape)
 
         self.setZValue(0)
@@ -83,6 +141,8 @@ class ArcItem(QGraphicsEllipseItem):
         self.node1_position = self.node1.get_position()
         self.node2_position = self.node2.get_position()
 
+        # print("node1_position at Arc", self.node1.get_position())
+
         boundingRect = self.boundingRect()
 
         if self.selectionRectangle.isVisible():
@@ -95,14 +155,35 @@ class ArcItem(QGraphicsEllipseItem):
         # Paint node circle
         painter.setBrush(self.arc_fill_brush)
 
+        painter.setPen(Qt.black)
+        # painter.drawText(boundingRect,Qt.AlignCenter,self.arc_instance.name)
+        # painter.drawText(boundingRect, Qt.AlignCenter, self.arc_instance.uid)
         degree1 = (
             math.atan(self.node1_position[1] / self.node1_position[0]) / math.pi
         ) * 180
         degree2 = (
             math.atan(self.node2_position[1] / self.node2_position[0]) / math.pi
         ) * 180
-        painter.drawArc(boundingRect, 0, 90 * 16)
 
+        if (self.node1_position[0] <self.node2_position[0] and self.node1_position[1] < self.node2_position[1]):
+                  painter.drawArc(boundingRect, 0, 90* 16)
+
+        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] < self.node2_position[1]):
+                  painter.drawArc(boundingRect,90*16,90*16)
+
+        elif (self.node1_position[0] < self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
+                  painter.drawArc(boundingRect,180*16,-90*16)
+
+        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
+                  painter.drawArc(boundingRect,0,90*16)
+        elif (self.node1_position[0] == self.node2_position[0] and self.node1_position[1] < self.node2_position[1]):
+                  painter.drawArc(boundingRect,90*16,180*16)
+        elif (self.node1_position[0] == self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
+                  painter.drawArc(boundingRect,-90*16,-180*16)
+        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] == self.node2_position[1]):
+                  painter.drawArc(boundingRect,0,180*16)
+        elif (self.node1_position[0] < self.node2_position[0] and self.node1_position[1] == self.node2_position[1]):
+                  painter.drawArc(boundingRect,180*16,-180*16)
         return
 
     def hoverEnterEvent(self, event):
@@ -150,7 +231,6 @@ class ArcItem(QGraphicsEllipseItem):
     def setPos(self, pos):
         bounding = self.boundingRect()
         offset = bounding.center()
-
         super().setPos(pos-offset)
         return
 
@@ -230,17 +310,7 @@ class Arc_Input(QDialog, QMainWindow):
         self.button.clicked.connect(self.confirm)
 
     def confirm(self):
-        len1=len(self.edit1.text())
-        len2=len(self.edit2.text())
-        if (len1 >6 or len1<=0) or (len2>6 or len2<=0):
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Warning)
-            msg.setText("The lenght of uid should be greater than 0 and  smaller than 6!!!!")
-            msg.show()
-            msg.exec_()
-            raise ValueError("Exceed the highest length!!!")
-        else:
-         return [self.edit1.text(), self.edit2.text()]
+        return [self.edit1.text(), self.edit2.text()]
 
 
 class DirectedGraphMainWindow(QMainWindow, QDialog):
@@ -395,8 +465,8 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
                 "type": "Node",
                 "name": "n1",
                 "uid": uid1,
-                "position_x": "300",
-                "position_y": "500",
+                "position_x": "900",
+                "position_y": "800",
             }
         )
         node2 = graph1.create_component(
@@ -404,8 +474,8 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
                 "type": "Node",
                 "name": "n2",
                 "uid": uid2,
-                "position_x": "300",
-                "position_y": "400",
+                "position_x": "500",
+                "position_y": "800",
             }
         )
         arc1 = Arc(graph1, None, "arc1", None, node1, node2, None, None)
@@ -418,89 +488,171 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
     def init_graph(self):
         graph1 = Graph()
-        self.scene.addItem(
-            NodeItem(
-                graph1.create_component(
-                    {
-                        "type": "Node",
-                        "uid": "7778da",
-                        "name": "Node 1",
-                        "colour": "#fd5455",
-                        "position_x": "300",
-                        "position_y": "300",
-                    }
-                ),
-                self,
-            )
-        )
-        self.scene.addItem(
-            NodeItem(
-                graph1.create_component(
-                    {
-                        "type": "Node",
-                        "uid": "b911b2",
-                        "name": "Node 2",
-                        "colour": "#fd5455",
-                        "position_x": "800",
-                        "position_y": "800",
-                    }
-                ),
-                self,
-            )
-        )
-        self.scene.addItem(
-            NodeItem(
-                graph1.create_component(
-                    {
-                        "type": "Node",
-                        "uid": "127409",
-                        "name": "Node 3",
-                        "colour": "#fd5455",
-                        "position_x": "1000",
-                        "position_y": "1000",
-                    }
-                ),
-                self,
-            )
-        )
-        self.scene.addItem(
-            ArcItem(
-                graph1.create_component(
-                    {
-                        "type": "Arc",
-                        "uid": "9a2812",
-                        "name": "Arc 1",
-                        "colour": "#000000",
-                        "node1_uid": "7778da",
-                        "node2_uid": "b911b2",
-                        "user_defined_attribute": "5",
-                        "user_defined_arc_type": "Resistor",
-                    }
-                ),
-                self,
-            )
-        )
-        self.scene.addItem(
-            ArcItem(
-                graph1.create_component(
-                    {
-                        "type": "Arc",
-                        "uid": "9a2813",
-                        "name": "Arc 2",
-                        "colour": "#000000",
-                        "node1_uid": "7778da",
-                        "node2_uid": "127409",
-                        "user_defined_attribute": "5",
-                        "user_defined_arc_type": "Resistor",
-                    }
-                ),
-                self,
-            )
-        )
-        # file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
-        # fm = FileManager()
-        # graph1 = fm.read_graph(str(file_name[0]))
+        # self.scene.addItem(
+        #     NodeItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Node",
+        #                 "uid": "7778da",
+        #                 "name": "Node 1",
+        #                 "colour": "#fd5455",
+        #                 "position_x": "300",
+        #                 "position_y": "300",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     NodeItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Node",
+        #                 "uid": "b911b2",
+        #                 "name": "Node 2",
+        #                 "colour": "#fd5455",
+        #                 "position_x": "800",
+        #                 "position_y": "800",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     NodeItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Node",
+        #                 "uid": "127409",
+        #                 "name": "Node 3",
+        #                 "colour": "#fd5455",
+        #                 "position_x": "1000",
+        #                 "position_y": "1000",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     ArcItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Arc",
+        #                 "uid": "9a2812",
+        #                 "name": "Arc 1",
+        #                 "colour": "#000000",
+        #                 "node1_uid": "7778da",
+        #                 "node2_uid": "b911b2",
+        #                 "user_defined_attribute": "5",
+        #                 "user_defined_arc_type": "Resistor",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     ArcItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Arc",
+        #                 "uid": "9a2813",
+        #                 "name": "Arc 2",
+        #                 "colour": "#000000",
+        #                 "node1_uid": "7778da",
+        #                 "node2_uid": "127409",
+        #                 "user_defined_attribute": "5",
+        #                 "user_defined_arc_type": "Resistor",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     ArcItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Arc",
+        #                 "uid": "9a2813",
+        #                 "name": "Arc 2",
+        #                 "colour": "#000000",
+        #                 "node1_uid": "b911b2",
+        #                 "node2_uid": "127409",
+        #                 "user_defined_attribute": "5",
+        #                 "user_defined_arc_type": "Resistor",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
 
+        # graph1.create_component(
+        #     {
+        #         "type": "Node",
+        #         "uid": "7778da",
+        #         "name": "Node 1",
+        #         "colour": "#fd5455",
+        #         "position_x": "300",
+        #         "position_y": "300",
+        #     }
+        # )
+        # graph1.create_component(
+        #     {
+        #         "type": "Node",
+        #         "uid": "b911b2",
+        #         "name": "Node 2",
+        #         "colour": "#fd5455",
+        #         "position_x": "800",
+        #         "position_y": "800",
+        #     }
+        # )
+        # graph1.create_component(
+        #     {
+        #         "type": "Node",
+        #         "uid": "127409",
+        #         "name": "Node 3",
+        #         "colour": "#fd5455",
+        #         "position_x": "1000",
+        #         "position_y": "1000",
+        #     }
+        # )
+
+        # graph1.create_component(
+        #     {
+        #         "type": "Arc",
+        #         "uid": "9a2812",
+        #         "name": "Arc 1",
+        #         "colour": "#000000",
+        #         "node1_uid": "7778da",
+        #         "node2_uid": "b911b2",
+        #         "user_defined_attribute": "5",
+        #         "user_defined_arc_type": "Resistor",
+        #     }
+        # )
+        # graph1.create_component(
+        #     {
+        #         "type": "Arc",
+        #         "uid": "9a2813",
+        #         "name": "Arc 2",
+        #         "colour": "#000000",
+        #         "node1_uid": "7778da",
+        #         "node2_uid": "127409",
+        #         "user_defined_attribute": "5",
+        #         "user_defined_arc_type": "Resistor",
+        #     }
+        # )
+        # graph1.create_component(
+        #     {
+        #         "type": "Arc",
+        #         "uid": "9a2813",
+        #         "name": "Arc 2",
+        #         "colour": "#000000",
+        #         "node1_uid": "b911b2",
+        #         "node2_uid": "127409",
+        #         "user_defined_attribute": "5",
+        #         "user_defined_arc_type": "Resistor",
+        #     }
+        # )
+        # graph1.print_graph_details()
         # for component in graph1.components.values():
         #     if type(component) == Node:
         #         self.scene.addItem(NodeItem(component, self))
@@ -511,6 +663,21 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         #     if type(component) == Arc:
         #         self.scene.addItem(ArcItem(component, self))
         #         print(component.get())
+
+        file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
+        fm = FileManager()
+        graph1 = fm.read_graph(str(file_name[0]))
+
+        for component in graph1.components.values():
+            if type(component) == Node:
+                self.scene.addItem(NodeItem(component, self))
+            if type(component) == SourceNode:
+                self.scene.addItem(SourceNodeItem(component, self))
+            if type(component) == GroundNode:
+                self.scene.addItem(GroundNodeItem(component, self))
+            if type(component) == Arc:
+                self.scene.addItem(ArcItem(component, self))
+                # print(component.get())
 
 
 class DirectedGraphApplication:

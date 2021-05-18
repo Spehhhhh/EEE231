@@ -302,6 +302,7 @@ class MainWindow(QMainWindow):
         arcGraphicItem_1 = QGraphicsPathItem(arc_PainterPath_1)
         arcGraphicItem_1.setZValue(-1)  # Hides path below nodes
         arcGraphicItem_1.setToolTip("arc 1")
+
         self.graphicsScene.addItem(arcGraphicItem_1)
 
         # Create example arc (2)

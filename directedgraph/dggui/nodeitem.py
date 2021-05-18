@@ -68,7 +68,7 @@ class NodeItem(QGraphicsEllipseItem):
         # Bounding rectangle of node 'ellipse' i.e. circle
         super().__init__(bounding_shape)
 
-        self.setZValue(0)
+        self.setZValue(10)
         self.setBrush(self.node_fill_brush)
 
         # Set node attributes
