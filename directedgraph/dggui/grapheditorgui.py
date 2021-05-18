@@ -214,21 +214,40 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
     def on_save_action(self):
-        fm = FileManager()
-        fm.export_graph(self.file_path, self.graph)
+        alert = self.graph.verify_graph_integrity()
+        if len(alert) == 0:
+            if self.file_path == "":
+                QMessageBox.about(
+                    self,
+                    "Error",
+                    "Please Use Save as...",
+                )
+            else:
+                fm = FileManager()
+                fm.export_graph(self.file_path, self.graph)
+        else:
+            for alert_message in alert:
+                QMessageBox.about(
+                    self,
+                    "Error",
+                    alert_message,
+                )
         return
 
     def on_save_as_action(self):
-        fm = FileManager()
-        file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
-        print(self.graph)
-        fm.export_graph(file_name[0], self.graph)
-
-        QMessageBox.about(  # Add Alert
-            self,
-            "About this program",
-            "https://github.com/pirlite2/EEE231-group-B",
-        )
+        alert = self.graph.verify_graph_integrity()
+        if len(alert) == 0:
+            fm = FileManager()
+            file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
+            fm.export_graph(file_name[0], self.graph)
+            self.file_path = file_name[0]  # 把路径保存到实例中
+        else:
+            for alert_message in alert:
+                QMessageBox.about(
+                    self,
+                    "Error",
+                    alert_message,
+                )
         return
 
     def on_preferences_action(self):
@@ -360,9 +379,19 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
     def on_simulate_action(self):
-        file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
-        sm = GraphSimulator()
-        sm.export(file_name[0], self.graph)
+        alert = self.graph.verify_graph_integrity()
+        if len(alert) == 0:
+            file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
+            sm = GraphSimulator()
+            sm.export(file_name[0], self.graph)
+        else:
+            for alert_message in alert:
+                QMessageBox.about(
+                    self,
+                    "Error",
+                    alert_message,
+                )
+        return
 
     # Other Function
     def reset_scene(self):
@@ -371,20 +400,8 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
 
-class DirectedGraphApplication:
-    def __init__(self):
-        app = QApplication([])
-        mainwindow = DirectedGraphMainWindow()
-        # mainwindow.showMaximized()
-        mainwindow.show()
-        sys.exit(app.exec_())
-
-    def main(self):
-        pass
-
-    def quit(self):
-        pass
-
-
 if __name__ == "__main__":
-    app = DirectedGraphApplication()
+    app = QApplication([])
+    mainwindow = DirectedGraphMainWindow()
+    mainwindow.show()
+    sys.exit(app.exec_())
