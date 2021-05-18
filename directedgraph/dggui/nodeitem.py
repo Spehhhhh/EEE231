@@ -85,6 +85,7 @@ class NodeItem(QGraphicsEllipseItem):
 
     def paint(self, painter, option, parent):
         # Paint the node instance - called by QGraphicView instance
+        self.prepareGeometryChange()
         boundingRect = self.boundingRect()
 
         if self.selectionRectangle.isVisible():
@@ -111,14 +112,17 @@ class NodeItem(QGraphicsEllipseItem):
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
         boundingRect.adjust(0, -40, 0, -40)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
+        # print("node paint called")
 
-        print("node paint called")
+        self.update()
         return
 
     def setPos(self, pos):
         bounding = self.boundingRect()
         offset = bounding.center()
         super().setPos(pos - offset)
+        self.update()
+        return
 
     # ------------------------- Mouse Event -------------------------
 
@@ -127,11 +131,15 @@ class NodeItem(QGraphicsEllipseItem):
     def hoverEnterEvent(self, event):
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().setOverrideCursor(Qt.OpenHandCursor)
+        self.update()
+        return
 
     # This Method is used to change back the cursor when mouse is not point to the node
     def hoverLeaveEvent(self, event):
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().restoreOverrideCursor()
+        self.update()
+        return
 
     # Handler for mousePressEvent
     def mousePressEvent(self, event):
@@ -139,6 +147,7 @@ class NodeItem(QGraphicsEllipseItem):
         # mousePos = event.pos()
         # self.selectionRectangle.setVisible(True)
         # print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
+        self.update()
         return
 
     # Handler for mouseReleaseEvent
@@ -147,6 +156,7 @@ class NodeItem(QGraphicsEllipseItem):
         # mousePos = event.pos()
         # self.selectionRectangle.setVisible(False)
         # print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
+        self.update()
         return
 
     # Handler for mouseMoveEvent
@@ -158,14 +168,17 @@ class NodeItem(QGraphicsEllipseItem):
 
         self.node.position[0] = scenePosition.x()
         self.node.position[1] = scenePosition.y()
-        print("node position:", self.node.position)
-        print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
+        # print("node position:", self.node.position)
+        # print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
+        self.update()
+        return
 
     # Handler for mouseDoubleClickEvent
     def mouseDoubleClickEvent(self, event):
         self.prepareGeometryChange()
         # self.setVisible(False)
         # print("mouseDoubleClickEvent")
+        self.update()
         return
 
     # ------------------------- Pop -------------------------
@@ -250,6 +263,7 @@ class SourceNodeItem(NodeItem):
         super().__init__(node_instance, main_window_instance)
 
     def paint(self, painter, option, parent):
+        self.prepareGeometryChange()
         boundingRect = self.boundingRect()
 
         if self.selectionRectangle.isVisible():
@@ -274,6 +288,7 @@ class SourceNodeItem(NodeItem):
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
         boundingRect.adjust(0, -40, 0, -40)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
+        self.update()
         return
 
     def on_duplicate_action(self):
