@@ -83,8 +83,6 @@ class ArcItem(QGraphicsEllipseItem):
         self.node1_position = self.node1.get_position()
         self.node2_position = self.node2.get_position()
 
-        print("node1_position at Arc", self.node1.get_position())
-
         boundingRect = self.boundingRect()
 
         if self.selectionRectangle.isVisible():
@@ -152,7 +150,8 @@ class ArcItem(QGraphicsEllipseItem):
     def setPos(self, pos):
         bounding = self.boundingRect()
         offset = bounding.center()
-        super().setPos(pos - offset)
+
+        super().setPos(pos-offset)
         return
 
     def contextMenuEvent(self, event):
@@ -396,8 +395,8 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
                 "type": "Node",
                 "name": "n1",
                 "uid": uid1,
-                "position_x": "200",
-                "position_y": "300",
+                "position_x": "300",
+                "position_y": "500",
             }
         )
         node2 = graph1.create_component(
