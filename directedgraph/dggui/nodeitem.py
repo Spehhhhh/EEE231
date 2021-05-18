@@ -158,9 +158,8 @@ class NodeItem(QGraphicsEllipseItem):
 
         self.node.position[0] = scenePosition.x()
         self.node.position[1] = scenePosition.y()
-        print("node position:",self.node.position)
+        print("node position:", self.node.position)
         print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-
 
     # Handler for mouseDoubleClickEvent
     def mouseDoubleClickEvent(self, event):
