@@ -400,20 +400,8 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
 
-class DirectedGraphApplication:
-    def __init__(self):
-        app = QApplication([])
-        mainwindow = DirectedGraphMainWindow()
-        # mainwindow.showMaximized()
-        mainwindow.show()
-        sys.exit(app.exec_())
-
-    def main(self):
-        pass
-
-    def quit(self):
-        pass
-
-
 if __name__ == "__main__":
-    app = DirectedGraphApplication()
+    app = QApplication([])
+    mainwindow = DirectedGraphMainWindow()
+    mainwindow.show()
+    sys.exit(app.exec_())
