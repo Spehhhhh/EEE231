@@ -38,7 +38,7 @@ sys.path.append(father_folder)
 
 from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc, Graph
 from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
-from directedgraph.dgutils import FileManager
+from directedgraph.dgutils import FileManager, GraphSimulator
 
 
 class InputDialogNode(QDialog):
@@ -107,15 +107,15 @@ class DirectedGraphMainWindow(QMainWindow):
         self.setCentralWidget(self.widget)
 
         # Set up the Menu Bar
-        self.fileMenu = self.menuBar().addMenu("&File")
+        self.FileMenu = self.menuBar().addMenu("&File")
 
-        self.openMenuAction = self.fileMenu.addAction("&Open...")
+        self.openMenuAction = self.FileMenu.addAction("&Open...")
         self.openMenuAction.triggered.connect(self.on_open_action)
 
-        self.saveMenuAction = self.fileMenu.addAction("&Save")
+        self.saveMenuAction = self.FileMenu.addAction("&Save")
         self.saveMenuAction.triggered.connect(self.on_save_action)
 
-        self.saveAsMenuAction = self.fileMenu.addAction("&Save As...")
+        self.saveAsMenuAction = self.FileMenu.addAction("&Save As...")
         self.saveAsMenuAction.triggered.connect(self.on_save_as_action)
 
         # Setup Graph Component menu
@@ -132,6 +132,10 @@ class DirectedGraphMainWindow(QMainWindow):
 
         self.ArcAction = self.GraphComponentMenu.addAction("&Add Arc")
         self.ArcAction.triggered.connect(self.on_arc_action)
+
+        self.ActionMenu = self.menuBar().addMenu("&Action")
+        self.SimulateAction = self.ActionMenu.addAction("&Export Simulation File...")
+        self.SimulateAction.triggered.connect(self.on_simulate_action)
 
         self.graph = Graph()
         self.file_path = ""
@@ -354,6 +358,11 @@ class DirectedGraphMainWindow(QMainWindow):
         # input_dialog_arc.exec_()
         # print(input_dialog_arc.confirm())
         return
+
+    def on_simulate_action(self):
+        file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
+        sm = GraphSimulator()
+        sm.export(file_name[0], self.graph)
 
     # Other Function
     def reset_scene(self):
