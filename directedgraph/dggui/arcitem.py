@@ -56,6 +56,10 @@ class ArcItem(QGraphicsEllipseItem):
         self.node1_position = self.node1.get_position()
         self.node2_position = self.node2.get_position()
 
+        print("arc", self.arc_instance.name)
+        print("node1_position", self.node1.get_position())
+        print("node2_position", self.node2.get_position())
+
         self.arc_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
         bounding_shape = QRectF(
             self.node1_position[0] - (self.node2_position[0] - self.node1_position[0]),
@@ -63,7 +67,7 @@ class ArcItem(QGraphicsEllipseItem):
             2 * (abs(self.node1_position[0] - self.node2_position[0])),
             2 * (abs(self.node1_position[1] - self.node2_position[1])),
         )
-        print("bounding_shape:", bounding_shape.center())
+        # print("bounding_shape:", bounding_shape.center())
         super().__init__(bounding_shape)
 
         self.setZValue(0)
@@ -83,7 +87,7 @@ class ArcItem(QGraphicsEllipseItem):
         self.node1_position = self.node1.get_position()
         self.node2_position = self.node2.get_position()
 
-        print("node1_position at Arc", self.node1.get_position())
+        # print("node1_position at Arc", self.node1.get_position())
 
         boundingRect = self.boundingRect()
 
@@ -409,89 +413,171 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
     def init_graph(self):
         graph1 = Graph()
-        self.scene.addItem(
-            NodeItem(
-                graph1.create_component(
-                    {
-                        "type": "Node",
-                        "uid": "7778da",
-                        "name": "Node 1",
-                        "colour": "#fd5455",
-                        "position_x": "300",
-                        "position_y": "300",
-                    }
-                ),
-                self,
-            )
-        )
-        self.scene.addItem(
-            NodeItem(
-                graph1.create_component(
-                    {
-                        "type": "Node",
-                        "uid": "b911b2",
-                        "name": "Node 2",
-                        "colour": "#fd5455",
-                        "position_x": "800",
-                        "position_y": "800",
-                    }
-                ),
-                self,
-            )
-        )
-        self.scene.addItem(
-            NodeItem(
-                graph1.create_component(
-                    {
-                        "type": "Node",
-                        "uid": "127409",
-                        "name": "Node 3",
-                        "colour": "#fd5455",
-                        "position_x": "1000",
-                        "position_y": "1000",
-                    }
-                ),
-                self,
-            )
-        )
-        self.scene.addItem(
-            ArcItem(
-                graph1.create_component(
-                    {
-                        "type": "Arc",
-                        "uid": "9a2812",
-                        "name": "Arc 1",
-                        "colour": "#000000",
-                        "node1_uid": "7778da",
-                        "node2_uid": "b911b2",
-                        "user_defined_attribute": "5",
-                        "user_defined_arc_type": "Resistor",
-                    }
-                ),
-                self,
-            )
-        )
-        self.scene.addItem(
-            ArcItem(
-                graph1.create_component(
-                    {
-                        "type": "Arc",
-                        "uid": "9a2813",
-                        "name": "Arc 2",
-                        "colour": "#000000",
-                        "node1_uid": "7778da",
-                        "node2_uid": "127409",
-                        "user_defined_attribute": "5",
-                        "user_defined_arc_type": "Resistor",
-                    }
-                ),
-                self,
-            )
-        )
-        # file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
-        # fm = FileManager()
-        # graph1 = fm.read_graph(str(file_name[0]))
+        # self.scene.addItem(
+        #     NodeItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Node",
+        #                 "uid": "7778da",
+        #                 "name": "Node 1",
+        #                 "colour": "#fd5455",
+        #                 "position_x": "300",
+        #                 "position_y": "300",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     NodeItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Node",
+        #                 "uid": "b911b2",
+        #                 "name": "Node 2",
+        #                 "colour": "#fd5455",
+        #                 "position_x": "800",
+        #                 "position_y": "800",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     NodeItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Node",
+        #                 "uid": "127409",
+        #                 "name": "Node 3",
+        #                 "colour": "#fd5455",
+        #                 "position_x": "1000",
+        #                 "position_y": "1000",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     ArcItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Arc",
+        #                 "uid": "9a2812",
+        #                 "name": "Arc 1",
+        #                 "colour": "#000000",
+        #                 "node1_uid": "7778da",
+        #                 "node2_uid": "b911b2",
+        #                 "user_defined_attribute": "5",
+        #                 "user_defined_arc_type": "Resistor",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     ArcItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Arc",
+        #                 "uid": "9a2813",
+        #                 "name": "Arc 2",
+        #                 "colour": "#000000",
+        #                 "node1_uid": "7778da",
+        #                 "node2_uid": "127409",
+        #                 "user_defined_attribute": "5",
+        #                 "user_defined_arc_type": "Resistor",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
+        # self.scene.addItem(
+        #     ArcItem(
+        #         graph1.create_component(
+        #             {
+        #                 "type": "Arc",
+        #                 "uid": "9a2813",
+        #                 "name": "Arc 2",
+        #                 "colour": "#000000",
+        #                 "node1_uid": "b911b2",
+        #                 "node2_uid": "127409",
+        #                 "user_defined_attribute": "5",
+        #                 "user_defined_arc_type": "Resistor",
+        #             }
+        #         ),
+        #         self,
+        #     )
+        # )
 
+        # graph1.create_component(
+        #     {
+        #         "type": "Node",
+        #         "uid": "7778da",
+        #         "name": "Node 1",
+        #         "colour": "#fd5455",
+        #         "position_x": "300",
+        #         "position_y": "300",
+        #     }
+        # )
+        # graph1.create_component(
+        #     {
+        #         "type": "Node",
+        #         "uid": "b911b2",
+        #         "name": "Node 2",
+        #         "colour": "#fd5455",
+        #         "position_x": "800",
+        #         "position_y": "800",
+        #     }
+        # )
+        # graph1.create_component(
+        #     {
+        #         "type": "Node",
+        #         "uid": "127409",
+        #         "name": "Node 3",
+        #         "colour": "#fd5455",
+        #         "position_x": "1000",
+        #         "position_y": "1000",
+        #     }
+        # )
+
+        # graph1.create_component(
+        #     {
+        #         "type": "Arc",
+        #         "uid": "9a2812",
+        #         "name": "Arc 1",
+        #         "colour": "#000000",
+        #         "node1_uid": "7778da",
+        #         "node2_uid": "b911b2",
+        #         "user_defined_attribute": "5",
+        #         "user_defined_arc_type": "Resistor",
+        #     }
+        # )
+        # graph1.create_component(
+        #     {
+        #         "type": "Arc",
+        #         "uid": "9a2813",
+        #         "name": "Arc 2",
+        #         "colour": "#000000",
+        #         "node1_uid": "7778da",
+        #         "node2_uid": "127409",
+        #         "user_defined_attribute": "5",
+        #         "user_defined_arc_type": "Resistor",
+        #     }
+        # )
+        # graph1.create_component(
+        #     {
+        #         "type": "Arc",
+        #         "uid": "9a2813",
+        #         "name": "Arc 2",
+        #         "colour": "#000000",
+        #         "node1_uid": "b911b2",
+        #         "node2_uid": "127409",
+        #         "user_defined_attribute": "5",
+        #         "user_defined_arc_type": "Resistor",
+        #     }
+        # )
+        # graph1.print_graph_details()
         # for component in graph1.components.values():
         #     if type(component) == Node:
         #         self.scene.addItem(NodeItem(component, self))
@@ -502,6 +588,21 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
         #     if type(component) == Arc:
         #         self.scene.addItem(ArcItem(component, self))
         #         print(component.get())
+
+        file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
+        fm = FileManager()
+        graph1 = fm.read_graph(str(file_name[0]))
+
+        for component in graph1.components.values():
+            if type(component) == Node:
+                self.scene.addItem(NodeItem(component, self))
+            if type(component) == SourceNode:
+                self.scene.addItem(SourceNodeItem(component, self))
+            if type(component) == GroundNode:
+                self.scene.addItem(GroundNodeItem(component, self))
+            if type(component) == Arc:
+                self.scene.addItem(ArcItem(component, self))
+                # print(component.get())
 
 
 class DirectedGraphApplication:
