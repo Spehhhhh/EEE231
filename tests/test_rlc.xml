@@ -17,14 +17,14 @@
             <position_y>416.0</position_y>
         </Node>
         <SourceNode uid="b20350">
-            <name>SourceNode 1</name>
+            <name>Source 1</name>
             <colour>#0f8080</colour>
             <position_x>585.0</position_x>
             <position_y>247.0</position_y>
             <user_defined_attribute>10</user_defined_attribute>
         </SourceNode>
         <GroundNode uid="365bb9">
-            <name>GroundNode 0</name>
+            <name>Ground 0</name>
             <colour>#d4aa01</colour>
             <position_x>375.0</position_x>
             <position_y>247.0</position_y>
