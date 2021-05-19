@@ -83,7 +83,7 @@ class ArcItem(QGraphicsPathItem):
         print("end", self.end_point)
 
         super().__init__(self.arc_PainterPath)
-
+        # self.bounding_rect = self.boundingRect()
         self.setZValue(-1)
         # self.setToolTip("Arc 1")
         # self.line =QLineF(self.start, self.end)
@@ -121,13 +121,16 @@ class ArcItem(QGraphicsPathItem):
         # self.setZValue(-1)
         painter.drawPath(self.arc_PainterPath)
 
-        # self.bounding_rect.setRect(
-        #     self.start_point.x(),
-        #     self.start_point.y(),
-        #     self.mid_point.x(),
-        #     self.mid_point.x(),
-        # )
-        # painter.drawText(self.boundingRect(), Qt.AlignCenter, self.arc.name)
+        self.bounding_rect = QRectF(
+            self.start_point.x(),
+            self.end_point.y(),
+            self.end_point.x(),
+            self.start_point.y(),
+        )
+
+        print(self.bounding_rect)
+
+        painter.drawText(self.bounding_rect, Qt.AlignCenter, self.arc.name)
 
         # pen = QPen()
         # pen.setWidth(2) #线的宽度 数值越大越宽
@@ -137,7 +140,7 @@ class ArcItem(QGraphicsPathItem):
 
         # QPainter.drawPath(self.line)
         # print("Paint Call")
-        self.update()
+        self.connected_window.scene.update()
         return
 
     def mouseMoveEvent(self, event):
