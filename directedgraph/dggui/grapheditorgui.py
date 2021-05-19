@@ -1,4 +1,6 @@
 from PySide6 import QtWidgets
+from PySide6 import QtCore
+from PySide6 import QtGui
 from PySide6.QtGui import QAction, QPainter
 from PySide6.QtWidgets import (
     QApplication,
@@ -35,6 +37,68 @@ from directedgraph.dggui import (
 from directedgraph.dgutils import FileManager, GraphSimulator
 
 
+class DirectedGraphScene(QGraphicsScene):
+    def __init__(self, parent=None):
+        super(DirectedGraphScene, self).__init__(0, 0, 1980, 1080, parent)
+        self.selected_items = []
+
+    def mouseReleaseEvent(self, event):
+        pass
+        # if event.button() == 2:  # Right mouse click
+        #     # Set previous selections selected
+        #     for item in self.prevItem:
+        #         item.setSelected(1)
+
+        #     item = self.itemAt(event.lastScenePos().x(), event.lastScenePos().y())
+        #     if item:
+        #         item.setSelected(1)
+
+        # if event.button() == 1:  # Left mouse click
+        #     # Get selected item
+        #     items = self.selectedItems()
+
+        #     # Shift click
+        #     if event.modifiers() & QtCore.Qt.ShiftModifier:
+        #         # Set previous items selected
+        #         for item in self.prevItem:
+        #             item.setSelected(1)
+
+        #         for item in items:
+        #             self.prevItem.append(item)
+
+        #         item = self.itemAt(event.scenePos(), QtGui.QTransform())
+        #         if item == None:
+        #             self.clearSelection()
+
+        #         # print(self.prevItem)
+
+        #     else:
+        #         self.prevItem = []
+        #         for item in items:
+        #             self.prevItem.append(item)
+
+        # super(DirectedGraphScene, self).mouseReleaseEvent(event)
+
+    def mousePressEvent(self, event):
+        if event.modifiers() & QtCore.Qt.ShiftModifier:
+            item = self.itemAt(event.scenePos(), QtGui.QTransform())
+            # print(type(item))
+            if item:
+                if type(item) in [NodeItem, SourceNodeItem, GroundNodeItem]:
+                    item.selectionRectangle.setVisible(True)
+                    if item in self.selected_items:
+                        pass
+                    else:
+                        self.selected_items.append(item)
+                        print(self.selected_items)
+        else:
+            for item in self.selected_items:
+                item.selectionRectangle.setVisible(False)
+            self.selected_items.clear()
+
+        super(DirectedGraphScene, self).mousePressEvent(event)
+
+
 class DirectedGraphMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -42,7 +106,7 @@ class DirectedGraphMainWindow(QMainWindow):
         self.setWindowTitle("Graph Editor")
 
         # Initialise the QGraphicScene
-        self.scene = QGraphicsScene(0, 0, 1980, 1080, self)
+        self.scene = DirectedGraphScene(self)
         self.view = QGraphicsView(self.scene)
 
         self.view.setRenderHints(QPainter.Antialiasing)
@@ -116,9 +180,13 @@ class DirectedGraphMainWindow(QMainWindow):
         contextmenu.addAction(newgroundnodeaction)
         newgroundnodeaction.triggered.connect(self.on_groundnode_action)
 
-        newarcaction = QAction("New Arc")
+        newarcaction = QAction("New Arc Using UID")
         contextmenu.addAction(newarcaction)
         newarcaction.triggered.connect(self.on_arc_action)
+
+        newarcshiftaction = QAction("New Arc Using SHIFT Selection")
+        contextmenu.addAction(newarcshiftaction)
+        newarcshiftaction.triggered.connect(self.on_arc_shift_action)
 
         contextmenu.addSeparator()
 
@@ -353,6 +421,30 @@ class DirectedGraphMainWindow(QMainWindow):
                 "Wrong UID",
             )
         return
+
+    def on_arc_shift_action(self):
+        if len(self.scene.selected_items) == 2:
+            self.scene.addItem(
+                ArcItem(
+                    self.graph.create_component(
+                        {
+                            "type": "Arc",
+                            "name": "Arc 1",
+                            "node1_uid": self.scene.selected_items[0].node.uid,
+                            "node2_uid": self.scene.selected_items[1].node.uid,
+                            "user_defined_attribute": "user_define_attribute",
+                            "user_defined_arc_type": "user_define_arc_type",
+                        }
+                    ),
+                    self,
+                )
+            )
+        else:
+            QMessageBox.about(
+                self,
+                "Error",
+                "You need to select two Node",
+            )
 
     def on_simulate_action(self):
         alert = self.graph.verify_graph_integrity()
