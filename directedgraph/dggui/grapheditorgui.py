@@ -129,7 +129,6 @@ class ArcItem(QGraphicsPathItem):
         )
 
         print(self.bounding_rect)
-
         painter.drawText(self.bounding_rect, Qt.AlignCenter, self.arc.name)
 
         # pen = QPen()
