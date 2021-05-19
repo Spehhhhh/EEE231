@@ -12,10 +12,10 @@ class ArcItem(QGraphicsPathItem):
         self.arc.connected_gui = self
         self.arc.connected_window = main_window_instance
         self.connected_window = main_window_instance
-        random_list = [-30, -25, -20, -15, -10, 10, 15, 20, 30]
+        random_list = [-40, -35, -30, -25, -15, 15, 25, 30, 35, 40]
         # self.curvature = random.randint(-30, -10) * random.randint(1)
         self.curvature = random.choice(random_list)
-        print(self.curvature)
+        # print(self.curvature)
 
         self.start_point = QPointF()
         self.start_point.setX(self.arc.nodes[0].position[0])
@@ -42,9 +42,10 @@ class ArcItem(QGraphicsPathItem):
             self.end_point.x(),
             self.end_point.y(),
         )
-        print("start", self.start_point)
-        print("mid", self.mid_point)
-        print("end", self.end_point)
+
+        # print("start", self.start_point)
+        # print("mid", self.mid_point)
+        # print("end", self.end_point)
 
         super().__init__(self.arc_PainterPath)
         # self.bounding_rect = self.boundingRect()
@@ -53,7 +54,6 @@ class ArcItem(QGraphicsPathItem):
         # self.line =QLineF(self.start, self.end)
         pass
 
-    # def paint(self, painter, option, parent):
     def paint(self, painter, QStyleOptionGraphicsItem, QWidget_widget=None):
         self.prepareGeometryChange()
 
@@ -82,7 +82,7 @@ class ArcItem(QGraphicsPathItem):
             self.end_point.x(),
             self.end_point.y(),
         )
-        # self.setZValue(-1)
+
         painter.drawPath(self.arc_PainterPath)
 
         # start_point_map = self.mapToItem(self, self.start_point())
@@ -99,52 +99,36 @@ class ArcItem(QGraphicsPathItem):
         painter.drawText(
             self.mid_point.x() + self.curvature * 2,
             self.mid_point.y() + self.curvature * 2,
-            self.arc.name,
+            "Name: " + self.arc.name,
         )
-        # painter.drawText(self.bounding_rect, Qt.AlignCenter, self.arc.name)
-
-        # pen = QPen()
-        # pen.setWidth(2) #线的宽度 数值越大越宽
-        # QPainter.setPen(pen)
-        # QPainterPath(self.start)
-        # QPainter.drawLine(self.line)
-
-        # QPainter.drawPath(self.line)
-        # print("Paint Call")
-        self.connected_window.scene.update()
-        return
-
-    def mouseMoveEvent(self, event):
-        # self.prepareGeometryChange()
-        # scenePosition = event.scenePos()
-        # self.setPos(scenePosition)
-        # self.update()
-        return
-
-    def setPos(self, pos):
-        # bounding = self.boundingRect()
-        # offset = bounding.center()
-        # super().setPos(pos - offset)
-        # self.update()
+        painter.drawText(
+            self.mid_point.x() + self.curvature * 2 + 14,
+            self.mid_point.y() + self.curvature * 2 + 14,
+            self.arc.user_defined_arc_type + ": " + self.arc.user_defined_attribute,
+        )
         return
 
     def contextMenuEvent(self, event):
-        # Pop up menu for Node
         popmenu = QMenu()
 
-        # Name
         nameAction = QAction("Edit Name")
         popmenu.addAction(nameAction)
         nameAction.triggered.connect(self.on_name_action)
 
+        typeAction = QAction("Edit Arc Type")
+        popmenu.addAction(typeAction)
+        typeAction.triggered.connect(self.on_type_action)
+
+        attributeAction = QAction("Edit Arc Attribute")
+        popmenu.addAction(attributeAction)
+        attributeAction.triggered.connect(self.on_attribute_action)
+
         popmenu.addSeparator()
 
-        # Delete
         deleteAction = QAction("Delete")
         popmenu.addAction(deleteAction)
         deleteAction.triggered.connect(self.on_delete_action)
 
-        # Excute at node Position, so it won't collide with Main windows pop-up menu
         popmenu.exec_(event.screenPos())
 
     def on_name_action(self):
@@ -157,7 +141,26 @@ class ArcItem(QGraphicsPathItem):
         if result == True:
             self.arc.name = str(text)
 
+    def on_type_action(self):
+        text, result = QInputDialog.getText(
+            self.connected_window,
+            "Input",
+            "Enter Type",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            self.arc.user_defined_arc_type = str(text)
+
+    def on_attribute_action(self):
+        text, result = QInputDialog.getText(
+            self.connected_window,
+            "Input",
+            "Enter Attribute",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            self.arc.user_defined_attribute = str(text)
+
     def on_delete_action(self):
         self.arc.connected_graph.delete_component(self.arc.uid)
         self.connected_window.scene.removeItem(self)
-        pass
