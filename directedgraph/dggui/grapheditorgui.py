@@ -405,8 +405,8 @@ class DirectedGraphMainWindow(QMainWindow):
                                 "name": uid_list[0],
                                 "node1_uid": uid_list[1],
                                 "node2_uid": uid_list[2],
-                                "user_defined_attribute": uid_list[3],
-                                "user_defined_arc_type": uid_list[4],
+                                "user_defined_arc_type": uid_list[3],
+                                "user_defined_attribute": uid_list[4],
                             }
                         ),
                         self,
@@ -434,8 +434,8 @@ class DirectedGraphMainWindow(QMainWindow):
                             "name": uid_list[0],
                             "node1_uid": self.scene.selected_items[0].node.uid,
                             "node2_uid": self.scene.selected_items[1].node.uid,
-                            "user_defined_attribute": uid_list[3],
-                            "user_defined_arc_type": uid_list[4],
+                            "user_defined_arc_type": uid_list[3],
+                            "user_defined_attribute": uid_list[4],
                         }
                     ),
                     self,
