@@ -1,31 +1,14 @@
-from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
+from PySide6 import QtWidgets
+from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QAction
-from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics
+from PySide6.QtGui import QColor, QBrush
 from PySide6.QtWidgets import (
     QApplication,
     QInputDialog,
-    QMainWindow,
-    QHBoxLayout,
-    QVBoxLayout,
-    QWidget,
-    QLineEdit,
-    QPushButton,
-    QDialog,
-    QLabel,
     QColorDialog,
-)
-from PySide6 import QtWidgets
-from PySide6.QtWidgets import QMenuBar, QMenu
-from PySide6.QtWidgets import QToolBar, QStatusBar
-from PySide6.QtWidgets import QFileDialog, QMessageBox
-from PySide6.QtWidgets import (
-    QGraphicsScene,
-    QGraphicsView,
+    QMenu,
     QGraphicsEllipseItem,
-    QGraphicsPathItem,
-    QGraphicsSimpleTextItem,
     QGraphicsRectItem,
-    QGraphicsItemGroup,
 )
 
 import sys

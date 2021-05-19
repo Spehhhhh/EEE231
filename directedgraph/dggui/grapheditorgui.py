@@ -1,36 +1,23 @@
-from PySide6.QtCore import Qt, QPointF, QRectF, QEvent
-from PySide6.QtGui import QAction
-from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QBrush, QFontMetrics
+from PySide6 import QtWidgets
+from PySide6.QtGui import QAction, QPainter
 from PySide6.QtWidgets import (
     QApplication,
     QInputDialog,
     QMainWindow,
-    QHBoxLayout,
     QVBoxLayout,
     QWidget,
-    QLineEdit,
-    QPushButton,
-    QDialog,
-    QLabel,
-    QColorDialog,
 )
-from PySide6 import QtWidgets
-from PySide6.QtWidgets import QMenuBar, QMenu
-from PySide6.QtWidgets import QToolBar, QStatusBar
-from PySide6.QtWidgets import QFileDialog, QMessageBox
+
 from PySide6.QtWidgets import (
+    QMenu,
+    QFileDialog,
+    QMessageBox,
     QGraphicsScene,
     QGraphicsView,
-    QGraphicsEllipseItem,
-    QGraphicsPathItem,
-    QGraphicsSimpleTextItem,
-    QGraphicsRectItem,
-    QGraphicsItemGroup,
 )
 
 import sys
 from pathlib import Path
-import random
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
@@ -38,214 +25,14 @@ father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
 from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc, Graph
-from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
+from directedgraph.dggui import (
+    NodeItem,
+    SourceNodeItem,
+    GroundNodeItem,
+    ArcItem,
+    InputDialogArc,
+)
 from directedgraph.dgutils import FileManager, GraphSimulator
-
-
-class ArcItem(QGraphicsPathItem):
-    def __init__(self, arc_instance, main_window_instance=None):
-        self.arc = arc_instance
-        self.arc.connected_gui = self
-        self.arc.connected_window = main_window_instance
-        self.connected_window = main_window_instance
-        random_list = [-30, -25, -20, -15, -10, 10, 15, 20, 30]
-        # self.curvature = random.randint(-30, -10) * random.randint(1)
-        self.curvature = random.choice(random_list)
-        print(self.curvature)
-
-        self.start_point = QPointF()
-        self.start_point.setX(self.arc.nodes[0].position[0])
-        self.start_point.setY(self.arc.nodes[0].position[1])
-
-        self.mid_point = QPointF()
-        self.mid_point.setX(
-            (self.arc.nodes[0].position[0] + self.arc.nodes[1].position[0]) / 2
-            - self.curvature * 6
-        )
-        self.mid_point.setY(
-            (self.arc.nodes[0].position[1] + self.arc.nodes[1].position[1]) / 2
-            - self.curvature * 6
-        )
-
-        self.end_point = QPointF()
-        self.end_point.setX(self.arc.nodes[1].position[0])
-        self.end_point.setY(self.arc.nodes[1].position[1])
-
-        self.arc_PainterPath = QPainterPath(self.start_point)
-        self.arc_PainterPath.quadTo(
-            self.mid_point.x(),
-            self.mid_point.y(),
-            self.end_point.x(),
-            self.end_point.y(),
-        )
-        print("start", self.start_point)
-        print("mid", self.mid_point)
-        print("end", self.end_point)
-
-        super().__init__(self.arc_PainterPath)
-        # self.bounding_rect = self.boundingRect()
-        self.setZValue(-1)
-        # self.setToolTip("Arc 1")
-        # self.line =QLineF(self.start, self.end)
-        pass
-
-    # def paint(self, painter, option, parent):
-    def paint(self, painter, QStyleOptionGraphicsItem, QWidget_widget=None):
-        self.prepareGeometryChange()
-
-        painter.setPen(Qt.black)
-        painter.setBrush(Qt.NoBrush)
-
-        self.start_point.setX(self.arc.nodes[0].position[0])
-        self.start_point.setY(self.arc.nodes[0].position[1])
-
-        self.mid_point.setX(
-            (self.arc.nodes[0].position[0] + self.arc.nodes[1].position[0]) / 2
-            - self.curvature * 4
-        )
-        self.mid_point.setY(
-            (self.arc.nodes[0].position[1] + self.arc.nodes[1].position[1]) / 2
-            - self.curvature * 4
-        )
-
-        self.end_point.setX(self.arc.nodes[1].position[0])
-        self.end_point.setY(self.arc.nodes[1].position[1])
-
-        self.arc_PainterPath = QPainterPath(self.start_point)
-        self.arc_PainterPath.quadTo(
-            self.mid_point.x(),
-            self.mid_point.y(),
-            self.end_point.x(),
-            self.end_point.y(),
-        )
-        # self.setZValue(-1)
-        painter.drawPath(self.arc_PainterPath)
-
-        self.bounding_rect = QRectF(
-            self.start_point.x(),
-            self.end_point.y(),
-            self.end_point.x(),
-            self.start_point.y(),
-        )
-
-        print(self.bounding_rect)
-
-        painter.drawText(self.bounding_rect, Qt.AlignCenter, self.arc.name)
-
-        # pen = QPen()
-        # pen.setWidth(2) #线的宽度 数值越大越宽
-        # QPainter.setPen(pen)
-        # QPainterPath(self.start)
-        # QPainter.drawLine(self.line)
-
-        # QPainter.drawPath(self.line)
-        # print("Paint Call")
-        self.connected_window.scene.update()
-        return
-
-    def mouseMoveEvent(self, event):
-        # self.prepareGeometryChange()
-        # scenePosition = event.scenePos()
-        # self.setPos(scenePosition)
-        # self.update()
-        return
-
-    def setPos(self, pos):
-        # bounding = self.boundingRect()
-        # offset = bounding.center()
-        # super().setPos(pos - offset)
-        # self.update()
-        return
-
-    def contextMenuEvent(self, event):
-        # Pop up menu for Node
-        popmenu = QMenu()
-
-        # Name
-        nameAction = QAction("Edit Name")
-        popmenu.addAction(nameAction)
-        nameAction.triggered.connect(self.on_name_action)
-
-        popmenu.addSeparator()
-
-        # Delete
-        deleteAction = QAction("Delete")
-        popmenu.addAction(deleteAction)
-        deleteAction.triggered.connect(self.on_delete_action)
-
-        # Excute at node Position, so it won't collide with Main windows pop-up menu
-        popmenu.exec_(event.screenPos())
-
-    def on_name_action(self):
-        text, result = QInputDialog.getText(
-            self.connected_window,
-            "Input",
-            "Enter Name",
-            QtWidgets.QLineEdit.Normal,
-        )
-        if result == True:
-            self.arc.name = str(text)
-
-    def on_delete_action(self):
-        self.arc.connected_graph.delete_component(self.arc.uid)
-        self.connected_window.scene.removeItem(self)
-        pass
-
-
-class InputDialogNode(QDialog):
-    def __init__(self, parent=None):
-        super(InputDialogNode, self).__init__(parent)
-        self.setWindowTitle("Please Input Source Node Value")
-        self.edit = QLineEdit(self)
-        self.edit.placeholderText()
-        self.button = QPushButton("Confirm")
-        layout = QVBoxLayout()
-        layout.addWidget(self.edit)
-        layout.addWidget(self.button)
-        # Set dialog layout
-        self.setLayout(layout)
-        # Add button signal to greetings slot
-        self.button.clicked.connect(self.confirm)
-
-    def confirm(self):
-        try:
-            return float(self.edit.text())
-        except ValueError:
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Warning)
-            msg.setText("You have to enter a number!!")
-            msg.show()
-            msg.exec_()
-            return
-
-
-class InputDialogArc(QDialog):
-    def __init__(self, parent=None):
-        super(InputDialogArc, self).__init__(parent)
-        self.setWindowTitle("Please Input Linked Nodes UID")
-        Label=QLabel("Arc attribute")
-        self.edit1 = QLineEdit(self)
-        self.edit1.setPlaceholderText("uid1")
-        self.edit2 = QLineEdit(self)
-        self.edit2.setPlaceholderText("uid2")
-        self.edit3=QLineEdit(self)
-        self.edit3.setPlaceholderText("user_define_arc_type")
-        self.edit4=QLineEdit(self)
-        self.edit4.setPlaceholderText("user_define_attribute_type")
-        self.button = QPushButton("Confirm")
-        layout = QVBoxLayout()
-        layout.addWidget(Label)
-        layout.addWidget(self.edit1)
-        layout.addWidget(self.edit2)
-        layout.addWidget(self.edit3)
-        layout.addWidget(self.edit4)
-        layout.addWidget(self.button)
-        self.setLayout(layout)
-        self.resize(300, 100)
-        self.button.clicked.connect(self.confirm)
-
-    def confirm(self):
-        return (self.edit1.text(), self.edit2.text(),self.edit3.text(),self.edit4.text())
 
 
 class DirectedGraphMainWindow(QMainWindow):
@@ -521,8 +308,8 @@ class DirectedGraphMainWindow(QMainWindow):
         input_dialog_arc.show()
         input_dialog_arc.exec_()
         uid_list = input_dialog_arc.confirm()
-        user_define_arc_type=input_dialog_arc.confirm()[2]
-        user_define_attribute=input_dialog_arc.confirm()[3]
+        user_define_arc_type = input_dialog_arc.confirm()[2]
+        user_define_attribute = input_dialog_arc.confirm()[3]
         if uid_list[0] in self.graph.components:
             if uid_list[1] in self.graph.components:
                 self.scene.addItem(
