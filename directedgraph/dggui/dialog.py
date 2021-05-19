@@ -41,13 +41,15 @@ class InputDialogArc(QDialog):
         self.setWindowTitle("Please Input Linked Nodes UID")
         Label = QLabel("Arc attribute")
         self.edit1 = QLineEdit(self)
-        self.edit1.setPlaceholderText("uid1")
+        self.edit1.setPlaceholderText("name")
         self.edit2 = QLineEdit(self)
-        self.edit2.setPlaceholderText("uid2")
+        self.edit2.setPlaceholderText("uid1")
         self.edit3 = QLineEdit(self)
-        self.edit3.setPlaceholderText("user_define_arc_type")
+        self.edit3.setPlaceholderText("uid2")
         self.edit4 = QLineEdit(self)
-        self.edit4.setPlaceholderText("user_define_attribute_type")
+        self.edit4.setPlaceholderText("user_define_arc_type")
+        self.edit5 = QLineEdit(self)
+        self.edit5.setPlaceholderText("user_define_attribute")
         self.button = QPushButton("Confirm")
         layout = QVBoxLayout()
         layout.addWidget(Label)
@@ -55,6 +57,7 @@ class InputDialogArc(QDialog):
         layout.addWidget(self.edit2)
         layout.addWidget(self.edit3)
         layout.addWidget(self.edit4)
+        layout.addWidget(self.edit5)
         layout.addWidget(self.button)
         self.setLayout(layout)
         self.resize(300, 100)
@@ -66,4 +69,5 @@ class InputDialogArc(QDialog):
             self.edit2.text(),
             self.edit3.text(),
             self.edit4.text(),
+            self.edit5.text(),
         )

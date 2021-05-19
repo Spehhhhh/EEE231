@@ -395,8 +395,6 @@ class DirectedGraphMainWindow(QMainWindow):
         input_dialog_arc.show()
         input_dialog_arc.exec_()
         uid_list = input_dialog_arc.confirm()
-        user_define_arc_type = input_dialog_arc.confirm()[2]
-        user_define_attribute = input_dialog_arc.confirm()[3]
         if uid_list[0] in self.graph.components:
             if uid_list[1] in self.graph.components:
                 self.scene.addItem(
@@ -404,11 +402,11 @@ class DirectedGraphMainWindow(QMainWindow):
                         self.graph.create_component(
                             {
                                 "type": "Arc",
-                                "name": "Arc 1",
-                                "node1_uid": uid_list[0],
-                                "node2_uid": uid_list[1],
-                                "user_defined_attribute": user_define_attribute,
-                                "user_defined_arc_type": user_define_arc_type,
+                                "name": uid_list[0],
+                                "node1_uid": uid_list[1],
+                                "node2_uid": uid_list[2],
+                                "user_defined_attribute": uid_list[3],
+                                "user_defined_arc_type": uid_list[4],
                             }
                         ),
                         self,
@@ -423,17 +421,21 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
     def on_arc_shift_action(self):
+        input_dialog_arc = InputDialogArc()
+        input_dialog_arc.show()
+        input_dialog_arc.exec_()
+        uid_list = input_dialog_arc.confirm()
         if len(self.scene.selected_items) == 2:
             self.scene.addItem(
                 ArcItem(
                     self.graph.create_component(
                         {
                             "type": "Arc",
-                            "name": "Arc 1",
+                            "name": uid_list[0],
                             "node1_uid": self.scene.selected_items[0].node.uid,
                             "node2_uid": self.scene.selected_items[1].node.uid,
-                            "user_defined_attribute": "user_define_attribute",
-                            "user_defined_arc_type": "user_define_arc_type",
+                            "user_defined_attribute": uid_list[3],
+                            "user_defined_arc_type": uid_list[4],
                         }
                     ),
                     self,
