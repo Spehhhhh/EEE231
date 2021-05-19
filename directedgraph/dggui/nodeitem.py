@@ -114,7 +114,7 @@ class NodeItem(QGraphicsEllipseItem):
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
         # print("node paint called")
 
-        self.update()
+        self.connected_window.scene.update()
         return
 
     def setPos(self, pos):
