@@ -104,7 +104,7 @@ class NodeItem(QGraphicsEllipseItem):
         bounding = self.boundingRect()
         offset = bounding.center()
         super().setPos(pos - offset)
-        self.update()
+        # self.update()
         return
 
     # ------------------------- Mouse Event -------------------------
@@ -114,37 +114,37 @@ class NodeItem(QGraphicsEllipseItem):
     def hoverEnterEvent(self, event):
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().setOverrideCursor(Qt.OpenHandCursor)
-        self.update()
+        # self.update()
         return
 
     # This Method is used to change back the cursor when mouse is not point to the node
     def hoverLeaveEvent(self, event):
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().restoreOverrideCursor()
-        self.update()
+        # self.update()
         return
 
     # Handler for mousePressEvent
     def mousePressEvent(self, event):
-        self.prepareGeometryChange()
+        # self.prepareGeometryChange()
         # mousePos = event.pos()
         # self.selectionRectangle.setVisible(True)
         # print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        self.update()
+        # self.update()
         return
 
     # Handler for mouseReleaseEvent
     def mouseReleaseEvent(self, event):
-        self.prepareGeometryChange()
+        # self.prepareGeometryChange()
         # mousePos = event.pos()
         # self.selectionRectangle.setVisible(False)
         # print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        self.update()
+        # self.update()
         return
 
     # Handler for mouseMoveEvent
     def mouseMoveEvent(self, event):
-        self.prepareGeometryChange()
+        # self.prepareGeometryChange()
 
         scenePosition = event.scenePos()
         self.setPos(scenePosition)
@@ -153,15 +153,15 @@ class NodeItem(QGraphicsEllipseItem):
         self.node.position[1] = scenePosition.y()
         # print("node position:", self.node.position)
         # print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-        self.update()
+        # self.update()
         return
 
     # Handler for mouseDoubleClickEvent
     def mouseDoubleClickEvent(self, event):
-        self.prepareGeometryChange()
+        # self.prepareGeometryChange()
         # self.setVisible(False)
         # print("mouseDoubleClickEvent")
-        self.update()
+        # self.update()
         return
 
     # ------------------------- Pop -------------------------
