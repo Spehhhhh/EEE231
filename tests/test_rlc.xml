@@ -7,27 +7,27 @@
         <Node uid="7778da">
             <name>N2</name>
             <colour>#fd5455</colour>
-            <position_x>811.0</position_x>
-            <position_y>247.0</position_y>
+            <position_x>853.0</position_x>
+            <position_y>571.0</position_y>
         </Node>
         <Node uid="32a24b">
             <name>N3</name>
             <colour>#fd5455</colour>
-            <position_x>811.0</position_x>
-            <position_y>416.0</position_y>
+            <position_x>315.0</position_x>
+            <position_y>579.0</position_y>
         </Node>
         <SourceNode uid="b20350">
             <name>S1</name>
             <colour>#0f8080</colour>
-            <position_x>585.0</position_x>
-            <position_y>247.0</position_y>
+            <position_x>833.0</position_x>
+            <position_y>198.0</position_y>
             <user_defined_attribute>10</user_defined_attribute>
         </SourceNode>
         <GroundNode uid="365bb9">
             <name>Ground 0</name>
             <colour>#d4aa01</colour>
-            <position_x>375.0</position_x>
-            <position_y>247.0</position_y>
+            <position_x>330.0</position_x>
+            <position_y>211.0</position_y>
         </GroundNode>
         <Arc uid="2f7002">
             <name>R1</name>

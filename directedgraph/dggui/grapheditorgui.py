@@ -39,7 +39,7 @@ from directedgraph.dgutils import FileManager, GraphSimulator
 
 class DirectedGraphScene(QGraphicsScene):
     def __init__(self, parent=None):
-        super(DirectedGraphScene, self).__init__(0, 0, 1980, 1080, parent)
+        super(DirectedGraphScene, self).__init__(0, 0, 1280, 720, parent)
         self.selected_items = []
 
     def mouseReleaseEvent(self, event):

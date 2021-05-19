@@ -12,7 +12,20 @@ class ArcItem(QGraphicsPathItem):
         self.arc.connected_gui = self
         self.arc.connected_window = main_window_instance
         self.connected_window = main_window_instance
-        random_list = [-40, -35, -30, -25, -15, 15, 25, 30, 35, 40]
+        random_list = [
+            -35,
+            -33,
+            -30,
+            -27,
+            -25,
+            -23,
+            35,
+            33,
+            30,
+            27,
+            25,
+            23,
+        ]
         # self.curvature = random.randint(-30, -10) * random.randint(1)
         self.curvature = random.choice(random_list)
         # print(self.curvature)
@@ -99,7 +112,7 @@ class ArcItem(QGraphicsPathItem):
         painter.drawText(
             self.mid_point.x() + self.curvature * 2,
             self.mid_point.y() + self.curvature * 2,
-            "Name: " + self.arc.name,
+            "    Name: " + self.arc.name,
         )
         painter.drawText(
             self.mid_point.x() + self.curvature * 2 + 14,
