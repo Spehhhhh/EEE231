@@ -30,6 +30,7 @@ from PySide6.QtWidgets import (
 
 import sys
 from pathlib import Path
+import random
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 current_folder = Path(__file__).absolute().parent.parent
@@ -39,6 +40,153 @@ sys.path.append(father_folder)
 from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc, Graph
 from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
 from directedgraph.dgutils import FileManager, GraphSimulator
+
+
+class ArcItem(QGraphicsPathItem):
+    def __init__(self, arc_instance, main_window_instance=None):
+        self.arc = arc_instance
+        self.arc.connected_gui = self
+        self.arc.connected_window = main_window_instance
+        self.connected_window = main_window_instance
+        random_list = [-30, -25, -20, -15, -10, 10, 15, 20, 30]
+        # self.curvature = random.randint(-30, -10) * random.randint(1)
+        self.curvature = random.choice(random_list)
+        print(self.curvature)
+
+        self.start_point = QPointF()
+        self.start_point.setX(self.arc.nodes[0].position[0])
+        self.start_point.setY(self.arc.nodes[0].position[1])
+
+        self.mid_point = QPointF()
+        self.mid_point.setX(
+            (self.arc.nodes[0].position[0] + self.arc.nodes[1].position[0]) / 2
+            - self.curvature * 6
+        )
+        self.mid_point.setY(
+            (self.arc.nodes[0].position[1] + self.arc.nodes[1].position[1]) / 2
+            - self.curvature * 6
+        )
+
+        self.end_point = QPointF()
+        self.end_point.setX(self.arc.nodes[1].position[0])
+        self.end_point.setY(self.arc.nodes[1].position[1])
+
+        self.arc_PainterPath = QPainterPath(self.start_point)
+        self.arc_PainterPath.quadTo(
+            self.mid_point.x(),
+            self.mid_point.y(),
+            self.end_point.x(),
+            self.end_point.y(),
+        )
+        print("start", self.start_point)
+        print("mid", self.mid_point)
+        print("end", self.end_point)
+
+        super().__init__(self.arc_PainterPath)
+
+        self.setZValue(-1)
+        # self.setToolTip("Arc 1")
+        # self.line =QLineF(self.start, self.end)
+        pass
+
+    # def paint(self, painter, option, parent):
+    def paint(self, painter, QStyleOptionGraphicsItem, QWidget_widget=None):
+        self.prepareGeometryChange()
+
+        painter.setPen(Qt.black)
+        painter.setBrush(Qt.NoBrush)
+
+        self.start_point.setX(self.arc.nodes[0].position[0])
+        self.start_point.setY(self.arc.nodes[0].position[1])
+
+        self.mid_point.setX(
+            (self.arc.nodes[0].position[0] + self.arc.nodes[1].position[0]) / 2
+            - self.curvature * 4
+        )
+        self.mid_point.setY(
+            (self.arc.nodes[0].position[1] + self.arc.nodes[1].position[1]) / 2
+            - self.curvature * 4
+        )
+
+        self.end_point.setX(self.arc.nodes[1].position[0])
+        self.end_point.setY(self.arc.nodes[1].position[1])
+
+        self.arc_PainterPath = QPainterPath(self.start_point)
+        self.arc_PainterPath.quadTo(
+            self.mid_point.x(),
+            self.mid_point.y(),
+            self.end_point.x(),
+            self.end_point.y(),
+        )
+        # self.setZValue(-1)
+        painter.drawPath(self.arc_PainterPath)
+
+        # self.bounding_rect.setRect(
+        #     self.start_point.x(),
+        #     self.start_point.y(),
+        #     self.mid_point.x(),
+        #     self.mid_point.x(),
+        # )
+        # painter.drawText(self.boundingRect(), Qt.AlignCenter, self.arc.name)
+
+        # pen = QPen()
+        # pen.setWidth(2) #线的宽度 数值越大越宽
+        # QPainter.setPen(pen)
+        # QPainterPath(self.start)
+        # QPainter.drawLine(self.line)
+
+        # QPainter.drawPath(self.line)
+        # print("Paint Call")
+        self.update()
+        return
+
+    def mouseMoveEvent(self, event):
+        # self.prepareGeometryChange()
+        # scenePosition = event.scenePos()
+        # self.setPos(scenePosition)
+        # self.update()
+        return
+
+    def setPos(self, pos):
+        # bounding = self.boundingRect()
+        # offset = bounding.center()
+        # super().setPos(pos - offset)
+        # self.update()
+        return
+
+    def contextMenuEvent(self, event):
+        # Pop up menu for Node
+        popmenu = QMenu()
+
+        # Name
+        nameAction = QAction("Edit Name")
+        popmenu.addAction(nameAction)
+        nameAction.triggered.connect(self.on_name_action)
+
+        popmenu.addSeparator()
+
+        # Delete
+        deleteAction = QAction("Delete")
+        popmenu.addAction(deleteAction)
+        deleteAction.triggered.connect(self.on_delete_action)
+
+        # Excute at node Position, so it won't collide with Main windows pop-up menu
+        popmenu.exec_(event.screenPos())
+
+    def on_name_action(self):
+        text, result = QInputDialog.getText(
+            self.connected_window,
+            "Input",
+            "Enter Name",
+            QtWidgets.QLineEdit.Normal,
+        )
+        if result == True:
+            self.arc.name = str(text)
+
+    def on_delete_action(self):
+        self.arc.connected_graph.delete_component(self.arc.uid)
+        self.connected_window.scene.removeItem(self)
+        pass
 
 
 class InputDialogNode(QDialog):
@@ -191,6 +339,8 @@ class DirectedGraphMainWindow(QMainWindow):
 
         action = contextmenu.exec_(self.mapToGlobal(event.pos()))
 
+        # self.scene.addItem(ArcItem(None, self))
+
     # Trigger Function
     def on_open_action(self):
         file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
@@ -208,6 +358,8 @@ class DirectedGraphMainWindow(QMainWindow):
                 self.scene.addItem(SourceNodeItem(component, self))
             if type(component) == GroundNode:
                 self.scene.addItem(GroundNodeItem(component, self))
+            if type(component) == Arc:
+                self.scene.addItem(ArcItem(component, self))
 
         self.graph = graph1
 
@@ -290,24 +442,6 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
     def on_sourcenode_action(self):
-        # input_dialog_node = InputDialogNode()
-        # input_dialog_node.show()
-        # input_dialog_node.exec_()
-        # value = str(input_dialog_node.confirm())
-        # print("value:", value)
-
-        # text, result = QInputDialog.getText(
-        #     self,
-        #     "Input",
-        #     "Enter Name",
-        #     QtWidgets.QLineEdit.Normal,
-        # )
-
-        # if result == True:
-        #     self.node.name = str(text)
-        # self.scene.addItem(
-        #     SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
-        # )
 
         name = ""
         text, result = QInputDialog.getText(
@@ -372,10 +506,33 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
     def on_arc_action(self):
-        # input_dialog_arc = InputDialogArc()
-        # input_dialog_arc.show()
-        # input_dialog_arc.exec_()
-        # print(input_dialog_arc.confirm())
+        input_dialog_arc = InputDialogArc()
+        input_dialog_arc.show()
+        input_dialog_arc.exec_()
+        uid_list = input_dialog_arc.confirm()
+        if uid_list[0] in self.graph.components:
+            if uid_list[1] in self.graph.components:
+                self.scene.addItem(
+                    ArcItem(
+                        self.graph.create_component(
+                            {
+                                "type": "Arc",
+                                "name": "Arc 1",
+                                "node1_uid": uid_list[0],
+                                "node2_uid": uid_list[1],
+                                "user_defined_attribute": "5",
+                                "user_defined_arc_type": "Resistor",
+                            }
+                        ),
+                        self,
+                    )
+                )
+        else:
+            QMessageBox.about(
+                self,
+                "Error",
+                "Wrong UID",
+            )
         return
 
     def on_simulate_action(self):

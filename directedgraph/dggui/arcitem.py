@@ -49,7 +49,6 @@ class ArcItem(QGraphicsEllipseItem):
     def __init__(self, arc_instance, graph=None):
         self.arc_instance = arc_instance
         self.graph = graph
-        self.num_arc=0
         # 根据两端的uid获取查询所在图中两个node对象
         self.node1 = self.arc_instance.nodes[0]
         self.node2 = self.arc_instance.nodes[1]
@@ -61,66 +60,98 @@ class ArcItem(QGraphicsEllipseItem):
         print("arc", self.arc_instance.name)
         print("node1_position", self.node1.get_position())
         print("node2_position", self.node2.get_position())
-        number=random.randint(32,64)
+
         self.arc_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-        if (self.node1_position[0] <self.node2_position[0] and self.node1_position[1] < self.node2_position[1]):
-                bounding_shape = QRectF(
-                    self.node1_position[0]-(self.node2_position[0] - self.node1_position[0]),
-                    self.node1_position[1],
-                    2*(abs(self.node1_position[0] - self.node2_position[0])),
-                    2*(abs(self.node1_position[1] - self.node2_position[1]))
-                     # 2*(abs(self.node1_position[1] - self.node2_position[1])),
-                )
-        elif (self.node1_position[0]>self.node2_position[0] and self.node1_position[1]<self.node2_position[1]):
+        if (
+            self.node1_position[0] < self.node2_position[0]
+            and self.node1_position[1] < self.node2_position[1]
+        ):
             bounding_shape = QRectF(
-                self.node2_position[0],
-                self.node2_position[1]-abs(self.node2_position[1]-self.node1_position[1]),
+                self.node1_position[0]
+                - (self.node2_position[0] - self.node1_position[0]),
+                self.node1_position[1],
                 2 * (abs(self.node1_position[0] - self.node2_position[0])),
                 2 * (abs(self.node1_position[1] - self.node2_position[1]))
                 # 2*(abs(self.node1_position[1] - self.node2_position[1])),
             )
-        elif (self.node1_position[0]<self.node2_position[0] and self.node1_position[1]>self.node2_position[1]):
-            bounding_shape = QRectF(
-                self.node1_position[0],
-                self.node1_position[1] - abs(self.node1_position[1] - self.node2_position[1]),
-                2*(abs(self.node2_position[0] - self.node1_position[0])),
-                 2*(abs(self.node2_position[1] - self.node1_position[1]))
-                # 2*(abs(self.node1_position[1] - self.node2_position[1])),
-            )
-        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
-            bounding_shape = QRectF(
-                self.node2_position[0]-(self.node1_position[0] - self.node2_position[0]),
-                self.node2_position[1],
-                2 * (abs(self.node2_position[0] - self.node1_position[0])),
-                2 * (abs(self.node2_position[1] - self.node1_position[1]))
-            )
-        elif (self.node1_position[0] ==self.node2_position[0] and self.node1_position[1] <self.node2_position[1]):
-            bounding_shape = QRectF(
-                self.node1_position[0] - 0.5*abs(self.node1_position[1] - self.node2_position[1]),
-                self.node1_position[1],
-                (abs(self.node2_position[1] - self.node1_position[1])),
-                 (abs(self.node2_position[1] - self.node1_position[1]))
-            )
-        elif (self.node1_position[0] ==self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
-            bounding_shape = QRectF(
-                self.node2_position[0] - 0.5 * abs(self.node1_position[1] - self.node2_position[1]),
-                self.node2_position[1],
-                (abs(self.node2_position[1] - self.node1_position[1])),
-                (abs(self.node2_position[1] - self.node1_position[1]))
-            )
-        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] == self.node2_position[1]):
+        elif (
+            self.node1_position[0] > self.node2_position[0]
+            and self.node1_position[1] < self.node2_position[1]
+        ):
             bounding_shape = QRectF(
                 self.node2_position[0],
-                self.node2_position[1]-number,
-                (abs(self.node2_position[0] - self.node1_position[0])),
-                64
+                self.node2_position[1]
+                - abs(self.node2_position[1] - self.node1_position[1]),
+                2 * (abs(self.node1_position[0] - self.node2_position[0])),
+                2 * (abs(self.node1_position[1] - self.node2_position[1]))
+                # 2*(abs(self.node1_position[1] - self.node2_position[1])),
             )
-        elif (self.node1_position[0] <self.node2_position[0] and self.node1_position[1] == self.node2_position[1]):
+        elif (
+            self.node1_position[0] < self.node2_position[0]
+            and self.node1_position[1] > self.node2_position[1]
+        ):
             bounding_shape = QRectF(
                 self.node1_position[0],
-                self.node1_position[1] - number,
+                self.node1_position[1]
+                - abs(self.node1_position[1] - self.node2_position[1]),
+                2 * (abs(self.node2_position[0] - self.node1_position[0])),
+                2 * (abs(self.node2_position[1] - self.node1_position[1]))
+                # 2*(abs(self.node1_position[1] - self.node2_position[1])),
+            )
+        elif (
+            self.node1_position[0] > self.node2_position[0]
+            and self.node1_position[1] > self.node2_position[1]
+        ):
+            bounding_shape = QRectF(
+                self.node2_position[0]
+                - (self.node1_position[0] - self.node2_position[0]),
+                self.node2_position[1],
+                2 * (abs(self.node2_position[0] - self.node1_position[0])),
+                2 * (abs(self.node2_position[1] - self.node1_position[1])),
+            )
+        elif (
+            self.node1_position[0] == self.node2_position[0]
+            and self.node1_position[1] < self.node2_position[1]
+        ):
+            bounding_shape = QRectF(
+                self.node1_position[0]
+                - 0.5 * abs(self.node1_position[1] - self.node2_position[1]),
+                self.node1_position[1],
+                (abs(self.node2_position[1] - self.node1_position[1])),
+                (abs(self.node2_position[1] - self.node1_position[1])),
+            )
+        elif (
+            self.node1_position[0] == self.node2_position[0]
+            and self.node1_position[1] > self.node2_position[1]
+        ):
+            bounding_shape = QRectF(
+                self.node2_position[0]
+                - 0.5 * abs(self.node1_position[1] - self.node2_position[1]),
+                self.node2_position[1],
+                (abs(self.node2_position[1] - self.node1_position[1])),
+                (abs(self.node2_position[1] - self.node1_position[1])),
+            )
+        elif (
+            self.node1_position[0] > self.node2_position[0]
+            and self.node1_position[1] == self.node2_position[1]
+        ):
+            bounding_shape = QRectF(
+                self.node2_position[0],
+                self.node2_position[1]
+                - 0.5 * abs(self.node2_position[0] - self.node1_position[0]),
                 (abs(self.node2_position[0] - self.node1_position[0])),
-                number
+                (abs(self.node2_position[0] - self.node1_position[0])),
+            )
+        elif (
+            self.node1_position[0] < self.node2_position[0]
+            and self.node1_position[1] == self.node2_position[1]
+        ):
+            bounding_shape = QRectF(
+                self.node1_position[0],
+                self.node1_position[1]
+                - 0.5 * abs(self.node1_position[0] - self.node2_position[0]),
+                (abs(self.node2_position[0] - self.node1_position[0])),
+                (abs(self.node2_position[0] - self.node1_position[0])),
             )
         # print("bounding_shape:", bounding_shape.center())
         super().__init__(bounding_shape)
@@ -166,34 +197,49 @@ class ArcItem(QGraphicsEllipseItem):
             math.atan(self.node2_position[1] / self.node2_position[0]) / math.pi
         ) * 180
 
+        if (
+            self.node1_position[0] < self.node2_position[0]
+            and self.node1_position[1] < self.node2_position[1]
+        ):
+            painter.drawArc(boundingRect, 0, 90 * 16)
 
+        elif (
+            self.node1_position[0] > self.node2_position[0]
+            and self.node1_position[1] < self.node2_position[1]
+        ):
+            painter.drawArc(boundingRect, 90 * 16, 90 * 16)
 
-        if (self.node1_position[0] <self.node2_position[0] and self.node1_position[1] < self.node2_position[1]):
-                      painter.drawArc(boundingRect, 0, 90* 16)
+        elif (
+            self.node1_position[0] < self.node2_position[0]
+            and self.node1_position[1] > self.node2_position[1]
+        ):
+            painter.drawArc(boundingRect, 180 * 16, -90 * 16)
 
-
-
-
-        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] < self.node2_position[1]):
-                  painter.drawArc(boundingRect,90*16,90*16)
-
-        elif (self.node1_position[0] < self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
-                  painter.drawArc(boundingRect,180*16,-90*16)
-
-        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
-                  painter.drawArc(boundingRect,0,90*16)
-        elif (self.node1_position[0] == self.node2_position[0] and self.node1_position[1] < self.node2_position[1]):
-                  painter.drawArc(boundingRect,90*16,180*16)
-        elif (self.node1_position[0] == self.node2_position[0] and self.node1_position[1] > self.node2_position[1]):
-                  painter.drawArc(boundingRect,-90*16,-180*16)
-        elif (self.node1_position[0] > self.node2_position[0] and self.node1_position[1] == self.node2_position[1]):
-                  painter.drawArc(boundingRect,0,180*16)
-                  painter.drawArc(boundingRect,0,-180*16)
-        elif (self.node1_position[0] < self.node2_position[0] and self.node1_position[1] == self.node2_position[1]):
-                  number=random.choice([1,-1])
-                  painter.drawArc(boundingRect,180*16,number*180*16)
-
-
+        elif (
+            self.node1_position[0] > self.node2_position[0]
+            and self.node1_position[1] > self.node2_position[1]
+        ):
+            painter.drawArc(boundingRect, 0, 90 * 16)
+        elif (
+            self.node1_position[0] == self.node2_position[0]
+            and self.node1_position[1] < self.node2_position[1]
+        ):
+            painter.drawArc(boundingRect, 90 * 16, 180 * 16)
+        elif (
+            self.node1_position[0] == self.node2_position[0]
+            and self.node1_position[1] > self.node2_position[1]
+        ):
+            painter.drawArc(boundingRect, -90 * 16, -180 * 16)
+        elif (
+            self.node1_position[0] > self.node2_position[0]
+            and self.node1_position[1] == self.node2_position[1]
+        ):
+            painter.drawArc(boundingRect, 0, 180 * 16)
+        elif (
+            self.node1_position[0] < self.node2_position[0]
+            and self.node1_position[1] == self.node2_position[1]
+        ):
+            painter.drawArc(boundingRect, 180 * 16, -180 * 16)
         return
 
     def hoverEnterEvent(self, event):
@@ -241,7 +287,7 @@ class ArcItem(QGraphicsEllipseItem):
     def setPos(self, pos):
         bounding = self.boundingRect()
         offset = bounding.center()
-        super().setPos(pos-offset)
+        super().setPos(pos - offset)
         return
 
     def contextMenuEvent(self, event):
@@ -305,14 +351,12 @@ class Arc_Input(QDialog, QMainWindow):
     def __init__(self, parent=None):
         super(Arc_Input, self).__init__(parent)
         self.setWindowTitle("Input two linked nodes' uid")
-        lblDialog = QLabel("Node's uid")
         self.edit1 = QLineEdit(self)
-        self.edit1.setPlaceholderText('uid1')
+        self.edit1.placeholderText()
         self.edit2 = QLineEdit(self)
-        self.edit2.setPlaceholderText('uid2')
+        self.edit2.placeholderText()
         self.button = QPushButton("confirm")
         layout = QVBoxLayout()
-        layout.addWidget(lblDialog)
         layout.addWidget(self.edit1)
         layout.addWidget(self.edit2)
         layout.addWidget(self.button)
@@ -323,8 +367,6 @@ class Arc_Input(QDialog, QMainWindow):
 
     def confirm(self):
         return [self.edit1.text(), self.edit2.text()]
-
-
 
 
 class DirectedGraphMainWindow(QMainWindow, QDialog):
@@ -479,8 +521,8 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
                 "type": "Node",
                 "name": "n1",
                 "uid": uid1,
-                "position_x": "300",
-                "position_y": "400",
+                "position_x": "900",
+                "position_y": "800",
             }
         )
         node2 = graph1.create_component(
@@ -489,7 +531,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
                 "name": "n2",
                 "uid": uid2,
                 "position_x": "500",
-                "position_y": "600",
+                "position_y": "800",
             }
         )
         arc1 = Arc(graph1, None, "arc1", None, node1, node2, None, None)
