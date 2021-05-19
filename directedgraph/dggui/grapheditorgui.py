@@ -99,6 +99,11 @@ class DirectedGraphMainWindow(QMainWindow):
         # contextmenu.addAction(newaction)
         # newaction.triggered.connect()
 
+        reloadaction = QAction("Reload")
+        contextmenu.addAction(reloadaction)
+        reloadaction.triggered.connect(self.on_reload_action)
+        contextmenu.addSeparator()
+
         newnodeaction = QAction("New Node")
         contextmenu.addAction(newnodeaction)
         newnodeaction.triggered.connect(self.on_node_action)
@@ -138,6 +143,20 @@ class DirectedGraphMainWindow(QMainWindow):
         action = contextmenu.exec_(self.mapToGlobal(event.pos()))
 
         # self.scene.addItem(ArcItem(None, self))
+
+    def on_reload_action(self):
+        self.reset_scene()
+        fm = FileManager()
+        self.graph = fm.read_graph(self.file_path)
+        for component in self.graph.components.values():
+            if type(component) == Node:
+                self.scene.addItem(NodeItem(component, self))
+            if type(component) == SourceNode:
+                self.scene.addItem(SourceNodeItem(component, self))
+            if type(component) == GroundNode:
+                self.scene.addItem(GroundNodeItem(component, self))
+            if type(component) == Arc:
+                self.scene.addItem(ArcItem(component, self))
 
     # Trigger Function
     def on_open_action(self):
