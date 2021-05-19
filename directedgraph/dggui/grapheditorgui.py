@@ -222,14 +222,14 @@ class InputDialogArc(QDialog):
     def __init__(self, parent=None):
         super(InputDialogArc, self).__init__(parent)
         self.setWindowTitle("Please Input Linked Nodes UID")
-        Label=QLabel("Arc attribute")
+        Label = QLabel("Arc attribute")
         self.edit1 = QLineEdit(self)
         self.edit1.setPlaceholderText("uid1")
         self.edit2 = QLineEdit(self)
         self.edit2.setPlaceholderText("uid2")
-        self.edit3=QLineEdit(self)
+        self.edit3 = QLineEdit(self)
         self.edit3.setPlaceholderText("user_define_arc_type")
-        self.edit4=QLineEdit(self)
+        self.edit4 = QLineEdit(self)
         self.edit4.setPlaceholderText("user_define_attribute_type")
         self.button = QPushButton("Confirm")
         layout = QVBoxLayout()
@@ -244,7 +244,12 @@ class InputDialogArc(QDialog):
         self.button.clicked.connect(self.confirm)
 
     def confirm(self):
-        return (self.edit1.text(), self.edit2.text(),self.edit3.text(),self.edit4.text())
+        return (
+            self.edit1.text(),
+            self.edit2.text(),
+            self.edit3.text(),
+            self.edit4.text(),
+        )
 
 
 class DirectedGraphMainWindow(QMainWindow):
@@ -520,8 +525,8 @@ class DirectedGraphMainWindow(QMainWindow):
         input_dialog_arc.show()
         input_dialog_arc.exec_()
         uid_list = input_dialog_arc.confirm()
-        user_define_arc_type=input_dialog_arc.confirm()[2]
-        user_define_attribute=input_dialog_arc.confirm()[3]
+        user_define_arc_type = input_dialog_arc.confirm()[2]
+        user_define_attribute = input_dialog_arc.confirm()[3]
         if uid_list[0] in self.graph.components:
             if uid_list[1] in self.graph.components:
                 self.scene.addItem(
