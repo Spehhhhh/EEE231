@@ -287,15 +287,15 @@ class DirectedGraphMainWindow(QMainWindow):
 
         self.graph = Graph()
         self.file_path = ""
-        self.mouse_position = None
+        # self.mouse_position = None
 
     # Menu
     def contextMenuEvent(self, event):
         contextmenu = QMenu(self)
 
-        self.mouse_position = self.mapToParent(event.pos())
+        # self.mouse_position = self.mapToParent(event.pos())
 
-        print("contextMenuEvent", self.mouse_position)
+        # print("contextMenuEvent", self.mouse_position)
 
         # newaction = QAction("New Component")
         # contextmenu.addAction(newaction)
@@ -424,7 +424,7 @@ class DirectedGraphMainWindow(QMainWindow):
         if result == True:
             name = str(text)
 
-        print("on_node_action", self.mouse_position)
+        # print("on_node_action", self.mouse_position)
 
         self.scene.addItem(
             NodeItem(
@@ -432,8 +432,8 @@ class DirectedGraphMainWindow(QMainWindow):
                     {
                         "type": "Node",
                         "name": name,
-                        "position_x": self.mouse_position.x(),
-                        "position_y": self.mouse_position.y(),
+                        "position_x": "500",
+                        "position_y": "500",
                     }
                 ),
                 self,
@@ -469,8 +469,8 @@ class DirectedGraphMainWindow(QMainWindow):
                     {
                         "type": "SourceNode",
                         "name": name,
-                        "position_x": self.mouse_position.x(),
-                        "position_y": self.mouse_position.y(),
+                        "position_x": "500",
+                        "position_y": "500",
                         "user_defined_attribute": user_defined_attribute,
                     }
                 ),
@@ -496,8 +496,8 @@ class DirectedGraphMainWindow(QMainWindow):
                     {
                         "type": "GroundNode",
                         "name": name,
-                        "position_x": self.mouse_position.x(),
-                        "position_y": self.mouse_position.y(),
+                        "position_x": "500",
+                        "position_y": "500",
                     }
                 ),
                 self,
