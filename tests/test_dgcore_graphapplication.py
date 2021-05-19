@@ -11,7 +11,7 @@ current_folder = Path(__file__).absolute().parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dgcore import DirectedGraphApplication
+# from directedgraph.dgcore import DirectedGraphApplication
 
 logger.add(
     "logs/test_dgcore_graphapplication.py.log",
