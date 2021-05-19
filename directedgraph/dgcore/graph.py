@@ -15,7 +15,8 @@ class Graph:
     """
 
     def __init__(self, name=None):
-        self.connected_gui = None
+        self.connected_window = None
+
         self.groundnode_counter = 0
         self.arc_counter = 0
 

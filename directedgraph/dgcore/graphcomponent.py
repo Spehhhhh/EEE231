@@ -11,6 +11,7 @@ sys.path.append(father_folder)
 class GraphComponent:
     def __init__(self, connected_graph=None, uid=None, name=None, colour=None):
         self.connected_graph = connected_graph if connected_graph else None
+        self.connected_window = None
         self.connected_gui = None
 
         self.uid = None

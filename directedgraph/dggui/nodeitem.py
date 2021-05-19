@@ -254,7 +254,11 @@ class NodeItem(QGraphicsEllipseItem):
         )
 
     def on_delete_action(self):
-        self.node.connected_graph.delete_component(self.node.uid)  # #TODO
+        self.node.connected_graph.update_component_node_arcs()
+        for arc in self.node.arcs:
+            arc.connected_window.scene.removeItem(arc.connected_gui)
+            self.node.connected_graph.delete_component(arc.uid)
+        self.node.connected_graph.delete_component(self.node.uid)
         self.connected_window.scene.removeItem(self)
 
 

@@ -45,6 +45,8 @@ from directedgraph.dgutils import FileManager, GraphSimulator
 class ArcItem(QGraphicsPathItem):
     def __init__(self, arc_instance, main_window_instance=None):
         self.arc = arc_instance
+        self.arc.connected_gui = self
+        self.arc.connected_window = main_window_instance
         self.connected_window = main_window_instance
         random_list = [-30, -25, -20, -15, -10, 10, 15, 20, 30]
         # self.curvature = random.randint(-30, -10) * random.randint(1)
@@ -182,8 +184,8 @@ class ArcItem(QGraphicsPathItem):
             self.arc.name = str(text)
 
     def on_delete_action(self):
-        # self.arc.connected_graph.delete_component(self.arc.uid)  # #TODO
-        # self.connected_window.scene.removeItem(self)
+        self.arc.connected_graph.delete_component(self.arc.uid)
+        self.connected_window.scene.removeItem(self)
         pass
 
 
@@ -440,24 +442,6 @@ class DirectedGraphMainWindow(QMainWindow):
         return
 
     def on_sourcenode_action(self):
-        # input_dialog_node = InputDialogNode()
-        # input_dialog_node.show()
-        # input_dialog_node.exec_()
-        # value = str(input_dialog_node.confirm())
-        # print("value:", value)
-
-        # text, result = QInputDialog.getText(
-        #     self,
-        #     "Input",
-        #     "Enter Name",
-        #     QtWidgets.QLineEdit.Normal,
-        # )
-
-        # if result == True:
-        #     self.node.name = str(text)
-        # self.scene.addItem(
-        #     SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
-        # )
 
         name = ""
         text, result = QInputDialog.getText(
@@ -526,8 +510,8 @@ class DirectedGraphMainWindow(QMainWindow):
         input_dialog_arc.show()
         input_dialog_arc.exec_()
         uid_list = input_dialog_arc.confirm()
-        for uid in uid_list:
-            if uid in self.graph.components:
+        if uid_list[0] in self.graph.components:
+            if uid_list[1] in self.graph.components:
                 self.scene.addItem(
                     ArcItem(
                         self.graph.create_component(
@@ -543,12 +527,12 @@ class DirectedGraphMainWindow(QMainWindow):
                         self,
                     )
                 )
-            else:
-                QMessageBox.about(
-                    self,
-                    "Error",
-                    "Wrong UID",
-                )
+        else:
+            QMessageBox.about(
+                self,
+                "Error",
+                "Wrong UID",
+            )
         return
 
     def on_simulate_action(self):
