@@ -109,7 +109,7 @@ class DirectedGraphMainWindow(QMainWindow):
         self.scene = DirectedGraphScene(self)
         self.view = QGraphicsView(self.scene)
 
-        self.view.setRenderHints(QPainter.Antialiasing)
+        # self.view.setRenderHints(QPainter.Antialiasing) # Performance optimisation
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.view)
         self.widget = QWidget()
