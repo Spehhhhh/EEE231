@@ -83,10 +83,10 @@ class FileManager:
     def create_graph(self, graph_raw_data):
         new_graph = Graph(graph_raw_data[0][0].get("name"))
         for item in graph_raw_data[1]:
-            if item.get("type") is not "Arc":
+            if str(item.get("type")) is not "Arc":
                 new_graph.create_component(item)
         for item in graph_raw_data[1]:
-            if item.get("type") is "Arc":
+            if str(item.get("type")) is "Arc":
                 new_graph.create_component(item)
         return new_graph
 

@@ -15,7 +15,8 @@ class Graph:
     """
 
     def __init__(self, name=None):
-        self.connected_gui = None
+        self.connected_window = None
+
         self.groundnode_counter = 0
         self.arc_counter = 0
 
@@ -87,30 +88,30 @@ class Graph:
     def update_name(self, name):
         self.name = name
 
-    def update_compoment_node_arcs(self):
+    def update_component_node_arcs(self):
         self.arc_counter = 0
-        compoments_values = self.components.values()
+        components_values = self.components.values()
 
-        for compoment_inst in compoments_values:
-            if isinstance(compoment_inst, Node):
-                compoment_inst.arcs.clear()
+        for component_inst in components_values:
+            if isinstance(component_inst, Node):
+                component_inst.arcs.clear()
 
-        for compoment_inst in compoments_values:
-            if type(compoment_inst) == Arc:
+        for component_inst in components_values:
+            if type(component_inst) == Arc:
                 self.arc_counter += 1
-                compoment_inst.nodes[0].arcs.append(compoment_inst)
-                compoment_inst.nodes[1].arcs.append(compoment_inst)
+                component_inst.nodes[0].arcs.append(component_inst)
+                component_inst.nodes[1].arcs.append(component_inst)
 
     def verify_graph_integrity(self):
         return_list = []
         return_list.clear()
-        compoments_values = self.components.values()
+        components_values = self.components.values()
         self.groundnode_counter = 0
         self.arc_counter = 0
 
         # Only one Ground Node is allowed
-        for compoment_inst in compoments_values:
-            if type(compoment_inst) == GroundNode:
+        for component_inst in components_values:
+            if type(component_inst) == GroundNode:
                 self.groundnode_counter += 1
         if self.groundnode_counter != 1:
             return_list.append("Only one Ground Node is allowed")
@@ -118,11 +119,11 @@ class Graph:
             pass
 
         # Source only allows single arcs
-        self.update_compoment_node_arcs()
+        self.update_component_node_arcs()
 
-        for compoment_inst in compoments_values:
-            if type(compoment_inst) == SourceNode:
-                if len(compoment_inst.arcs) > 1:
+        for component_inst in components_values:
+            if type(component_inst) == SourceNode:
+                if len(component_inst.arcs) > 1:
                     return_list.append("Source only allows single arcs")
 
         if self.arc_counter > 50:
@@ -168,8 +169,8 @@ class Graph:
                 parameters.get("name", None),
                 parameters.get("colour", None),
                 [
-                    int(parameters.get("position_x", 0)),
-                    int(parameters.get("position_y", 0)),
+                    int(float(parameters.get("position_x", 0))),
+                    int(float(parameters.get("position_y", 0))),
                 ],
             )
             self.insert_component(component)
@@ -181,8 +182,8 @@ class Graph:
                 parameters.get("name", None),
                 parameters.get("colour", None),
                 [
-                    int(parameters.get("position_x", 0)),
-                    int(parameters.get("position_y", 0)),
+                    int(float(parameters.get("position_x", 0))),
+                    int(float(parameters.get("position_y", 0))),
                 ],
                 parameters.get("user_defined_attribute", None),
             )
@@ -195,8 +196,8 @@ class Graph:
                 parameters.get("name", None),
                 parameters.get("colour", None),
                 [
-                    int(parameters.get("position_x", 0)),
-                    int(parameters.get("position_y", 0)),
+                    int(float(parameters.get("position_x", 0))),
+                    int(float(parameters.get("position_y", 0))),
                 ],
             )
             self.insert_component(component)

@@ -11,6 +11,7 @@ sys.path.append(father_folder)
 class GraphComponent:
     def __init__(self, connected_graph=None, uid=None, name=None, colour=None):
         self.connected_graph = connected_graph if connected_graph else None
+        self.connected_window = None
         self.connected_gui = None
 
         self.uid = None
@@ -94,7 +95,8 @@ class Node(GraphComponent):
         position=None,
     ):
         self.colour = colour if colour else "#fd5455"
-        super().__init__(connected_graph, uid, name, colour)
+        super().__init__(connected_graph, uid, name, self.colour)
+
         self.position = position if position else [0, 0]
 
         # it won't get any value which can be obtained from the simulator
@@ -136,7 +138,8 @@ class SourceNode(Node):
         user_defined_attribute=None,  # Current
     ):
         self.colour = colour if colour else "#0f8080"
-        super().__init__(connected_graph, uid, name, colour, position)
+        super().__init__(connected_graph, uid, name, self.colour, position)
+
         self.user_defined_attribute = (
             user_defined_attribute if user_defined_attribute else "0"
         )
@@ -158,7 +161,7 @@ class GroundNode(Node):
         position=None,
     ):
         self.colour = colour if colour else "#d4aa01"
-        super().__init__(connected_graph, uid, name, colour, position)
+        super().__init__(connected_graph, uid, name, self.colour, position)
         self.user_defined_attribute = "0"
 
         if connected_graph != None:
