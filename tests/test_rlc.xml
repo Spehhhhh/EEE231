@@ -5,19 +5,19 @@
     </Graph>
     <Component>
         <Node uid="7778da">
-            <name>Node 2</name>
+            <name>N2</name>
             <colour>#fd5455</colour>
             <position_x>811.0</position_x>
             <position_y>247.0</position_y>
         </Node>
         <Node uid="32a24b">
-            <name>Node 3</name>
+            <name>N3</name>
             <colour>#fd5455</colour>
             <position_x>811.0</position_x>
             <position_y>416.0</position_y>
         </Node>
         <SourceNode uid="b20350">
-            <name>Source 1</name>
+            <name>S1</name>
             <colour>#0f8080</colour>
             <position_x>585.0</position_x>
             <position_y>247.0</position_y>
@@ -30,7 +30,7 @@
             <position_y>247.0</position_y>
         </GroundNode>
         <Arc uid="2f7002">
-            <name>Resistor 1</name>
+            <name>R1</name>
             <colour>#0000</colour>
             <node1_uid>b20350</node1_uid>
             <node2_uid>7778da</node2_uid>
@@ -38,7 +38,7 @@
             <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="0dcb2f">
-            <name>Resistor 2</name>
+            <name>R2</name>
             <colour>#0000</colour>
             <node1_uid>365bb9</node1_uid>
             <node2_uid>7778da</node2_uid>
@@ -46,7 +46,7 @@
             <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="33ae52">
-            <name>Resistor 3</name>
+            <name>R3</name>
             <colour>#0000</colour>
             <node1_uid>365bb9</node1_uid>
             <node2_uid>32a24b</node2_uid>
@@ -54,7 +54,7 @@
             <user_defined_arc_type>Resistor</user_defined_arc_type>
         </Arc>
         <Arc uid="6bf56b">
-            <name>Capacitor 1</name>
+            <name>C1</name>
             <colour>#0000</colour>
             <node1_uid>365bb9</node1_uid>
             <node2_uid>32a24b</node2_uid>
@@ -62,7 +62,7 @@
             <user_defined_arc_type>Capacitor</user_defined_arc_type>
         </Arc>
         <Arc uid="2201bd">
-            <name>Inductor 1</name>
+            <name>I1</name>
             <colour>#0000</colour>
             <node1_uid>7778da</node1_uid>
             <node2_uid>32a24b</node2_uid>
