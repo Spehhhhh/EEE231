@@ -215,7 +215,7 @@ class DirectedGraphMainWindow(QMainWindow):
     def on_reload_action(self):
         self.reset_scene()
         fm = FileManager()
-        self.graph = fm.read_graph(self.file_path)
+        self.graph = fm.open_graph(self.file_path)
         for component in self.graph.components.values():
             if type(component) == Node:
                 self.scene.addItem(NodeItem(component, self))
@@ -234,7 +234,7 @@ class DirectedGraphMainWindow(QMainWindow):
         self.reset_scene()
 
         fm = FileManager()
-        graph1 = fm.read_graph(str(file_name[0]))
+        graph1 = fm.open_graph(str(file_name[0]))
 
         for component in graph1.components.values():
             if type(component) == Node:
@@ -261,7 +261,7 @@ class DirectedGraphMainWindow(QMainWindow):
                 )
             else:
                 fm = FileManager()
-                fm.export_graph(self.file_path, self.graph)
+                fm.export_graph_xml(self.file_path, self.graph)
         else:
             for alert_message in alert:
                 QMessageBox.about(
@@ -276,7 +276,7 @@ class DirectedGraphMainWindow(QMainWindow):
         if len(alert) == 0:
             fm = FileManager()
             file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
-            fm.export_graph(file_name[0], self.graph)
+            fm.export_graph_xml(file_name[0], self.graph)
             self.file_path = file_name[0]  # 把路径保存到实例中
         else:
             for alert_message in alert:

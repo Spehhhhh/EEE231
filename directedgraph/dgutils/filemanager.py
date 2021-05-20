@@ -16,6 +16,8 @@ class FileManager:
         # self.link_graph = None
         pass
 
+    # Internal
+
     def parse_attribute(self, component, temp, attributes):
         for attribute in attributes:
             try:
@@ -25,11 +27,7 @@ class FileManager:
             except IndexError:
                 pass
 
-    def read_graph(self, filepath):
-        new_graph = self.create_graph(self.read_graph_raw_data(filepath))
-        return new_graph
-
-    def read_graph_raw_data(self, filepath):
+    def create_graph_raw_data(self, filepath):
         dom1 = minidom.parse(filepath)
         graph_attribute = []
         graph_components = []
@@ -51,18 +49,21 @@ class FileManager:
                 temp = {}
                 temp["type"] = component_type
                 temp["uid"] = component.getAttribute("uid")
-
                 self.parse_attribute(component, temp, ["name", "colour"])
+
                 if component_type == "Node":
                     self.parse_attribute(component, temp, ["position_x", "position_y"])
+
                 elif component_type == "SourceNode":
                     self.parse_attribute(
                         component,
                         temp,
                         ["position_x", "position_y", "user_defined_attribute"],
                     )
+
                 elif component_type == "GroundNode":
                     self.parse_attribute(component, temp, ["position_x", "position_y"])
+
                 elif component_type == "Arc":
                     self.parse_attribute(
                         component,
@@ -74,6 +75,7 @@ class FileManager:
                             "user_defined_arc_type",
                         ],
                     )
+
                 graph_components.append(temp)
 
         # Return Data as Tuple
@@ -81,16 +83,26 @@ class FileManager:
         return graph
 
     def create_graph(self, graph_raw_data):
+        # Creating Graph Instances
         new_graph = Graph(graph_raw_data[0][0].get("name"))
+
+        # Inserting component instances into Graph
         for item in graph_raw_data[1]:
             if str(item.get("type")) is not "Arc":
                 new_graph.create_component(item)
         for item in graph_raw_data[1]:
             if str(item.get("type")) is "Arc":
                 new_graph.create_component(item)
+
         return new_graph
 
-    def export_graph(self, filepath, import_graph):
+    # External
+
+    def open_graph(self, filepath):
+        new_graph = self.create_graph(self.create_graph_raw_data(filepath))
+        return new_graph
+
+    def export_graph_xml(self, filepath, import_graph):
         graph_raw_data = import_graph.get()
         graph_attribute = graph_raw_data[0]
         graph_components = graph_raw_data[1]

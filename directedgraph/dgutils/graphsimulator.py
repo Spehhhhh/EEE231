@@ -203,7 +203,7 @@ if __name__ == "__main__":
     )
 
     fm = FileManager()
-    import_graph = fm.read_graph(str(path))
+    import_graph = fm.open_graph(str(path))
     gs = GraphSimulator()
     gs.export(path_out, import_graph)
 

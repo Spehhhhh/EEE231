@@ -39,13 +39,13 @@ class TestFileManager(unittest.TestCase):
         pass
 
     @logger.catch
-    def test_read_graph(self):
+    def test_open_graph(self):
         pass
 
     @logger.catch
-    def test_read_graph_raw_data(self):
+    def test_create_graph_raw_data(self):
         fm = FileManager()
-        data1 = fm.read_graph_raw_data(str(self.path))
+        data1 = fm.create_graph_raw_data(str(self.path))
         list1 = [{"name": "My Graph"}]
         list2 = [
             {
@@ -321,13 +321,13 @@ class TestFileManager(unittest.TestCase):
         self.assertEqual(len(graph1.components), 8)
 
     @logger.catch
-    def test_export_graph(self):
+    def test_export_graph_xml(self):
         fm = FileManager()
-        graph1 = fm.read_graph(str(self.path))
+        graph1 = fm.open_graph(str(self.path))
 
         path_output = Path(os.path.dirname(__file__)).joinpath("test_out.xml")
         print("test")
-        fm.export_graph(str(path_output), graph1)
+        fm.export_graph_xml(str(path_output), graph1)
 
 
 if __name__ == "__main__":

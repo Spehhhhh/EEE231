@@ -307,7 +307,7 @@ class TestGraph(unittest.TestCase):
     def test_read_and_create_graph(self):
         fm = FileManager()
         path = Path(os.path.dirname(__file__)).joinpath("test.xml")
-        data1 = fm.read_graph_raw_data(str(path))
+        data1 = fm.create_graph_raw_data(str(path))
         graph1 = fm.create_graph(data1)
 
         graph1.verify_graph_integrity()

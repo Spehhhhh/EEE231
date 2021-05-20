@@ -711,7 +711,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 
         file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
         fm = FileManager()
-        graph1 = fm.read_graph(str(file_name[0]))
+        graph1 = fm.open_graph(str(file_name[0]))
 
         for component in graph1.components.values():
             if type(component) == Node:
