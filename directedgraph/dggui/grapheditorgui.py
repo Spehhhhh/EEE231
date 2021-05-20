@@ -42,47 +42,9 @@ class DirectedGraphScene(QGraphicsScene):
         super(DirectedGraphScene, self).__init__(0, 0, 1280, 720, parent)
         self.selected_items = []
 
-    def mouseReleaseEvent(self, event):
-        pass
-        # if event.button() == 2:  # Right mouse click
-        #     # Set previous selections selected
-        #     for item in self.prevItem:
-        #         item.setSelected(1)
-
-        #     item = self.itemAt(event.lastScenePos().x(), event.lastScenePos().y())
-        #     if item:
-        #         item.setSelected(1)
-
-        # if event.button() == 1:  # Left mouse click
-        #     # Get selected item
-        #     items = self.selectedItems()
-
-        #     # Shift click
-        #     if event.modifiers() & QtCore.Qt.ShiftModifier:
-        #         # Set previous items selected
-        #         for item in self.prevItem:
-        #             item.setSelected(1)
-
-        #         for item in items:
-        #             self.prevItem.append(item)
-
-        #         item = self.itemAt(event.scenePos(), QtGui.QTransform())
-        #         if item == None:
-        #             self.clearSelection()
-
-        #         # print(self.prevItem)
-
-        #     else:
-        #         self.prevItem = []
-        #         for item in items:
-        #             self.prevItem.append(item)
-
-        # super(DirectedGraphScene, self).mouseReleaseEvent(event)
-
     def mousePressEvent(self, event):
         if event.modifiers() & QtCore.Qt.ShiftModifier:
             item = self.itemAt(event.scenePos(), QtGui.QTransform())
-            # print(type(item))
             if item:
                 if type(item) in [NodeItem, SourceNodeItem, GroundNodeItem]:
                     item.selectionRectangle.setVisible(True)
@@ -102,6 +64,7 @@ class DirectedGraphScene(QGraphicsScene):
 class DirectedGraphMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
         # Title of the Windows
         self.setWindowTitle("Graph Editor")
 
@@ -149,19 +112,12 @@ class DirectedGraphMainWindow(QMainWindow):
 
         self.graph = Graph()
         self.file_path = ""
-        # self.mouse_position = None
 
     # Menu
     def contextMenuEvent(self, event):
         contextmenu = QMenu(self)
 
-        # self.mouse_position = self.mapToParent(event.pos())
-
         # print("contextMenuEvent", self.mouse_position)
-
-        # newaction = QAction("New Component")
-        # contextmenu.addAction(newaction)
-        # newaction.triggered.connect()
 
         reloadaction = QAction("Reload")
         contextmenu.addAction(reloadaction)
@@ -210,7 +166,7 @@ class DirectedGraphMainWindow(QMainWindow):
 
         action = contextmenu.exec_(self.mapToGlobal(event.pos()))
 
-        # self.scene.addItem(ArcItem(None, self))
+    # Trigger Function
 
     def on_reload_action(self):
         self.reset_scene()
@@ -226,7 +182,6 @@ class DirectedGraphMainWindow(QMainWindow):
             if type(component) == Arc:
                 self.scene.addItem(ArcItem(component, self))
 
-    # Trigger Function
     def on_open_action(self):
         file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
         self.file_path = str(file_name[0])
@@ -466,12 +421,13 @@ class DirectedGraphMainWindow(QMainWindow):
     # Other Function
     def reset_scene(self):
         for item in self.scene.items():
-            item.on_delete_action()
+            if type(item) == NodeItem:  # Arc will be deleted with the Node
+                item.on_delete_action()
         return
 
 
 if __name__ == "__main__":
-    app = QApplication([])
-    mainwindow = DirectedGraphMainWindow()
-    mainwindow.show()
-    sys.exit(app.exec_())
+    from main import DirectedGraphApplication
+
+    app = DirectedGraphApplication()
+    app.run()
