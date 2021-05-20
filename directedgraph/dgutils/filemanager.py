@@ -219,6 +219,6 @@ class FileManager:
 
 if __name__ == "__main__":
     import unittest
-    from tests.test_dgutils_filemanager import TestFileManager
+    from tests import TestFileManager
 
     unittest.main()

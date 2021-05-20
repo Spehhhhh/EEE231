@@ -248,6 +248,6 @@ class Graph:
 
 if __name__ == "__main__":
     import unittest
-    from tests.test_dgcore_graph import TestGraph
+    from tests import TestGraph
 
     unittest.main()  # Run Unit tests

@@ -8,9 +8,7 @@ sys.path.append(father_folder)
 
 
 if __name__ == "__main__":
-    # import unittest
-    # from tests.test_dgcore_graphapplication import TestDirectedGraphApplication
+    import unittest
+    from tests import TestDirectedGraphApplication
 
-    # unittest.main()
-    # app = DirectedGraphApplication()
-    pass
+    unittest.main()

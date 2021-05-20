@@ -179,6 +179,6 @@ class GroundNode(Node):
 
 if __name__ == "__main__":
     import unittest
-    from tests.test_dgcore_graphcomponent import TestGraphComponent
+    from tests import TestGraphComponent
 
     unittest.main()

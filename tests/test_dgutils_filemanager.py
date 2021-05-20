@@ -33,7 +33,11 @@ class TestFileManager(unittest.TestCase):
         pass
 
     def setUp(self):
-        self.path = Path(os.path.dirname(__file__)).joinpath("test.xml")
+        self.file_name = "test_rc"
+        self.file_extension = ".xml"
+        self.path = Path(os.path.dirname(__file__)).joinpath(
+            self.file_name + self.file_extension
+        )
 
     def tearDown(self):
         pass
@@ -325,7 +329,9 @@ class TestFileManager(unittest.TestCase):
         fm = FileManager()
         graph1 = fm.open_graph(str(self.path))
 
-        path_output = Path(os.path.dirname(__file__)).joinpath("test_out.xml")
+        path_output = Path(os.path.dirname(__file__)).joinpath(
+            self.file_name + "_output" + self.file_extension
+        )
         print("test")
         fm.export_graph_xml(str(path_output), graph1)
 
