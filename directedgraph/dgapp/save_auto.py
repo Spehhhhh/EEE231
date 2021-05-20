@@ -6,7 +6,7 @@ current_folder = Path(__file__).absolute().parent.parent
 father_folder = str(current_folder.parent)
 sys.path.append(father_folder)
 
-from directedgraph.dggui.grapheditorgui import DirectedGraphMainWindow
+from directedgraph.dggui import DirectedGraphMainWindow
 from threading import Timer
 
 # 循环定时器
