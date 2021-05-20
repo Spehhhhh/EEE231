@@ -1,4 +1,4 @@
-import sys
+from sys import exit
 from PySide6.QtWidgets import QApplication
 
 from directedgraph.dggui import DirectedGraphMainWindow
@@ -6,17 +6,19 @@ from directedgraph.dggui import DirectedGraphMainWindow
 
 class DirectedGraphApplication:
     def __init__(self):
-        self.auto_save_interval = 300  # Seconds
+        self.auto_save_interval = "300s"
 
     def run(self):
-        app = QApplication([])
-        mainwindow = DirectedGraphMainWindow()  # mainwindow.showMaximized()
+        print("run")
+        application = QApplication([])
 
-        mainwindow.show()
-        sys.exit(app.exec_())
+        mainwindow = DirectedGraphMainWindow()
+        mainwindow.show()  # .showMaximized()
+
+        exit(application.exec_())
 
     def run_debug(self):
-        pass
+        print("run_debug")
 
 
 if __name__ == "__main__":
