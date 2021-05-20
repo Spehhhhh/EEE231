@@ -8,15 +8,12 @@ class DirectedGraphApplication:
     def __init__(self):
         self.auto_save_interval = 300  # Seconds
 
+    def main(self):
         app = QApplication([])
-        mainwindow = DirectedGraphMainWindow()
-        # mainwindow.showMaximized()
+        mainwindow = DirectedGraphMainWindow()  # mainwindow.showMaximized()
 
         mainwindow.show()
         sys.exit(app.exec_())
-
-    def main(self):
-        pass
 
     def quit(self):
         pass
@@ -24,3 +21,4 @@ class DirectedGraphApplication:
 
 if __name__ == "__main__":
     app = DirectedGraphApplication()
+    app.main()
