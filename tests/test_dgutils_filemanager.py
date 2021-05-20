@@ -15,7 +15,7 @@ sys.path.append(father_folder)
 from directedgraph.dgutils import FileManager
 
 logger.add(
-    "logs/test_dgutils.py.log",
+    "logs/test_dgutils_filemanager.py.log",
     level="DEBUG",
     format="{time:YYYY-MM-DD :mm:ss} - {level} - {file} - {line} - {message}",
     rotation="10 MB",

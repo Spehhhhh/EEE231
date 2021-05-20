@@ -22,7 +22,7 @@ from directedgraph.dgcore import (
 from directedgraph.dgutils import FileManager
 
 logger.add(
-    "logs/test_dgcore.py.log",
+    "logs/test_dgcore_graph.py.log",
     level="DEBUG",
     format="{time:YYYY-MM-DD :mm:ss} - {level} - {file} - {line} - {message}",
     rotation="10 MB",
