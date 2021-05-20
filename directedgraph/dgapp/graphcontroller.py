@@ -1,27 +1,35 @@
-class GraphController:
-    node_counter = {
-        "GroundNode": 0,
-        "SourceNode": 0,
-    }  # dictionary for the number of ground and source nodes
-    arc_counter = (
-        {}
-    )  # dictionary that uses the node IDs as keys and the number of arcs it is connected to as value pair
-    a = 0
-    b = 0
+from directedgraph.dgcore import GroundNode
 
-    def __init__(self, node_counter, arc_counter, a, b):
-        self.node_counter = node_counter
-        self.arc_counter = arc_counter
-        self.a = a
-        self.b = b
+
+class GraphController:
+    # dictionary for the number of ground and source nodes
+    # node_counter = {
+    #     "GroundNode": 0,
+    #     "SourceNode": 0,
+    # }
+    # dictionary that uses the node IDs as keys and the number of arcs it is connected to as value pair
+    # arc_counter = {}
+    # a = 0
+    # b = 0
+
+    def __init__(self):
+        self.node_counter = {
+            "GroundNode": 0,
+            "SourceNode": 0,
+        }
+        self.arc_counter = {}
+        self.a = 0
+        self.b = 0
 
     def add_ground_node(self):
-        self.a = self.a + 1
-        self.node_counter["GroundNode"] = self.a
+        # self.a = self.a + 1
+        # self.node_counter["GroundNode"] = self.a
+        self.node_counter["GroundNode"] = self.node_counter["GroundNode"] + 1
 
     def remove_ground_node(self):
-        self.a = self.a - 1
-        self.node_counter["GroundNode"] = self.a
+        # self.a = self.a - 1
+        # self.node_counter["GroundNode"] = self.a
+        self.node_counter["GroundNode"] = self.node_counter["GroundNode"] - 1
 
     def add_source_node(self):
         self.b = self.b + 1
@@ -48,10 +56,9 @@ class GraphController:
         self.arc_counter[node1] = self.arc_counter[node1] - 1
         self.arc_counter[node2] = self.arc_counter[node2] - 1
 
-    def insert_component(self, graph_instance, parameters):
+    def create_component(self, graph_instance, parameters):
         if parameters["type"] == "GroundNode":
             if self.node_counter["GroundNode"] == 0:
-                id = generate_uid
                 temp = graph_instance.create_component(parameters)
                 self.add_ground_node()
                 return temp
@@ -59,13 +66,11 @@ class GraphController:
                 return "Ground Node already exist"
 
         if parameters["type"] == "SourceNode":
-            id = generate_uid
             temp = graph_instance.create_component(parameters)
             self.add_source_node()
             return temp
 
         if parameters["type"] == "Node":
-            id = generate_uid
             temp = graph_instance.create_component(parameters)
             return temp
 
@@ -117,7 +122,6 @@ class GraphController:
                 return "Arc Property Must be Positive"
 
             if (valid1 == 1) and (valid2 == 1) and (valid3 == 1):
-                id = generate_uid
                 temp = graph_instance.create_component(
                     parameters
                 )  # if it passes the tests, the arc will be created
@@ -126,30 +130,35 @@ class GraphController:
                 )  # pass the 2 node IDs to be used as keys in the arc_counter dictionary
                 return temp
 
-    def delete_component(self, graph_instance, parameters):
-        if parameters["type"] == "SourceNode":
-            if self.node_counter["SourceNode"] == 1:
-                return "There must be at least one source node"
-            else:
-                temp = graph_instance.delete_component(parameters["uid"])
-                self.remove_source_node()
-                return temp
+    def delete_component(self, graph_instance, uid):
+        # if parameters["type"] == "SourceNode":
+        #     if self.node_counter["SourceNode"] == 1:
+        #         return "There must be at least one source node"
+        #     else:
+        #         temp = graph_instance.delete_component(parameters["uid"])
+        #         self.remove_source_node()
+        #         return temp
 
-        if parameters["type"] == "GroundNode":
-            if self.node_counter["GroundNode"] == 1:
-                return "There must be at least one ground node"
-            else:
-                temp = graph_instance.delete_component(parameters["uid"])
-                self.remove_ground_node()
-                return temp
+        # if parameters["type"] == "GroundNode":
+        #     if self.node_counter["GroundNode"] == 1:
+        #         return "There must be at least one ground node"
+        #     else:
+        #         temp = graph_instance.delete_component(parameters["uid"])
+        #         self.remove_ground_node()
+        #         return temp
 
-        if parameters["type"] == "Node":
-            temp = graph_instance.delete_component(parameters["uid"])
-            return temp
+        # if parameters["type"] == "Node":
+        #     temp = graph_instance.delete_component(parameters["uid"])
+        #     return temp
 
-        if parameters["type"] == "Arc":
-            temp = graph_instance.delete_component(parameters["uid"])
-            self.remove_arc(parameters["node1_uid"], parameters["node2_uid"])
+        # if parameters["type"] == "Arc":
+        #     temp = graph_instance.delete_component(parameters["uid"])
+        #     self.remove_arc(parameters["node1_uid"], parameters["node2_uid"])
 
+        component_type = type(graph_instance.get_component(uid))
+
+        if component_type == GroundNode:
+            return "There must be at least one ground node"
         else:
-            return "error"
+            temp = graph_instance.delete_component(uid)
+            return temp
