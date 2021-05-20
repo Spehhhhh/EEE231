@@ -9,16 +9,16 @@ class DirectedGraphApplication:
         self.auto_save_interval = "300s"
 
     def run(self):
-        print("run")
-        application = QApplication([])
+        print("Running")
+        self.application = QApplication([])
 
-        mainwindow = DirectedGraphMainWindow()
-        mainwindow.show()  # .showMaximized()
+        self.mainwindow = DirectedGraphMainWindow()
+        self.mainwindow.show()  # .showMaximized()
 
-        exit(application.exec_())
+        exit(self.application.exec_())
 
     def run_debug(self):
-        print("run_debug")
+        print("Running Debug Mode")
 
 
 if __name__ == "__main__":
