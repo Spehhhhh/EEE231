@@ -4,9 +4,9 @@ from pathlib import Path
 import csv
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
-current_folder = Path(__file__).absolute().parent.parent
-father_folder = str(current_folder.parent)
-sys.path.append(father_folder)
+CURRENT_DIRECTORY = Path(__file__).absolute()
+ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
+sys.path.append(str(ROOT_FOLDER))
 
 from directedgraph.dgcore import Graph, Node, SourceNode, GroundNode, Arc
 from directedgraph.dgutils import FileManager

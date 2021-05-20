@@ -1,9 +1,9 @@
 import sys
 from pathlib import Path
 
-current_folder = Path(__file__).absolute().parent
-father_folder = str(current_folder.parent)
-sys.path.append(father_folder)
+CURRENT_FOLDER = Path(__file__).absolute().parent.parent.parent
+CURRENT_FOLDER_PATH = str(CURRENT_FOLDER)
+sys.path.append(CURRENT_FOLDER_PATH)
 
 from directedgraph.dgcore import (
     Node,
