@@ -35,6 +35,7 @@ from directedgraph.dggui import (
     InputDialogArc,
 )
 from directedgraph.dgutils import FileManager, GraphSimulator
+from directedgraph.dgapp import GraphController
 
 
 class DirectedGraphScene(QGraphicsScene):
@@ -64,6 +65,11 @@ class DirectedGraphScene(QGraphicsScene):
 class DirectedGraphMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.connected_graph = Graph()
+        self.connected_graphcontroller = GraphController()
+        self.scene_position = QtCore.QPointF(0, 0)
+        self.file_path = ""
 
         # Title of the Windows
         self.setWindowTitle("Graph Editor")
@@ -110,14 +116,9 @@ class DirectedGraphMainWindow(QMainWindow):
         self.SimulateAction = self.ActionMenu.addAction("&Export Simulation File...")
         self.SimulateAction.triggered.connect(self.on_simulate_action)
 
-        self.graph = Graph()
-        self.file_path = ""
-
     # Menu
     def contextMenuEvent(self, event):
         contextmenu = QMenu(self)
-
-        # print("contextMenuEvent", self.mouse_position)
 
         reloadaction = QAction("Reload")
         contextmenu.addAction(reloadaction)
@@ -164,6 +165,8 @@ class DirectedGraphMainWindow(QMainWindow):
         contextmenu.addAction(helpaction)
         helpaction.triggered.connect(self.on_about_action)
 
+        self.scene_position = self.view.mapFromGlobal(self.mapToGlobal(event.pos()))
+
         action = contextmenu.exec_(self.mapToGlobal(event.pos()))
 
     # Trigger Function
@@ -171,8 +174,9 @@ class DirectedGraphMainWindow(QMainWindow):
     def on_reload_action(self):
         self.reset_scene()
         fm = FileManager()
-        self.graph = fm.open_graph(self.file_path)
-        for component in self.graph.components.values():
+        self.connected_graph = fm.open_graph(self.file_path)
+
+        for component in self.connected_graph.components.values():
             if type(component) == Node:
                 self.scene.addItem(NodeItem(component, self))
             if type(component) == SourceNode:
@@ -189,9 +193,9 @@ class DirectedGraphMainWindow(QMainWindow):
         self.reset_scene()
 
         fm = FileManager()
-        graph1 = fm.open_graph(str(file_name[0]))
+        self.connected_graph = fm.open_graph(str(file_name[0]))
 
-        for component in graph1.components.values():
+        for component in self.connected_graph.components.values():
             if type(component) == Node:
                 self.scene.addItem(NodeItem(component, self))
             if type(component) == SourceNode:
@@ -201,12 +205,8 @@ class DirectedGraphMainWindow(QMainWindow):
             if type(component) == Arc:
                 self.scene.addItem(ArcItem(component, self))
 
-        self.graph = graph1
-
-        return
-
     def on_save_action(self):
-        alert = self.graph.verify_graph_integrity()
+        alert = self.connected_graph.verify_graph_integrity()
         if len(alert) == 0:
             if self.file_path == "":
                 QMessageBox.about(
@@ -216,7 +216,7 @@ class DirectedGraphMainWindow(QMainWindow):
                 )
             else:
                 fm = FileManager()
-                fm.export_graph_xml(self.file_path, self.graph)
+                fm.export_graph_xml(self.file_path, self.connected_graph)
         else:
             for alert_message in alert:
                 QMessageBox.about(
@@ -224,15 +224,15 @@ class DirectedGraphMainWindow(QMainWindow):
                     "Error",
                     alert_message,
                 )
-        return
 
     def on_save_as_action(self):
-        alert = self.graph.verify_graph_integrity()
+        alert = self.connected_graph.verify_graph_integrity()
+
         if len(alert) == 0:
             fm = FileManager()
             file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
-            fm.export_graph_xml(file_name[0], self.graph)
-            self.file_path = file_name[0]  # 把路径保存到实例中
+            fm.export_graph_xml(file_name[0], self.connected_graph)
+            self.file_path = file_name[0]
         else:
             for alert_message in alert:
                 QMessageBox.about(
@@ -240,10 +240,6 @@ class DirectedGraphMainWindow(QMainWindow):
                     "Error",
                     alert_message,
                 )
-        return
-
-    def on_preferences_action(self):
-        return
 
     def on_about_action(self):
         QMessageBox.about(
@@ -251,39 +247,38 @@ class DirectedGraphMainWindow(QMainWindow):
             "About this program",
             "https://github.com/pirlite2/EEE231-group-B",
         )
-        return
 
     def on_node_action(self):
-        name = ""
-        text, result = QInputDialog.getText(
-            self,
-            "Input",
-            "Enter Name",
-            QtWidgets.QLineEdit.Normal,
-        )
-        if result == True:
-            name = str(text)
-
         # print("on_node_action", self.mouse_position)
 
-        self.scene.addItem(
-            NodeItem(
-                self.graph.create_component(
-                    {
-                        "type": "Node",
-                        "name": name,
-                        "position_x": "500",
-                        "position_y": "500",
-                    }
-                ),
-                self,
-            )
+        name = ""
+
+        text, result = QInputDialog.getText(
+            self,
+            "Input",
+            "Enter Name",
+            QtWidgets.QLineEdit.Normal,
         )
-        return
+
+        if result == True:
+            name = str(text)
+            self.scene.addItem(
+                NodeItem(
+                    self.connected_graph.create_component(
+                        {
+                            "type": "Node",
+                            "name": name,
+                            "position_x": self.scene_position.x(),
+                            "position_y": self.scene_position.y(),
+                        }
+                    ),
+                    self,
+                )
+            )
 
     def on_sourcenode_action(self):
-
         name = ""
+
         text, result = QInputDialog.getText(
             self,
             "Input",
@@ -293,31 +288,29 @@ class DirectedGraphMainWindow(QMainWindow):
         if result == True:
             name = str(text)
 
-        user_defined_attribute = ""
-        text, result = QInputDialog.getText(
-            self,
-            "Input",
-            "Enter User Defined Attribute",
-            QtWidgets.QLineEdit.Normal,
-        )
-        if result == True:
-            user_defined_attribute = str(text)
-
-        self.scene.addItem(
-            SourceNodeItem(
-                self.graph.create_component(
-                    {
-                        "type": "SourceNode",
-                        "name": name,
-                        "position_x": "500",
-                        "position_y": "500",
-                        "user_defined_attribute": user_defined_attribute,
-                    }
-                ),
+            text, result = QInputDialog.getText(
                 self,
+                "Input",
+                "Enter User Defined Attribute",
+                QtWidgets.QLineEdit.Normal,
             )
-        )
-        return
+            if result == True:
+                user_defined_attribute = str(text)
+
+                self.scene.addItem(
+                    SourceNodeItem(
+                        self.connected_graph.create_component(
+                            {
+                                "type": "SourceNode",
+                                "name": name,
+                                "position_x": self.scene_position.x(),
+                                "position_y": self.scene_position.y(),
+                                "user_defined_attribute": user_defined_attribute,
+                            }
+                        ),
+                        self,
+                    )
+                )
 
     def on_groundnode_action(self, event):
         name = ""
@@ -330,31 +323,30 @@ class DirectedGraphMainWindow(QMainWindow):
         if result == True:
             name = str(text)
 
-        self.scene.addItem(
-            NodeItem(
-                self.graph.create_component(
-                    {
-                        "type": "GroundNode",
-                        "name": name,
-                        "position_x": "500",
-                        "position_y": "500",
-                    }
-                ),
-                self,
+            self.scene.addItem(
+                NodeItem(
+                    self.connected_graph.create_component(
+                        {
+                            "type": "GroundNode",
+                            "name": name,
+                            "position_x": self.scene_position.x(),
+                            "position_y": self.scene_position.y(),
+                        },
+                    ),
+                    self,
+                )
             )
-        )
-        return
 
     def on_arc_action(self):
         input_dialog_arc = InputDialogArc()
         input_dialog_arc.show()
         input_dialog_arc.exec_()
         uid_list = input_dialog_arc.confirm()
-        if uid_list[0] in self.graph.components:
-            if uid_list[1] in self.graph.components:
+        if uid_list[0] in self.connected_graph.components:
+            if uid_list[1] in self.connected_graph.components:
                 self.scene.addItem(
                     ArcItem(
-                        self.graph.create_component(
+                        self.connected_graph.create_component(
                             {
                                 "type": "Arc",
                                 "name": uid_list[0],
@@ -373,7 +365,6 @@ class DirectedGraphMainWindow(QMainWindow):
                 "Error",
                 "Wrong UID",
             )
-        return
 
     def on_arc_shift_action(self):
         input_dialog_arc = InputDialogArc()
@@ -383,7 +374,7 @@ class DirectedGraphMainWindow(QMainWindow):
         if len(self.scene.selected_items) == 2:
             self.scene.addItem(
                 ArcItem(
-                    self.graph.create_component(
+                    self.connected_graph.create_component(
                         {
                             "type": "Arc",
                             "name": uid_list[0],
@@ -404,11 +395,11 @@ class DirectedGraphMainWindow(QMainWindow):
             )
 
     def on_simulate_action(self):
-        alert = self.graph.verify_graph_integrity()
+        alert = self.connected_graph.verify_graph_integrity()
         if len(alert) == 0:
             file_name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
             sm = GraphSimulator()
-            sm.export(file_name[0], self.graph)
+            sm.export(file_name[0], self.connected_graph)
         else:
             for alert_message in alert:
                 QMessageBox.about(
@@ -416,14 +407,13 @@ class DirectedGraphMainWindow(QMainWindow):
                     "Error",
                     alert_message,
                 )
-        return
 
     # Other Function
     def reset_scene(self):
         for item in self.scene.items():
             if type(item) == NodeItem:  # Arc will be deleted with the Node
                 item.on_delete_action()
-        return
+        self.connected_graphcontroller = GraphController()
 
 
 if __name__ == "__main__":
