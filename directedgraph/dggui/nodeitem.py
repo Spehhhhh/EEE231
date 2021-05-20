@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QMenu,
     QGraphicsEllipseItem,
     QGraphicsRectItem,
+    QMessageBox,
 )
 
 import sys
@@ -114,38 +115,30 @@ class NodeItem(QGraphicsEllipseItem):
     def hoverEnterEvent(self, event):
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().setOverrideCursor(Qt.OpenHandCursor)
-        # self.update()
         return
 
     # This Method is used to change back the cursor when mouse is not point to the node
     def hoverLeaveEvent(self, event):
         app = QApplication.instance()  # Obtain the Q application instance
         app.instance().restoreOverrideCursor()
-        # self.update()
         return
 
     # Handler for mousePressEvent
     def mousePressEvent(self, event):
-        # self.prepareGeometryChange()
         # mousePos = event.pos()
         # self.selectionRectangle.setVisible(True)
         # print("mousePressEvent at", mousePos.x(), ", ", mousePos.y())
-        # self.update()
         return
 
     # Handler for mouseReleaseEvent
     def mouseReleaseEvent(self, event):
-        # self.prepareGeometryChange()
         # mousePos = event.pos()
         # self.selectionRectangle.setVisible(False)
         # print("mouseReleaseEvent at ", mousePos.x(), ", ", mousePos.y())
-        # self.update()
         return
 
     # Handler for mouseMoveEvent
     def mouseMoveEvent(self, event):
-        # self.prepareGeometryChange()
-
         scenePosition = event.scenePos()
         self.setPos(scenePosition)
 
@@ -153,15 +146,12 @@ class NodeItem(QGraphicsEllipseItem):
         self.node.position[1] = scenePosition.y()
         # print("node position:", self.node.position)
         # print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
-        # self.update()
         return
 
     # Handler for mouseDoubleClickEvent
     def mouseDoubleClickEvent(self, event):
-        # self.prepareGeometryChange()
         # self.setVisible(False)
         # print("mouseDoubleClickEvent")
-        # self.update()
         return
 
     # ------------------------- Pop -------------------------
@@ -297,3 +287,10 @@ class SourceNodeItem(NodeItem):
 class GroundNodeItem(NodeItem):
     def __init__(self, node_instance, main_window_instance):
         super().__init__(node_instance, main_window_instance)
+
+    def on_duplicate_action(self):
+        QMessageBox.about(
+            self.connected_window,
+            "Error",
+            "GroundNode cannot Duplicate",
+        )
