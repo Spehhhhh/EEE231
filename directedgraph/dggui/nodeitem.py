@@ -26,8 +26,6 @@ from directedgraph.dgutils import FileManager
 
 
 class NodeItem(QGraphicsEllipseItem):
-    # Global Config
-
     def __init__(self, node_instance, main_window_instance):
         self.node = node_instance
         self.connected_window = main_window_instance
@@ -49,7 +47,7 @@ class NodeItem(QGraphicsEllipseItem):
             2.0 * self.node_radius,
             2.0 * self.node_radius,
         )
-        # Bounding rectangle of node 'ellipse' i.e. circle
+
         super().__init__(bounding_shape)
 
         self.setZValue(10)
@@ -67,9 +65,9 @@ class NodeItem(QGraphicsEllipseItem):
 
     # ------------------------- paint -------------------------
 
+    # Paint the node instance - called by QGraphicView instance
     def paint(self, painter, option, parent):
-        # Paint the node instance - called by QGraphicView instance
-        self.prepareGeometryChange()
+
         boundingRect = self.boundingRect()
 
         if self.selectionRectangle.isVisible():
@@ -96,16 +94,17 @@ class NodeItem(QGraphicsEllipseItem):
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
         boundingRect.adjust(0, -40, 0, -40)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
+
+        self.connected_window.scene.update()  # Fixing Arc's dragging issue
+
         # print("node paint called")
 
-        self.connected_window.scene.update()
         return
 
     def setPos(self, pos):
         bounding = self.boundingRect()
         offset = bounding.center()
         super().setPos(pos - offset)
-        # self.update()
         return
 
     # ------------------------- Mouse Event -------------------------
@@ -140,12 +139,15 @@ class NodeItem(QGraphicsEllipseItem):
     # Handler for mouseMoveEvent
     def mouseMoveEvent(self, event):
         scenePosition = event.scenePos()
+
         self.setPos(scenePosition)
 
         self.node.position[0] = scenePosition.x()
         self.node.position[1] = scenePosition.y()
+
         # print("node position:", self.node.position)
         # print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
+
         return
 
     # Handler for mouseDoubleClickEvent
@@ -156,7 +158,7 @@ class NodeItem(QGraphicsEllipseItem):
 
     # ------------------------- Pop -------------------------
 
-    # Pop Menu
+    # Pop Context Menu
     def contextMenuEvent(self, event):
         # Pop up menu for Node
         popmenu = QMenu()
@@ -240,7 +242,6 @@ class SourceNodeItem(NodeItem):
         super().__init__(node_instance, main_window_instance)
 
     def paint(self, painter, option, parent):
-        self.prepareGeometryChange()
         boundingRect = self.boundingRect()
 
         if self.selectionRectangle.isVisible():
@@ -265,8 +266,6 @@ class SourceNodeItem(NodeItem):
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.name)
         boundingRect.adjust(0, -40, 0, -40)
         painter.drawText(boundingRect, Qt.AlignCenter, self.node.uid)
-        self.update()
-        return
 
     def on_duplicate_action(self):
         self.connected_window.scene.addItem(

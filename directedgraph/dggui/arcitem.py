@@ -8,10 +8,6 @@ import random
 
 class ArcItem(QGraphicsPathItem):
     def __init__(self, arc_instance, main_window_instance=None):
-        self.arc = arc_instance
-        self.arc.connected_gui = self
-        self.arc.connected_window = main_window_instance
-        self.connected_window = main_window_instance
         random_list = [
             -35,
             -33,
@@ -26,8 +22,12 @@ class ArcItem(QGraphicsPathItem):
             25,
             23,
         ]
-        # self.curvature = random.randint(-30, -10) * random.randint(1)
+        self.arc = arc_instance
+        self.arc.connected_gui = self
+        self.arc.connected_window = main_window_instance
+        self.connected_window = main_window_instance
         self.curvature = random.choice(random_list)
+        # self.curvature = random.randint(-30, -10) * random.randint(1)
         # print(self.curvature)
 
         self.start_point = QPointF()
@@ -56,20 +56,11 @@ class ArcItem(QGraphicsPathItem):
             self.end_point.y(),
         )
 
-        # print("start", self.start_point)
-        # print("mid", self.mid_point)
-        # print("end", self.end_point)
-
         super().__init__(self.arc_PainterPath)
-        # self.bounding_rect = self.boundingRect()
         self.setZValue(-1)
-        # self.setToolTip("Arc 1")
-        # self.line =QLineF(self.start, self.end)
         pass
 
     def paint(self, painter, QStyleOptionGraphicsItem, QWidget_widget=None):
-        self.prepareGeometryChange()
-
         painter.setPen(Qt.black)
         painter.setBrush(Qt.NoBrush)
 
@@ -95,20 +86,8 @@ class ArcItem(QGraphicsPathItem):
             self.end_point.x(),
             self.end_point.y(),
         )
-
         painter.drawPath(self.arc_PainterPath)
 
-        # start_point_map = self.mapToItem(self, self.start_point())
-        # end_point_map = self.mapToItem(self, self.end_point())
-
-        # self.bounding_rect = QRectF(
-        #     self.start_point_map.x(),
-        #     self.end_point_map.y(),
-        #     self.end_point_map.x(),
-        #     self.start_point_map.y(),
-        # )
-
-        # print(self.bounding_rect)
         painter.drawText(
             self.mid_point.x() + self.curvature * 2,
             self.mid_point.y() + self.curvature * 2,
@@ -119,7 +98,6 @@ class ArcItem(QGraphicsPathItem):
             self.mid_point.y() + self.curvature * 2 + 14,
             self.arc.user_defined_arc_type + ": " + self.arc.user_defined_attribute,
         )
-        return
 
     def contextMenuEvent(self, event):
         popmenu = QMenu()
