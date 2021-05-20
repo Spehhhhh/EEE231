@@ -7,7 +7,7 @@ import random
 
 
 class ArcItem(QGraphicsPathItem):
-    def __init__(self, arc_instance, main_window_instance=None):
+    def __init__(self, arc_inst, main_window_inst=None):
         random_list = [
             -35,
             -33,
@@ -22,10 +22,10 @@ class ArcItem(QGraphicsPathItem):
             25,
             23,
         ]
-        self.arc = arc_instance
+        self.arc = arc_inst
         self.arc.connected_gui = self
-        self.arc.connected_window = main_window_instance
-        self.connected_window = main_window_instance
+        self.arc.connected_window = main_window_inst
+        self.connected_window = main_window_inst
         self.curvature = random.choice(random_list)
         # self.curvature = random.randint(-30, -10) * random.randint(1)
         # print(self.curvature)

@@ -35,18 +35,18 @@ from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
 
 
 class ArcItem(QGraphicsEllipseItem):
-    def __init__(self, arc_instance, graph=None):
-        self.arc_instance = arc_instance
+    def __init__(self, arc_inst, graph=None):
+        self.arc_inst = arc_inst
         self.graph = graph
         # 根据两端的uid获取查询所在图中两个node对象
-        self.node1 = self.arc_instance.nodes[0]
-        self.node2 = self.arc_instance.nodes[1]
+        self.node1 = self.arc_inst.nodes[0]
+        self.node2 = self.arc_inst.nodes[1]
 
         # 再根据两个node对象得到两个node对象的位置
         self.node1_position = self.node1.get_position()
         self.node2_position = self.node2.get_position()
 
-        print("arc", self.arc_instance.name)
+        print("arc", self.arc_inst.name)
         print("node1_position", self.node1.get_position())
         print("node2_position", self.node2.get_position())
 
@@ -177,8 +177,8 @@ class ArcItem(QGraphicsEllipseItem):
         painter.setBrush(self.arc_fill_brush)
 
         painter.setPen(Qt.black)
-        # painter.drawText(boundingRect,Qt.AlignCenter,self.arc_instance.name)
-        # painter.drawText(boundingRect, Qt.AlignCenter, self.arc_instance.uid)
+        # painter.drawText(boundingRect,Qt.AlignCenter,self.arc_inst.name)
+        # painter.drawText(boundingRect, Qt.AlignCenter, self.arc_inst.uid)
         degree1 = (
             math.atan(self.node1_position[1] / self.node1_position[0]) / math.pi
         ) * 180

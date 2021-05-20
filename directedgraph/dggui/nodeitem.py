@@ -26,9 +26,9 @@ from directedgraph.dgutils import FileManager
 
 
 class NodeItem(QGraphicsEllipseItem):
-    def __init__(self, node_instance, main_window_instance):
-        self.node = node_instance
-        self.connected_window = main_window_instance
+    def __init__(self, node_inst, main_window_inst):
+        self.node = node_inst
+        self.connected_window = main_window_inst
 
         self.node_radius = 40.0
 
@@ -145,7 +145,7 @@ class NodeItem(QGraphicsEllipseItem):
         self.node.position[0] = scenePosition.x()
         self.node.position[1] = scenePosition.y()
 
-        # print("node position:", self.node.position)
+        print("NodeItem Position:", self.node.position)
         # print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
 
         return
@@ -230,16 +230,17 @@ class NodeItem(QGraphicsEllipseItem):
 
     def on_delete_action(self):
         self.node.connected_graph.update_component_node_arcs()
-        for arc in self.node.arcs:
-            arc.connected_window.scene.removeItem(arc.connected_gui)
-            self.node.connected_graph.delete_component(arc.uid)
-        self.node.connected_graph.delete_component(self.node.uid)
-        self.connected_window.scene.removeItem(self)
+
+        if self.node.connected_graph.delete_component(self.node.uid):
+            for arc in self.node.arcs:
+                arc.connected_window.scene.removeItem(arc.connected_gui)
+                self.node.connected_graph.delete_component(arc.uid)
+            self.connected_window.scene.removeItem(self)
 
 
 class SourceNodeItem(NodeItem):
-    def __init__(self, node_instance, main_window_instance):
-        super().__init__(node_instance, main_window_instance)
+    def __init__(self, node_inst, main_window_inst):
+        super().__init__(node_inst, main_window_inst)
 
     def paint(self, painter, option, parent):
         boundingRect = self.boundingRect()
@@ -284,8 +285,8 @@ class SourceNodeItem(NodeItem):
 
 
 class GroundNodeItem(NodeItem):
-    def __init__(self, node_instance, main_window_instance):
-        super().__init__(node_instance, main_window_instance)
+    def __init__(self, node_inst, main_window_inst):
+        super().__init__(node_inst, main_window_inst)
 
     def on_duplicate_action(self):
         QMessageBox.about(
