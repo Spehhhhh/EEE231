@@ -14,7 +14,7 @@ sys.path.append(father_folder)
 # from directedgraph.dgcore import DirectedGraphApplication
 
 logger.add(
-    "logs/test_dgcore_graphapplication.py.log",
+    "logs/test_dgcore_graph_application.py.log",
     level="DEBUG",
     format="{time:YYYY-MM-DD :mm:ss} - {level} - {file} - {line} - {message}",
     rotation="10 MB",

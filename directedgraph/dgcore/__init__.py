@@ -11,7 +11,3 @@ from directedgraph.dgcore.graphcomponent import (
 )
 from directedgraph.dgcore.graphcomponent_arc import Arc
 from directedgraph.dgcore.graph import Graph
-
-# import directedgraph.dgcore.graphcomponent
-# import directedgraph.dgcore.graph
-# import directedgraph.dgcore.graphapplication
