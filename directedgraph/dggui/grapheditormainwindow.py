@@ -33,13 +33,13 @@ from directedgraph.dggui import (
     GroundNodeItem,
     ArcItem,
     InputDialogArc,
-    DirectedGraphScene,
+    GraphEditorScene,
 )
 from directedgraph.dgutils import FileManager, GraphSimulator
 from directedgraph.dgapp import GraphController
 
 
-class DirectedGraphMainWindow(QMainWindow):
+class GraphEditorMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -52,7 +52,7 @@ class DirectedGraphMainWindow(QMainWindow):
         self.setWindowTitle("Graph Editor")
 
         # Initialise the QGraphicScene
-        self.scene = DirectedGraphScene(self)
+        self.scene = GraphEditorScene(self)
         self.view = QGraphicsView(self.scene)
 
         # self.view.setRenderHints(QPainter.Antialiasing) # Performance optimisation

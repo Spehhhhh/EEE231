@@ -2,10 +2,10 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from directedgraph.dggui import DirectedGraphMainWindow
+from directedgraph.dggui import GraphEditorMainWindow
 
 
-class DirectedGraphApplication:
+class GraphEditor:
     """
     Run
     """
@@ -13,7 +13,7 @@ class DirectedGraphApplication:
     def __init__(self):
         self.auto_save_interval = "300s"
         self.application = QApplication([])
-        self.mainwindow = DirectedGraphMainWindow()
+        self.mainwindow = GraphEditorMainWindow()
 
     def run(self):
         """

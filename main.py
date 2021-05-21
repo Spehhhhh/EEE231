@@ -1,5 +1,5 @@
-from directedgraph.dggui import DirectedGraphApplication
+from directedgraph.dggui import GraphEditor
 
 if __name__ == "__main__":
-    app = DirectedGraphApplication()
+    app = GraphEditor()
     app.run()

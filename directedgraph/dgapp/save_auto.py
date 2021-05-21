@@ -6,7 +6,7 @@ CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dggui import DirectedGraphMainWindow
+from directedgraph.dggui import GraphEditorMainWindow
 from threading import Timer
 
 # 循环定时器
@@ -17,5 +17,5 @@ class RepeatingTimer(Timer):
             self.finished.wait(self.interval)
 
 
-t = RepeatingTimer(600.0, DirectedGraphMainWindow().file_save())  # 10分钟运行一次file_save
+t = RepeatingTimer(600.0, GraphEditorMainWindow().file_save())  # 10分钟运行一次file_save
 t.start()

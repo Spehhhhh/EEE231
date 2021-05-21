@@ -17,9 +17,9 @@ from directedgraph.dggui import (
 )
 
 
-class DirectedGraphScene(QGraphicsScene):
+class GraphEditorScene(QGraphicsScene):
     def __init__(self, parent=None):
-        super(DirectedGraphScene, self).__init__(0, 0, 1280, 720, parent)
+        super(GraphEditorScene, self).__init__(0, 0, 1280, 720, parent)
         self.selected_items = []
 
     def mousePressEvent(self, event):
@@ -38,4 +38,4 @@ class DirectedGraphScene(QGraphicsScene):
                 item.selectionRectangle.setVisible(False)
             self.selected_items.clear()
 
-        super(DirectedGraphScene, self).mousePressEvent(event)
+        super(GraphEditorScene, self).mousePressEvent(event)

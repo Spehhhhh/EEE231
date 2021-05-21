@@ -359,7 +359,7 @@ class Arc_Input(QDialog, QMainWindow):
         return [self.edit1.text(), self.edit2.text()]
 
 
-class DirectedGraphMainWindow(QMainWindow, QDialog):
+class GraphEditorMainWindow(QMainWindow, QDialog):
     def __init__(self):
         super().__init__()
         # Title of the Windows
@@ -729,7 +729,7 @@ class DirectedGraphMainWindow(QMainWindow, QDialog):
 class DirectedGraphApplication:
     def __init__(self):
         app = QApplication([])
-        mainwindow = DirectedGraphMainWindow()
+        mainwindow = GraphEditorMainWindow()
         mainwindow.show()
         sys.exit(app.exec_())
 
