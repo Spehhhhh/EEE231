@@ -145,7 +145,7 @@ class NodeItem(QGraphicsEllipseItem):
         self.node.position[0] = scenePosition.x()
         self.node.position[1] = scenePosition.y()
 
-        print("NodeItem Position:", self.node.position)
+        # print("NodeItem Position:", self.node.position)
         # print("mouseMoveEvent to", scenePosition.x(), ", ", scenePosition.y())
 
         return
@@ -275,6 +275,7 @@ class SourceNodeItem(NodeItem):
                     {
                         "type": "SourceNode",
                         "name": self.node.name + " Copy",
+                        "colour": self.node.colour,
                         "position_x": self.node.position[0],
                         "position_y": self.node.position[1],
                     }
