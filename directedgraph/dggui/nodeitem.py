@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QAction
@@ -11,9 +14,6 @@ from PySide6.QtWidgets import (
     QGraphicsRectItem,
     QMessageBox,
 )
-
-import sys
-from pathlib import Path
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 CURRENT_DIRECTORY = Path(__file__).absolute()

@@ -1,9 +1,9 @@
+import random
+
 from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QPointF
 from PySide6.QtGui import QAction, QPainterPath
 from PySide6.QtWidgets import QMenu, QGraphicsPathItem, QInputDialog
-
-import random
 
 
 class ArcItem(QGraphicsPathItem):
