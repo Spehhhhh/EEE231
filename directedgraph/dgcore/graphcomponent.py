@@ -15,15 +15,15 @@ class GraphComponent:
     GraphComponent()
     """
 
-    def __init__(self, connected_graph=None, uid=None, name=None, colour=None):
+    def __init__(self, connected_graph=None, **kwargs):
         self.connected_graph = connected_graph if connected_graph else None
         self.connected_window = None
         self.connected_gui = None
 
         self.uid = None
-        self.generate_uid(uid)
-        self.name = name if name else "Untitled"
-        self.colour = colour if colour else "#000000"
+        self.generate_uid(kwargs.get("uid", None))
+        self.name = kwargs["name"] if kwargs.get("name", None) else "Untitled"
+        self.colour = kwargs["colour"] if kwargs.get("colour", None) else "#000000"
 
     def generate_uid(self, uid_old=None):
         """
@@ -129,15 +129,13 @@ class Node(GraphComponent):
     def __init__(
         self,
         connected_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        position=None,
+        **kwargs,
     ):
-        self.colour = colour if colour else "#fd5455"
-        super().__init__(connected_graph, uid, name, self.colour)
+        self.colour = kwargs["colour"] if kwargs.get("colour", None) else "#fd5455"
+        kwargs["colour"] = self.colour
+        super().__init__(connected_graph, **kwargs)
 
-        self.position = position if position else [0, 0]
+        self.position = kwargs["position"] if kwargs.get("position", None) else [0, 0]
         self.arcs = []  # Objects of the arc connected to this node
 
     def get_position(self):
@@ -183,17 +181,20 @@ class SourceNode(Node):
     def __init__(
         self,
         connected_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        position=None,
-        user_defined_attribute=None,  # Current
+        **kwargs,
     ):
-        self.colour = colour if colour else "#0f8080"
-        super().__init__(connected_graph, uid, name, self.colour, position)
+        self.colour = kwargs["colour"] if kwargs.get("colour", None) else "#0f8080"
+        kwargs["colour"] = self.colour
+
+        # self.colour = kwargs.get("colour", None)
+        # self.colour = kwargs["colour"] if kwargs.get("colour", None) else "#fd5455"
+
+        super().__init__(connected_graph, **kwargs)
 
         self.user_defined_attribute = (
-            user_defined_attribute if user_defined_attribute else "0"
+            kwargs["user_defined_attribute"]
+            if kwargs.get("user_defined_attribute", None)
+            else "0"
         )
 
     def get_user_defined_attribute(self):
@@ -219,13 +220,13 @@ class GroundNode(Node):
     def __init__(
         self,
         connected_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        position=None,
+        **kwargs,
     ):
-        self.colour = colour if colour else "#d4aa01"
-        super().__init__(connected_graph, uid, name, self.colour, position)
+        self.colour = kwargs["colour"] if kwargs.get("colour", None) else "#d4aa01"
+        kwargs["colour"] = self.colour
+
+        super().__init__(connected_graph, **kwargs)
+
         self.user_defined_attribute = "0"
 
         if connected_graph is not None:

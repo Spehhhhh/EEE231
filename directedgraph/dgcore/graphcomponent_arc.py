@@ -10,24 +10,23 @@ from directedgraph.dgcore import GraphComponent, Node
 
 
 class Arc(GraphComponent):
-    def __init__(
-        self,
-        connected_graph=None,
-        uid=None,
-        name=None,
-        colour=None,
-        node1_uid=None,
-        node2_uid=None,
-        user_defined_attribute=None,
-        user_defined_arc_type=None,
-    ):
-        super().__init__(connected_graph, uid, name, colour)
+    def __init__(self, connected_graph=None, **kwargs):
+        super().__init__(connected_graph, **kwargs)
 
         self.nodes = [None, None]
-        self.update_position(node1_uid, node2_uid)
+        self.update_position(kwargs["node1_uid"], kwargs["node2_uid"])
 
-        self.user_defined_attribute = user_defined_attribute
-        self.user_defined_arc_type = user_defined_arc_type
+        self.user_defined_attribute = (
+            kwargs["user_defined_attribute"]
+            if kwargs.get("user_defined_attribute", None)
+            else "0"
+        )
+
+        self.user_defined_arc_type = (
+            kwargs["user_defined_arc_type"]
+            if kwargs.get("user_defined_arc_type", None)
+            else None
+        )
 
         # self.function = {}
 

@@ -156,61 +156,64 @@ class Graph:
         create component according to the dictionary in the parameters
         """
 
-        if parameters.get("type", None) == "Node":
+        component_type = parameters.get("type", None)
+
+        if component_type == "Node":
             component = Node(
                 self,
-                parameters.get("uid", None),
-                parameters.get("name", None),
-                parameters.get("colour", None),
-                [
+                uid=parameters.get("uid", None),
+                name=parameters.get("name", None),
+                colour=parameters.get("colour", None),
+                position=[
                     int(float(parameters.get("position_x", 0))),
                     int(float(parameters.get("position_y", 0))),
                 ],
             )
             self.insert_component(component)
             return component
-        elif parameters.get("type", None) == "SourceNode":
+        elif component_type == "SourceNode":
             component = SourceNode(
                 self,
-                parameters.get("uid", None),
-                parameters.get("name", None),
-                parameters.get("colour", None),
-                [
+                uid=parameters.get("uid", None),
+                name=parameters.get("name", None),
+                colour=parameters.get("colour", None),
+                position=[
                     int(float(parameters.get("position_x", 0))),
                     int(float(parameters.get("position_y", 0))),
                 ],
-                parameters.get("user_defined_attribute", None),
+                user_defined_attribute=parameters.get("user_defined_attribute", None),
             )
             self.insert_component(component)
             return component
-        elif parameters.get("type", None) == "GroundNode":
+        elif component_type == "GroundNode":
             component = GroundNode(
                 self,
-                parameters.get("uid", None),
-                parameters.get("name", None),
-                parameters.get("colour", None),
-                [
+                uid=parameters.get("uid", None),
+                name=parameters.get("name", None),
+                colour=parameters.get("colour", None),
+                position=[
                     int(float(parameters.get("position_x", 0))),
                     int(float(parameters.get("position_y", 0))),
                 ],
             )
             self.insert_component(component)
             return component
-        elif parameters.get("type", None) == "Arc":
+        elif component_type == "Arc":
             component = Arc(
                 self,
-                parameters.get("uid", None),
-                parameters.get("name", None),
-                parameters.get("colour", None),
-                parameters.get("node1_uid", None),
-                parameters.get("node2_uid", None),
-                parameters.get("user_defined_attribute", None),
-                parameters.get("user_defined_arc_type", None),
+                uid=parameters.get("uid", None),
+                name=parameters.get("name", None),
+                colour=parameters.get("colour", None),
+                node1_uid=parameters.get("node1_uid", None),
+                node2_uid=parameters.get("node2_uid", None),
+                user_defined_attribute=parameters.get("user_defined_attribute", None),
+                user_defined_arc_type=parameters.get("user_defined_arc_type", None),
             )
             self.insert_component(component)
             return component
         else:
             print("Error: Component Type")
+            return False
 
     def insert_component(self, component):
         """
