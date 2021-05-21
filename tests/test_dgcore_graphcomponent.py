@@ -38,26 +38,29 @@ class TestGraphComponent(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @logger.catch
+    # @logger.catch
     def test_get(self):
         component1 = GraphComponent()
         self.assertEqual(vars(component1), component1.get())
         self.assertEqual(component1.get("name"), "Untitled")
 
-    @logger.catch
+    # @logger.catch
     def test_node_position(self):
         # node1 = Node(None, None, None, None, [1, 2])
         node1 = Node()
         node1.update_position([0, 9])
         self.assertEqual(node1.get("position"), [0, 9])
 
-    @logger.catch
+    # @logger.catch
     def test_groundnode_sourcenode(self):
         groundnode1 = GroundNode()
         self.assertEqual(groundnode1.get("user_defined_attribute"), "0")
-        sourcenode1 = SourceNode(None, None, "sourcenode1", None, [2, 3], "foo")
+        sourcenode1 = SourceNode(
+            None, name="sourcenode1", position=[2, 3], user_defined_attribute="foo"
+        )
         self.assertEqual(sourcenode1.get("user_defined_attribute"), "foo")
 
+    # @logger.catch
     def test_node_arc(self):
         pass
 

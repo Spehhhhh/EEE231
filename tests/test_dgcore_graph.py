@@ -1,7 +1,6 @@
 import sys
 import os
 import time
-import timeit
 import itertools
 import unittest
 from pathlib import Path
@@ -31,6 +30,10 @@ logger.info("Start Log")
 
 
 class TestGraph(unittest.TestCase):
+    """
+    TestGraph
+    """
+
     @classmethod
     def setUpClass(cls):
         pass
@@ -40,14 +43,21 @@ class TestGraph(unittest.TestCase):
         pass
 
     def setUp(self):
-        self.xml = "TODO"
-        pass
+        self.file_name = "test_rc"
+        self.file_extension = ".xml"
+        self.path = Path(os.path.dirname(__file__)).joinpath(
+            self.file_name + self.file_extension
+        )
 
     def tearDown(self):
         pass
 
-    @logger.catch
+    # @logger.catch
     def test_get(self):
+        """
+        test_get
+        """
+
         graph1 = Graph("graph1")
         graph1.create_component({"type": "Node", "name": "Node 1", "uid": "7778da"})
         graph1.create_component({"type": "Node", "name": "Node 2", "uid": "b911b2"})
@@ -62,6 +72,7 @@ class TestGraph(unittest.TestCase):
                 "user_defined_arc_type": "Resistor",
             }
         )
+
         self.assertEqual(
             graph1.get(),
             (
@@ -97,8 +108,12 @@ class TestGraph(unittest.TestCase):
             ),
         )
 
-    @logger.catch
+    # @logger.catch
     def test_id(self):
+        """
+        test_id
+        """
+
         graph1 = Graph("graph1")
         graph1.create_component({"type": "Node", "name": "Node without UID"})
         graph1.create_component({"type": "Node", "name": "Node 1", "uid": "7778da"})
@@ -108,13 +123,13 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(graph2.components, {})
         self.assertEqual(len(graph1.components), 2)
 
-    @logger.catch
+    # @logger.catch
     def test_insert_component(self):
         graph1 = Graph("graph1")
 
-        node1 = Node(graph1, "b911b2", "node1")
+        node1 = Node(graph1, uid="b911b2", name="node1")
         graph1.insert_component(node1)
-        node2 = Node(graph1, "9a2812", "node2")
+        node2 = Node(graph1, uid="9a2812", name="node2")
         graph1.insert_component(node2)
 
         self.assertEqual(len(graph1.components), 2)
@@ -122,7 +137,7 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(graph1.get_component("b911b2").name, "node1")
         self.assertEqual(graph1.get_component("9a2812").connected_graph, graph1)
 
-    @logger.catch
+    # @logger.catch
     def test_create_component(self):
         graph1 = Graph("graph1")
         graph1.create_component(
@@ -165,7 +180,7 @@ class TestGraph(unittest.TestCase):
             graph1.get_component("9a2812").get_position(), ([50, 50], [400, 500])
         )
 
-    @logger.catch
+    # @logger.catch
     def test_generate_component_uid(self):
         graph1 = Graph("graph1")
         graph1.create_component({"type": "Node", "name": "Node without UID 1"})
@@ -179,13 +194,13 @@ class TestGraph(unittest.TestCase):
 
         self.assertEqual(len(graph1.components), 4)
 
-    @logger.catch
+    # @logger.catch
     def test_error(self):
         # graph1.create_component({"type": "Arc", "name": "Arc 1", "uid": "7778da"})
         # graph1.create_component({"name": "Fooo", "uid": "7778da"})
         pass
 
-    @logger.catch
+    # @logger.catch
     def test_query_and_delete(self):
         # print("---Init---")
         graph1 = Graph("graph1")
@@ -205,6 +220,7 @@ class TestGraph(unittest.TestCase):
         self.assertFalse(graph1.delete_component("31233"))
         self.assertEqual(len(graph1.components), 3)
 
+    # @logger.catch
     def test_verify_graph_integrity(self):
         graph1 = Graph("graph1")
         graph1.create_component(
@@ -303,13 +319,14 @@ class TestGraph(unittest.TestCase):
         # graph1.print_graph_details()
         # print(graph1.get_component("7778da0a0a0a").get())
 
-    @logger.catch
+    # @logger.catch
     def test_read_and_create_graph(self):
         fm = FileManager()
-        path = Path(os.path.dirname(__file__)).joinpath("test.xml")
+        path = Path(os.path.dirname(__file__)).joinpath("test_rc.xml")
         data1 = fm.create_graph_raw_data(str(path))
         graph1 = fm.create_graph(data1)
 
+        # graph1.print_graph_details()
         graph1.verify_graph_integrity()
         # graph1.print_graph_details()
 
@@ -324,7 +341,7 @@ class TestGraph(unittest.TestCase):
         # print("N7 Arcs:", len(graph1.get_component("567071").arcs))
         # print("G1 Arcs:", len(graph1.get_component("365bb9").arcs))
 
-    @logger.catch
+    # @logger.catch
     def test_query_and_delete_efficiency(self):
         start_time = time.time()
         for _ in itertools.repeat(None, 100):

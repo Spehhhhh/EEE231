@@ -42,11 +42,11 @@ class TestFileManager(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @logger.catch
+    # @logger.catch
     def test_open_graph(self):
         pass
 
-    @logger.catch
+    # @logger.catch
     def test_create_graph_raw_data(self):
         fm = FileManager()
         data1 = fm.create_graph_raw_data(str(self.path))
@@ -73,40 +73,40 @@ class TestFileManager(unittest.TestCase):
                 "uid": "a129a9",
                 "name": "N3",
                 "colour": "#fd5455",
-                "position_x": "700",
-                "position_y": "100",
+                "position_x": "1026.0",
+                "position_y": "67.0",
             },
             {
                 "type": "Node",
                 "uid": "59d632",
                 "name": "N4",
                 "colour": "#fd5455",
-                "position_x": "700",
-                "position_y": "300",
+                "position_x": "1011.0",
+                "position_y": "387.0",
             },
             {
                 "type": "Node",
                 "uid": "8ad505",
                 "name": "N5",
                 "colour": "#fd5455",
-                "position_x": "700",
-                "position_y": "500",
+                "position_x": "852.0",
+                "position_y": "585.0",
             },
             {
                 "type": "Node",
                 "uid": "1d2386",
                 "name": "N6",
                 "colour": "#fd5455",
-                "position_x": "500",
-                "position_y": "300",
+                "position_x": "175.0",
+                "position_y": "342.0",
             },
             {
                 "type": "Node",
                 "uid": "567071",
                 "name": "N7",
                 "colour": "#fd5455",
-                "position_x": "500",
-                "position_y": "500",
+                "position_x": "200.0",
+                "position_y": "493.0",
             },
             {
                 "type": "SourceNode",
@@ -122,8 +122,8 @@ class TestFileManager(unittest.TestCase):
                 "uid": "365bb9",
                 "name": "G1",
                 "colour": "#d4aa01",
-                "position_x": "500",
-                "position_y": "700",
+                "position_x": "179.0",
+                "position_y": "632.0",
             },
             {
                 "type": "Arc",
@@ -252,7 +252,7 @@ class TestFileManager(unittest.TestCase):
         graph1 = fm.create_graph((list1, list2))
         self.assertEqual(data1[0], graph1.get()[0])
 
-    @logger.catch
+    # @logger.catch
     def test_create_graph(self):
         fm = FileManager()
         graph_attribute = [{"name": "graph1"}]
@@ -324,16 +324,16 @@ class TestFileManager(unittest.TestCase):
         self.assertEqual(graph1.get_component("b7c567").name, "arc1")
         self.assertEqual(len(graph1.components), 8)
 
-    @logger.catch
+    # @logger.catch
     def test_export_graph_xml(self):
-        fm = FileManager()
-        graph1 = fm.open_graph(str(self.path))
+        pass
+        # fm = FileManager()
+        # graph1 = fm.open_graph(str(self.path))
 
-        path_output = Path(os.path.dirname(__file__)).joinpath(
-            self.file_name + "_output" + self.file_extension
-        )
-        print("test")
-        fm.export_graph_xml(str(path_output), graph1)
+        # path_output = Path(os.path.dirname(__file__)).joinpath(
+        #     self.file_name + "_output" + self.file_extension
+        # )
+        # fm.export_graph_xml(str(path_output), graph1)
 
 
 if __name__ == "__main__":

@@ -23,6 +23,10 @@ logger.info("Start Log")
 
 
 class TestDirectedGraphApplication(unittest.TestCase):
+    """
+    TestDirectedGraphApplication
+    """
+
     @classmethod
     def setUpClass(cls):
         pass
