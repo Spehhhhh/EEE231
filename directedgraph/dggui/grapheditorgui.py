@@ -312,7 +312,7 @@ class DirectedGraphMainWindow(QMainWindow):
                     )
                 )
 
-    def on_groundnode_action(self, event):
+    def on_groundnode_action(self):
         name = ""
         text, result = QInputDialog.getText(
             self,
@@ -411,7 +411,7 @@ class DirectedGraphMainWindow(QMainWindow):
     # Other Function
     def reset_scene(self):
         for item in self.scene.items():
-            if type(item) == NodeItem:  # Arc will be deleted with the Node
+            if isinstance(item, NodeItem):  # Arc will be deleted with the Node
                 item.on_delete_action()
         self.connected_graphcontroller = GraphController()
 
