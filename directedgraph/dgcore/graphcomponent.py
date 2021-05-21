@@ -7,8 +7,14 @@ CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
+UID_LENGTH = 6
+
 
 class GraphComponent:
+    """
+    GraphComponent()
+    """
+
     def __init__(self, connected_graph=None, uid=None, name=None, colour=None):
         self.connected_graph = connected_graph if connected_graph else None
         self.connected_window = None
@@ -19,73 +25,107 @@ class GraphComponent:
         self.name = name if name else "Untitled"
         self.colour = colour if colour else "#000000"
 
-    # If the instance does not have a UID, a UID is generated.
-    # If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
     def generate_uid(self, uid_old=None):
-        UID_LENGTH = 6
-        if self.connected_graph == None:
+        """
+        If the instance does not have a UID, a UID is generated.
+        If there is a duplicate UID in the Graph to which the instance belongs, reassign a UID.
+        """
+
+        if self.connected_graph is None:
             self.uid = uuid.uuid4().hex[:UID_LENGTH]
         else:
-            if uid_old == None:
+            if uid_old is None:
                 uid_new = uuid.uuid4().hex[:UID_LENGTH]
                 while uid_new in self.connected_graph.components:
                     uid_new = uuid.uuid4().hex[:UID_LENGTH]
                     self.uid = uid_new
                 self.uid = uid_new
-                return uid_new
             else:
                 if uid_old not in self.connected_graph.components:
                     self.uid = uid_old
-                    return uid_old
                 else:
-                    # print(
-                    #     "Error: Duplicate uid occurs",
-                    #     uid_old,
-                    #     "Try to reassign UID...",
-                    # )
+                    print("Error: Duplicate uid occurs", uid_old)
+                    # Try to reassign UID...
                     uid_new = uuid.uuid4().hex[:UID_LENGTH]
                     while uid_new in self.connected_graph.components:
                         uid_new = uuid.uuid4().hex[:UID_LENGTH]
                         self.uid = uid_new
                     self.uid = uid_new
-                    return uid_new
+        return self.uid
 
-    # .get(): return all
-    # .get("name") return name
     def get(self, element_attribute=None):
-        if element_attribute == None:
+        """
+        get(): return all
+        get("name") return name
+        """
+
+        if element_attribute is None:
             return vars(self)
         else:
             return vars(self).get(element_attribute, None)
 
     def get_connected_graph(self):
+        """
+        get_connected_graph() return self.connected_graph
+        """
+
         return self.connected_graph
 
     def get_uid(self):
+        """
+        get_uid()
+        """
+
         return self.uid
 
     def get_name(self):
+        """
+        get_name()
+        """
+
         return self.name
 
     def get_colour(self):
+        """
+        get_colour()
+        """
+
         return self.colour
 
-    # .update(name)
-    # #TODO 需要设计 Trace Back 捕捉
-    def update(self, element_attribute, element_attribute_new):
-        self.element_attribute = element_attribute_new
+    def update(self, element_attribute, element_attribute_new_value):
+        """
+        update()
+        """
+
+        if element_attribute in self.vars(self):
+            self.element_attribute = element_attribute_new_value
+            return True
+        else:
+            return False
 
     def update_connected_gui(self, connected_gui_new):
+        """
+        update_connected_gui()
+        """
+
         self.connected_gui = connected_gui_new
 
     def delete(self):
-        if self.connected_graph != None:
+        """
+        delete()
+        """
+
+        if self.connected_graph is not None:
             return self.connected_graph.delete_component(self.uid)
         else:
             return False
 
 
 class Node(GraphComponent):
+    """
+    Node()
+    """
+
     def __init__(
         self,
         connected_graph=None,
@@ -98,36 +138,48 @@ class Node(GraphComponent):
         super().__init__(connected_graph, uid, name, self.colour)
 
         self.position = position if position else [0, 0]
-
-        # it won't get any value which can be obtained from the simulator
-        # The user cannot change (Default is 0)
-        self.value = 0
-
-        # Objects of the arc connected to this node
-        # #TODO 此处要注意的是 Node 当中这个 List 可能有多个，而 Source Node 中只能有一个
-        self.arcs = []
+        self.arcs = []  # Objects of the arc connected to this node
 
     def get_position(self):
+        """
+        get_position()
+        """
+
         return self.position
 
     def get_value(self):
+        """
+        get_value()
+        """
+
         return self.value
 
-    # .update(position, [10, 10])
-    def update(self, element_attribute, element_attribute_new):
-        if element_attribute == "position":
-            self.position[0] = element_attribute_new[0]
-            self.position[1] = element_attribute_new[1]
-        else:
-            return super().update(element_attribute, element_attribute_new)
+    def update(self, element_attribute, element_attribute_new_value):
+        """
+        update(position, [10, 10])
+        """
 
-    # .update_position([10, 10])
+        if element_attribute == "position":
+            self.position[0] = element_attribute_new_value[0]
+            self.position[1] = element_attribute_new_value[1]
+            return True
+        else:
+            return super().update(element_attribute, element_attribute_new_value)
+
     def update_position(self, position):
+        """
+        update_position([10, 10])
+        """
+
         self.position[0] = position[0]
         self.position[1] = position[1]
 
 
 class SourceNode(Node):
+    """
+    SourceNode()
+    """
+
     def __init__(
         self,
         connected_graph=None,
@@ -145,13 +197,25 @@ class SourceNode(Node):
         )
 
     def get_user_defined_attribute(self):
+        """
+        get_user_defined_attribute()
+        """
+
         return self.user_defined_attribute
 
     def update_user_defined_attribute(self, user_defined_attribute_new):
+        """
+        update_user_defined_attribute()
+        """
+
         self.user_defined_attribute = user_defined_attribute_new
 
 
 class GroundNode(Node):
+    """
+    GroundNode()
+    """
+
     def __init__(
         self,
         connected_graph=None,
@@ -164,16 +228,21 @@ class GroundNode(Node):
         super().__init__(connected_graph, uid, name, self.colour, position)
         self.user_defined_attribute = "0"
 
-        if connected_graph != None:
+        if connected_graph is not None:
             self.connected_graph.groundnode_counter += 1
 
-    def get_groundnode_counter(self):
-        return self.connected_graph.groundnode_counter
-
     def get_user_defined_attribute(self):
+        """
+        get_user_defined_attribute()
+        """
+
         return self.user_defined_attribute
 
     def update_user_defined_attribute(self):
+        """
+        update_user_defined_attribute()
+        """
+
         return False  # groundnote user_defined_attribute cannot be modified
 
 
