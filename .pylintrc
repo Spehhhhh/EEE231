@@ -1,5 +1,6 @@
 [MASTER]
 disable=
+    I1101, # c-extension-no-member
     C0114, # missing-module-docstring
     C0413, # wrong-import-position
     E1101, # no-member
