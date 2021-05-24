@@ -394,7 +394,7 @@ class GraphEditorMainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
-    from main import DirectedGraphApplication
+    from main import GraphEditor
 
-    app = DirectedGraphApplication()
+    app = GraphEditor()
     app.run()
