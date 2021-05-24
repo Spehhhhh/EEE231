@@ -270,7 +270,7 @@ class SourceNodeItem(NodeItem):
 
     def on_duplicate_action(self):
         self.connected_window.scene.addItem(
-            NodeItem(
+            SourceNodeItem(
                 self.node.connected_graph.create_component(
                     {
                         "type": "SourceNode",
