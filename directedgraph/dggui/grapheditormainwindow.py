@@ -301,7 +301,7 @@ class GraphEditorMainWindow(QMainWindow):
             name = str(text)
 
             self.scene.addItem(
-                NodeItem(
+                GroundNodeItem(
                     self.connected_graph.create_component(
                         {
                             "type": "GroundNode",

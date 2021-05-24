@@ -145,13 +145,6 @@ class Node(GraphComponent):
 
         return self.position
 
-    def get_value(self):
-        """
-        get_value()
-        """
-
-        return self.value
-
     def update(self, element_attribute, element_attribute_new_value):
         """
         update(position, [10, 10])
@@ -185,9 +178,6 @@ class SourceNode(Node):
     ):
         self.colour = kwargs["colour"] if kwargs.get("colour", None) else "#0f8080"
         kwargs["colour"] = self.colour
-
-        # self.colour = kwargs.get("colour", None)
-        # self.colour = kwargs["colour"] if kwargs.get("colour", None) else "#fd5455"
 
         super().__init__(connected_graph, **kwargs)
 

@@ -278,6 +278,7 @@ class SourceNodeItem(NodeItem):
                         "colour": self.node.colour,
                         "position_x": self.node.position[0],
                         "position_y": self.node.position[1],
+                        "user_defined_attribute": self.node.user_defined_attribute,
                     }
                 ),
                 self.connected_window,

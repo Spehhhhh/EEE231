@@ -28,7 +28,7 @@ class Graph:
 
     def get(self):
         """
-        #TODO
+        Pack all the data from Graph into Tuple.
         """
 
         graph_attribute = []
@@ -73,21 +73,21 @@ class Graph:
 
     def get_name(self):
         """
-        #TODO
+        get_name
         """
 
         return self.name
 
     def update_name(self, name):
         """
-        #TODO
+        update_name
         """
 
         self.name = name
 
     def update_component_node_arcs(self):
         """
-        #TODO
+        update_component_node_arcs
         """
 
         self.arc_counter = 0
@@ -105,7 +105,7 @@ class Graph:
 
     def verify_graph_integrity(self):
         """
-        #TODO
+        verify_graph_integrity
         """
         return_list = []
         return_list.clear()
@@ -143,7 +143,7 @@ class Graph:
 
     def get_component(self, uid):
         """
-        #TODO
+        get_component
         """
 
         # print(self.components[uid].get_name())
@@ -217,21 +217,21 @@ class Graph:
 
     def insert_component(self, component):
         """
-        #TODO
+        insert_component
         """
 
         self.components[component.get_uid()] = component
 
     def update_component_name(self, uid, name):
         """
-        #TODO
+        update_component_name
         """
 
         self.components[uid].name = name
 
     def update_component_colour(self, uid, colour):
         """
-        #TODO
+        update_component_colour
         """
 
         self.components[uid].colour = colour
@@ -241,7 +241,7 @@ class Graph:
     # def update_arc_position(arc1, node1, node2):
     def update_arc_position(self, arc1, node1, node2):
         """
-        Query and delete components using uid
+        update_arc_position
         """
 
         if isinstance(arc1) == Arc:
