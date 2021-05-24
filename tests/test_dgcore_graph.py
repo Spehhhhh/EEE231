@@ -109,7 +109,7 @@ class TestGraph(unittest.TestCase):
         )
 
     # @logger.catch
-    def test_id(self):
+    def test_create_component_without_uid(self):
         """
         test_id
         """
@@ -118,9 +118,6 @@ class TestGraph(unittest.TestCase):
         graph1.create_component({"type": "Node", "name": "Node without UID"})
         graph1.create_component({"type": "Node", "name": "Node 1", "uid": "7778da"})
 
-        graph2 = Graph("graph2")
-
-        self.assertEqual(graph2.components, {})
         self.assertEqual(len(graph1.components), 2)
 
     # @logger.catch
@@ -227,7 +224,7 @@ class TestGraph(unittest.TestCase):
             {
                 "type": "GroundNode",
                 "uid": "7778da",
-                "name": "Node 1",
+                "name": "GroundNode 1",
                 "colour": "#0000",
                 "position_x": "50",
                 "position_y": "50",
@@ -236,8 +233,8 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "GroundNode",
-                "uid": "7778da",
-                "name": "Node 1",
+                "uid": "7778db",
+                "name": "GroundNode 2",
                 "colour": "#0000",
                 "position_x": "50",
                 "position_y": "50",
@@ -256,7 +253,7 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Node",
-                "uid": "7778da",
+                "uid": "7778dc",
                 "name": "Node 1",
                 "colour": "#0000",
                 "position_x": "50",
@@ -266,7 +263,7 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Node",
-                "uid": "7778da",
+                "uid": "7778dd",
                 "name": "Node 2",
                 "colour": "#0000",
                 "position_x": "400",
@@ -276,11 +273,11 @@ class TestGraph(unittest.TestCase):
         graph1.create_component(
             {
                 "type": "Arc",
-                "uid": "9a2812",
+                "uid": "9a2813",
                 "name": "Arc 1",
                 "colour": "#0000",
                 "node1_uid": "7778da",
-                "node2_uid": "7778da",
+                "node2_uid": "7778db",
                 "user_defined_attribute": None,
                 "user_defined_arc_type": None,
             }
@@ -342,13 +339,13 @@ class TestGraph(unittest.TestCase):
         # print("G1 Arcs:", len(graph1.get_component("365bb9").arcs))
 
     # @logger.catch
-    def test_query_and_delete_efficiency(self):
+    def test_read_and_create_graph_efficiency(self):
         start_time = time.time()
-        for _ in itertools.repeat(None, 100):
-            self.test_query_and_delete()
+        for _ in itertools.repeat(None, 500):
+            self.test_read_and_create_graph()
         end_time = time.time()
         print(
-            "test_query_and_delete_efficiency() Elapsed time was %g seconds"
+            "test_read_and_create_graph_efficiency() Elapsed time was %g seconds"
             % (end_time - start_time)
         )
 
