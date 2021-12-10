@@ -46,9 +46,7 @@ class FileManager:
         for component_type in type_list:
             components = dom1.getElementsByTagName(component_type)
             for component in components:
-                temp = {}
-                temp["type"] = component_type
-                temp["uid"] = component.getAttribute("uid")
+                temp = {"type": component_type, "uid": component.getAttribute("uid")}
                 self.parse_attribute(component, temp, ["name", "colour"])
 
                 if component_type == "Node":
@@ -140,7 +138,6 @@ class FileManager:
                 or component["type"] == "GroundNode"
                 or component["type"] == "SourceNode"
             ):
-                attribute = ["position_x", "position_y"]
                 component_node_position_x = doc.createElement("position_x")
                 component_node.appendChild(component_node_position_x)
                 component_node_position_x_value = doc.createTextNode(

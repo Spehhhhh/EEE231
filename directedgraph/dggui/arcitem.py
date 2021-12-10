@@ -131,7 +131,7 @@ class ArcItem(QGraphicsPathItem):
             "Enter Name",
             QtWidgets.QLineEdit.Normal,
         )
-        if result == True:
+        if result is True:
             self.arc.name = str(text)
 
     def on_type_action(self):
@@ -141,7 +141,7 @@ class ArcItem(QGraphicsPathItem):
             "Enter Type",
             QtWidgets.QLineEdit.Normal,
         )
-        if result == True:
+        if result is True:
             self.arc.user_defined_arc_type = str(text)
 
     def on_attribute_action(self):
@@ -151,7 +151,7 @@ class ArcItem(QGraphicsPathItem):
             "Enter Attribute",
             QtWidgets.QLineEdit.Normal,
         )
-        if result == True:
+        if result is True:
             self.arc.user_defined_attribute = str(text)
 
     def on_delete_action(self):

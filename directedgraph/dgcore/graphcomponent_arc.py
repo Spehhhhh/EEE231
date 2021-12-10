@@ -33,7 +33,7 @@ class Arc(GraphComponent):
     # get_position() get positions of two objects connected by the arc
     # #TODO 需要设计 Trace Back 捕捉
     def get_position(self):
-        return (self.nodes[0].get_position(), self.nodes[1].get_position())
+        return self.nodes[0].get_position(), self.nodes[1].get_position()
 
     # update_position() get positions of two objects connected by the arc
     # update_position() can accept both UIDs and objects as parameters
@@ -41,14 +41,14 @@ class Arc(GraphComponent):
     def update_position(self, node1=None, node2=None):
         if node1 is not None:
             if isinstance(node1, str):
-                if len(node1) == 6 and self.connected_graph != None:
+                if len(node1) == 6 and self.connected_graph is not None:
                     self.nodes[0] = self.connected_graph.get_component(node1)
             elif isinstance(node1, Node):
                 self.nodes[0] = node1
 
         if node2 is not None:
-            if isinstance(node2, str) and self.connected_graph != None:
-                if len(node2) == 6 and self.connected_graph != None:
+            if isinstance(node2, str) and self.connected_graph is not None:
+                if len(node2) == 6 and self.connected_graph is not None:
                     self.nodes[1] = self.connected_graph.get_component(node2)
             elif isinstance(node2, Node):
                 self.nodes[1] = node2
@@ -57,7 +57,7 @@ class Arc(GraphComponent):
         self.user_defined_arc_type = new_user_defined_arc_type
 
     def update_user_defined_attribute(self, new_user_defined_attribute):
-        str_can_be_usde = ["p", "u", "k", "n", "m"]
+        str_can_be_used = ["p", "u", "k", "n", "m"]
         if new_user_defined_attribute.isdigit() is True:
             if self.user_defined_arc_type.lower() == "resistor":
                 if (
@@ -71,7 +71,7 @@ class Arc(GraphComponent):
                 raise ValueError("wrong input!!!")
             for j in new_user_defined_attribute:
                 if j.isdigit() is False:
-                    if j.lower() not in str_can_be_usde:
+                    if j.lower() not in str_can_be_used:
                         raise ValueError("wrong input!!!")
                     else:
                         index = new_user_defined_attribute.index(j)

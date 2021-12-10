@@ -3,10 +3,8 @@ from pathlib import Path
 
 from PySide6 import QtWidgets
 from PySide6 import QtCore
-from PySide6 import QtGui
-from PySide6.QtGui import QAction, QPainter
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
-    QApplication,
     QInputDialog,
     QMainWindow,
     QVBoxLayout,
@@ -17,7 +15,6 @@ from PySide6.QtWidgets import (
     QMenu,
     QFileDialog,
     QMessageBox,
-    QGraphicsScene,
     QGraphicsView,
 )
 
@@ -164,7 +161,7 @@ class GraphEditorMainWindow(QMainWindow):
                 self.scene.addItem(ArcItem(component, self))
 
     def on_open_action(self):
-        file_name = QFileDialog.getOpenFileName(self, "Open File", ".", ("*.xml"))
+        file_name = QFileDialog.getOpenFileName(self, "Open File", ".", "*.xml")
         self.file_path = str(file_name[0])
 
         self.reset_scene()
@@ -228,8 +225,6 @@ class GraphEditorMainWindow(QMainWindow):
     def on_node_action(self):
         # print("on_node_action", self.mouse_position)
 
-        name = ""
-
         text, result = QInputDialog.getText(
             self,
             "Input",
@@ -237,7 +232,7 @@ class GraphEditorMainWindow(QMainWindow):
             QtWidgets.QLineEdit.Normal,
         )
 
-        if result == True:
+        if result is True:
             name = str(text)
             self.scene.addItem(
                 NodeItem(
@@ -254,15 +249,13 @@ class GraphEditorMainWindow(QMainWindow):
             )
 
     def on_sourcenode_action(self):
-        name = ""
-
         text, result = QInputDialog.getText(
             self,
             "Input",
             "Enter Name",
             QtWidgets.QLineEdit.Normal,
         )
-        if result == True:
+        if result is True:
             name = str(text)
 
             text, result = QInputDialog.getText(
@@ -271,7 +264,7 @@ class GraphEditorMainWindow(QMainWindow):
                 "Enter User Defined Attribute",
                 QtWidgets.QLineEdit.Normal,
             )
-            if result == True:
+            if result is True:
                 user_defined_attribute = str(text)
 
                 self.scene.addItem(
@@ -290,14 +283,13 @@ class GraphEditorMainWindow(QMainWindow):
                 )
 
     def on_groundnode_action(self):
-        name = ""
         text, result = QInputDialog.getText(
             self,
             "Input",
             "Enter Name",
             QtWidgets.QLineEdit.Normal,
         )
-        if result == True:
+        if result is True:
             name = str(text)
 
             self.scene.addItem(

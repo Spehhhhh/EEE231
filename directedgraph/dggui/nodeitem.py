@@ -20,10 +20,6 @@ CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc, Graph
-from directedgraph.dgcore import GroundNodeNumberError
-from directedgraph.dgutils import FileManager
-
 
 class NodeItem(QGraphicsEllipseItem):
     def __init__(self, node_inst, main_window_inst):
@@ -197,7 +193,7 @@ class NodeItem(QGraphicsEllipseItem):
             "Enter Name",
             QtWidgets.QLineEdit.Normal,
         )
-        if result == True:
+        if result is True:
             self.node.name = str(text)
 
     def on_colour_action(self):

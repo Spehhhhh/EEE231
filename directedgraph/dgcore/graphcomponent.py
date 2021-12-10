@@ -234,7 +234,7 @@ class GroundNode(Node):
         update_user_defined_attribute()
         """
 
-        return False  # groundnote user_defined_attribute cannot be modified
+        return False  # groundnode user_defined_attribute cannot be modified
 
 
 if __name__ == "__main__":

@@ -31,34 +31,31 @@ class Graph:
         Pack all the data from Graph into Tuple.
         """
 
-        graph_attribute = []
-        graph_attribute.append({"name": self.name})
+        graph_attribute = [{"name": self.name}]
 
         graph_components = []
         for component in self.components.values():
             if isinstance(component, Arc):
-                component_dict = {}
-                component_dict["type"] = "Arc"
-                component_dict["uid"] = str(component.uid)
-                component_dict["name"] = str(component.name)
-                component_dict["colour"] = str(component.colour)
-                component_dict["node1_uid"] = str(component.nodes[0].uid)
-                component_dict["node2_uid"] = str(component.nodes[1].uid)
-                component_dict["user_defined_attribute"] = str(
-                    component.user_defined_attribute
-                )
-                component_dict["user_defined_arc_type"] = str(
-                    component.user_defined_arc_type
-                )
+                component_dict = {
+                    "type": "Arc",
+                    "uid": str(component.uid),
+                    "name": str(component.name),
+                    "colour": str(component.colour),
+                    "node1_uid": str(component.nodes[0].uid),
+                    "node2_uid": str(component.nodes[1].uid),
+                    "user_defined_attribute": str(component.user_defined_attribute),
+                    "user_defined_arc_type": str(component.user_defined_arc_type),
+                }
                 graph_components.append(component_dict)
             elif isinstance(component, Node):
-                component_dict = {}
-                component_dict["type"] = "Node"
-                component_dict["uid"] = str(component.uid)
-                component_dict["name"] = str(component.name)
-                component_dict["colour"] = str(component.colour)
-                component_dict["position_x"] = str(component.position[0])
-                component_dict["position_y"] = str(component.position[1])
+                component_dict = {
+                    "type": "Node",
+                    "uid": str(component.uid),
+                    "name": str(component.name),
+                    "colour": str(component.colour),
+                    "position_x": str(component.position[0]),
+                    "position_y": str(component.position[1]),
+                }
                 if isinstance(component, SourceNode):
                     component_dict["type"] = "SourceNode"
                     component_dict["user_defined_attribute"] = str(
@@ -69,7 +66,7 @@ class Graph:
                 graph_components.append(component_dict)
             else:
                 pass
-        return (graph_attribute, graph_components)
+        return graph_attribute, graph_components
 
     def get_name(self):
         """
@@ -244,10 +241,10 @@ class Graph:
         update_arc_position
         """
 
-        if isinstance(arc1) == Arc:
+        if isinstance(arc1, Arc):
             arc1.update_position(node1, node2)
         elif isinstance(arc1, str):
-            if len(node2) == 12 and self.connected_graph == self:
+            if len(node2) == 12 and node2.connected_graph == self:
                 self.get_component("arc1").update_position(node1, node2)
 
     def delete_component(self, uid):
