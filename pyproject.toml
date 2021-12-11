@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "EEE231"
+version = "0.1.0"
+description = "EEE231 Directed Graph Editor"
+readme = "README.md"
+authors = ["Alex <30626291+Spehhhhh@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.6.2,<3.11"
+PySide6 = "^6.2.2"
+PyQt6 = "^6.2.2"
+
+
+[tool.poetry.dev-dependencies]
+black = "^21.12b0"
+coverage = "^6.2"
+loguru = "^0.5.3"
+pylint = "^2.12.2"
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

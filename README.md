@@ -20,17 +20,18 @@
 
 ### 1.0 Install
 
-- Clone GitHub Repository `git clone https://github.com/pirlite2/EEE231-group-B.git`
-- Switch to the directory `cd EEE231-group-B`
+- Clone GitHub Repository `git clone git@github.com:Spehhhhh/EEE228.git`
+- Switch to the directory `cd EEE231`
 
 ### 1.1 Usage
 
 - This project uses pipenv to manage the virtual environment.
-- Install pipenv `pip3 install pipenv`
-- Install package `pipenv install`
-- Activate the virtual environment for the current project `pipenv shell`
-- Generate lockfile `pipenv lock`
-- Run the main program `python main.py`
+- Install Poetry `curl -sSL https://install.python-poetry.org | python3 -`
+- Set environment variables `echo 'export PATH="$HOME/.poetry/bin:$PATH"' >> ~/.zshrc`
+- Install package `poetry install`
+- Activate the virtual environment for the current project `poetry shell`
+- Generate lockfile `poetry lock --no-update`
+- Run the main program `poetry run python main.py`
 
 ### 1.2 Name Convention
 
