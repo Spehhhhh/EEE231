@@ -86,10 +86,10 @@ class FileManager:
 
         # Inserting component instances into Graph
         for item in graph_raw_data[1]:
-            if str(item.get("type")) is not "Arc":
+            if str(item.get("type")) != "Arc":
                 new_graph.create_component(item)
         for item in graph_raw_data[1]:
-            if str(item.get("type")) is "Arc":
+            if str(item.get("type")) == "Arc":
                 new_graph.create_component(item)
 
         return new_graph
