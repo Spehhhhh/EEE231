@@ -1,14 +1,25 @@
 [tool.poetry]
-name = "EEE231"
+name = "directedgraph"
 version = "0.1.0"
 description = "EEE231 Directed Graph Editor"
-readme = "README.md"
 authors = ["Alex <30626291+Spehhhhh@users.noreply.github.com>"]
+maintainers = ["Alex <30626291+Spehhhhh@users.noreply.github.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = ""
+documentation = ""
+keywords = [
+    "Directed Graph Editor",
+]
+
+[build-system]
+requires = ["poetry>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
 python = ">=3.6.2,<3.11"
 PySide6 = "^6.2.2"
+pyinstaller = "^4.7"
 
 [tool.poetry.dev-dependencies]
 # Static Type Checker
@@ -54,7 +65,3 @@ extend_skip_glob=[".*", "*/site-packages/*","*/__init__.py", "*/__main__.py","*/
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"

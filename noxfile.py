@@ -48,3 +48,9 @@ def linting_pylint(session):
 def typing(session):
     install_with_constraints(session, "mypy")
     session.run("mypy", *src)
+
+
+@nox.session
+def building(session):
+    session.run("poetry", "install", "--no-dev")
+    session.run("pyinstaller", '--name="Directed Graph Editor"', "--windowed", "--onefile", "main.py")
