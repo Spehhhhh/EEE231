@@ -182,9 +182,7 @@ class SourceNode(Node):
         super().__init__(connected_graph, **kwargs)
 
         self.user_defined_attribute = (
-            kwargs["user_defined_attribute"]
-            if kwargs.get("user_defined_attribute", None)
-            else "0"
+            kwargs["user_defined_attribute"] if kwargs.get("user_defined_attribute", None) else "0"
         )
 
     def get_user_defined_attribute(self):

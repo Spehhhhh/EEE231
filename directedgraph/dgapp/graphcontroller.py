@@ -93,12 +93,8 @@ class GraphController:
                     valid1 = 1  # source node does not have an arc yet
 
             else:
-                if (
-                    parameters["node1_uid"] in self.arc_counter
-                ):  # if they have at least 1 arc
-                    if (
-                        self.arc_counter[parameters["node1_uid"]] > 49
-                    ):  # for any node it cannot have more than 50 arcs.
+                if parameters["node1_uid"] in self.arc_counter:  # if they have at least 1 arc
+                    if self.arc_counter[parameters["node1_uid"]] > 49:  # for any node it cannot have more than 50 arcs.
                         return "Each node cannot have more than 5 arcs"
                     else:
                         valid1 = 1
@@ -122,17 +118,13 @@ class GraphController:
                 else:
                     valid2 = 1  # Valid 2 is the same as Valid one but it is for the checking of second node
 
-            if (
-                parameters["user_defined_attribute"] > 0
-            ):  # arc properties cannot be negative
+            if parameters["user_defined_attribute"] > 0:  # arc properties cannot be negative
                 valid3 = 1
             else:
                 return "Arc Property Must be Positive"
 
             if (valid1 == 1) and (valid2 == 1) and (valid3 == 1):
-                temp = graph_instance.create_component(
-                    parameters
-                )  # if it passes the tests, the arc will be created
+                temp = graph_instance.create_component(parameters)  # if it passes the tests, the arc will be created
                 self.add_arc(
                     parameters["node1_uid"], parameters["node2_uid"]
                 )  # pass the 2 node IDs to be used as keys in the arc_counter dictionary

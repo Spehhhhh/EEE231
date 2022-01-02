@@ -192,9 +192,7 @@ class GraphSimulator:
 if __name__ == "__main__":
     path = Path(os.path.dirname(__file__)).parent.parent.joinpath("tests").joinpath("test_rlc.xml")
 
-    path_out = (
-        Path(os.path.dirname(__file__)).parent.parent.joinpath("tests").joinpath("test_rlc.cir")
-    )
+    path_out = Path(os.path.dirname(__file__)).parent.parent.joinpath("tests").joinpath("test_rlc.cir")
 
     fm = FileManager()
     import_graph = fm.open_graph(str(path))

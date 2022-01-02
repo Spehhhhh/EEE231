@@ -21,9 +21,7 @@ class FileManager:
     def parse_attribute(self, component, temp, attributes):
         for attribute in attributes:
             try:
-                temp[attribute] = (
-                    component.getElementsByTagName(attribute)[0].childNodes[0].data
-                )
+                temp[attribute] = component.getElementsByTagName(attribute)[0].childNodes[0].data
             except IndexError:
                 pass
 
@@ -34,12 +32,7 @@ class FileManager:
         type_list = ["Node", "SourceNode", "GroundNode", "Arc"]
 
         # Get Graph Name
-        graph_name = (
-            dom1.getElementsByTagName("Graph")[0]
-            .getElementsByTagName("name")[0]
-            .childNodes[0]
-            .data
-        )
+        graph_name = dom1.getElementsByTagName("Graph")[0].getElementsByTagName("name")[0].childNodes[0].data
         graph_attribute.append({"name": graph_name})
 
         # Get Graph components
@@ -133,73 +126,43 @@ class FileManager:
             component_node_colour_value = doc.createTextNode(component["colour"])
             component_node_colour.appendChild(component_node_colour_value)
 
-            if (
-                component["type"] == "Node"
-                or component["type"] == "GroundNode"
-                or component["type"] == "SourceNode"
-            ):
+            if component["type"] == "Node" or component["type"] == "GroundNode" or component["type"] == "SourceNode":
                 component_node_position_x = doc.createElement("position_x")
                 component_node.appendChild(component_node_position_x)
-                component_node_position_x_value = doc.createTextNode(
-                    component["position_x"]
-                )
+                component_node_position_x_value = doc.createTextNode(component["position_x"])
                 component_node_position_x.appendChild(component_node_position_x_value)
 
                 component_node_position_y = doc.createElement("position_y")
                 component_node.appendChild(component_node_position_y)
-                component_node_position_y_value = doc.createTextNode(
-                    component["position_y"]
-                )
+                component_node_position_y_value = doc.createTextNode(component["position_y"])
                 component_node_position_y.appendChild(component_node_position_y_value)
 
             if component["type"] == "SourceNode":
-                component_node_user_defined_attribute = doc.createElement(
-                    "user_defined_attribute"
-                )
+                component_node_user_defined_attribute = doc.createElement("user_defined_attribute")
                 component_node.appendChild(component_node_user_defined_attribute)
-                component_node_user_defined_attribute_value = doc.createTextNode(
-                    component["user_defined_attribute"]
-                )
-                component_node_user_defined_attribute.appendChild(
-                    component_node_user_defined_attribute_value
-                )
+                component_node_user_defined_attribute_value = doc.createTextNode(component["user_defined_attribute"])
+                component_node_user_defined_attribute.appendChild(component_node_user_defined_attribute_value)
 
             if component["type"] == "Arc":
                 component_node_node1_uid = doc.createElement("node1_uid")
                 component_node.appendChild(component_node_node1_uid)
-                component_node_node1_uid_value = doc.createTextNode(
-                    component["node1_uid"]
-                )
+                component_node_node1_uid_value = doc.createTextNode(component["node1_uid"])
                 component_node_node1_uid.appendChild(component_node_node1_uid_value)
 
                 component_node_node2_uid = doc.createElement("node2_uid")
                 component_node.appendChild(component_node_node2_uid)
-                component_node_node2_uid_value = doc.createTextNode(
-                    component["node2_uid"]
-                )
+                component_node_node2_uid_value = doc.createTextNode(component["node2_uid"])
                 component_node_node2_uid.appendChild(component_node_node2_uid_value)
 
-                component_node_user_defined_attribute = doc.createElement(
-                    "user_defined_attribute"
-                )
+                component_node_user_defined_attribute = doc.createElement("user_defined_attribute")
                 component_node.appendChild(component_node_user_defined_attribute)
-                component_node_user_defined_attribute_value = doc.createTextNode(
-                    component["user_defined_attribute"]
-                )
-                component_node_user_defined_attribute.appendChild(
-                    component_node_user_defined_attribute_value
-                )
+                component_node_user_defined_attribute_value = doc.createTextNode(component["user_defined_attribute"])
+                component_node_user_defined_attribute.appendChild(component_node_user_defined_attribute_value)
 
-                component_node_user_defined_arc_type = doc.createElement(
-                    "user_defined_arc_type"
-                )
+                component_node_user_defined_arc_type = doc.createElement("user_defined_arc_type")
                 component_node.appendChild(component_node_user_defined_arc_type)
-                component_node_user_defined_arc_type_value = doc.createTextNode(
-                    component["user_defined_arc_type"]
-                )
-                component_node_user_defined_arc_type.appendChild(
-                    component_node_user_defined_arc_type_value
-                )
+                component_node_user_defined_arc_type_value = doc.createTextNode(component["user_defined_arc_type"])
+                component_node_user_defined_arc_type.appendChild(component_node_user_defined_arc_type_value)
 
             components_node.appendChild(component_node)
 

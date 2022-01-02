@@ -27,15 +27,7 @@ CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dgcore import (
-    Arc,
-    Graph,
-    GroundNode,
-    GroundNodeNumberError,
-    Node,
-    SourceNode,
-    graph,
-)
+from directedgraph.dgcore import Arc, Graph, GroundNode, GroundNodeNumberError, Node, SourceNode, graph
 from directedgraph.dggui import GroundNodeItem, NodeItem, SourceNodeItem
 from directedgraph.dgutils import FileManager
 
@@ -57,10 +49,7 @@ class ArcItem(QGraphicsEllipseItem):
         print("node2_position", self.node2.get_position())
 
         self.arc_fill_brush = QBrush(Qt.black, Qt.SolidPattern)
-        if (
-            self.node1_position[0] < self.node2_position[0]
-            and self.node1_position[1] < self.node2_position[1]
-        ):
+        if self.node1_position[0] < self.node2_position[0] and self.node1_position[1] < self.node2_position[1]:
             bounding_shape = QRectF(
                 self.node1_position[0] - (self.node2_position[0] - self.node1_position[0]),
                 self.node1_position[1],
@@ -68,10 +57,7 @@ class ArcItem(QGraphicsEllipseItem):
                 2 * (abs(self.node1_position[1] - self.node2_position[1]))
                 # 2*(abs(self.node1_position[1] - self.node2_position[1])),
             )
-        elif (
-            self.node1_position[0] > self.node2_position[0]
-            and self.node1_position[1] < self.node2_position[1]
-        ):
+        elif self.node1_position[0] > self.node2_position[0] and self.node1_position[1] < self.node2_position[1]:
             bounding_shape = QRectF(
                 self.node2_position[0],
                 self.node2_position[1] - abs(self.node2_position[1] - self.node1_position[1]),
@@ -79,10 +65,7 @@ class ArcItem(QGraphicsEllipseItem):
                 2 * (abs(self.node1_position[1] - self.node2_position[1]))
                 # 2*(abs(self.node1_position[1] - self.node2_position[1])),
             )
-        elif (
-            self.node1_position[0] < self.node2_position[0]
-            and self.node1_position[1] > self.node2_position[1]
-        ):
+        elif self.node1_position[0] < self.node2_position[0] and self.node1_position[1] > self.node2_position[1]:
             bounding_shape = QRectF(
                 self.node1_position[0],
                 self.node1_position[1] - abs(self.node1_position[1] - self.node2_position[1]),
@@ -90,57 +73,38 @@ class ArcItem(QGraphicsEllipseItem):
                 2 * (abs(self.node2_position[1] - self.node1_position[1]))
                 # 2*(abs(self.node1_position[1] - self.node2_position[1])),
             )
-        elif (
-            self.node1_position[0] > self.node2_position[0]
-            and self.node1_position[1] > self.node2_position[1]
-        ):
+        elif self.node1_position[0] > self.node2_position[0] and self.node1_position[1] > self.node2_position[1]:
             bounding_shape = QRectF(
                 self.node2_position[0] - (self.node1_position[0] - self.node2_position[0]),
                 self.node2_position[1],
                 2 * (abs(self.node2_position[0] - self.node1_position[0])),
                 2 * (abs(self.node2_position[1] - self.node1_position[1])),
             )
-        elif (
-            self.node1_position[0] == self.node2_position[0]
-            and self.node1_position[1] < self.node2_position[1]
-        ):
+        elif self.node1_position[0] == self.node2_position[0] and self.node1_position[1] < self.node2_position[1]:
             bounding_shape = QRectF(
-                self.node1_position[0]
-                - 0.5 * abs(self.node1_position[1] - self.node2_position[1]),
+                self.node1_position[0] - 0.5 * abs(self.node1_position[1] - self.node2_position[1]),
                 self.node1_position[1],
                 (abs(self.node2_position[1] - self.node1_position[1])),
                 (abs(self.node2_position[1] - self.node1_position[1])),
             )
-        elif (
-            self.node1_position[0] == self.node2_position[0]
-            and self.node1_position[1] > self.node2_position[1]
-        ):
+        elif self.node1_position[0] == self.node2_position[0] and self.node1_position[1] > self.node2_position[1]:
             bounding_shape = QRectF(
-                self.node2_position[0]
-                - 0.5 * abs(self.node1_position[1] - self.node2_position[1]),
+                self.node2_position[0] - 0.5 * abs(self.node1_position[1] - self.node2_position[1]),
                 self.node2_position[1],
                 (abs(self.node2_position[1] - self.node1_position[1])),
                 (abs(self.node2_position[1] - self.node1_position[1])),
             )
-        elif (
-            self.node1_position[0] > self.node2_position[0]
-            and self.node1_position[1] == self.node2_position[1]
-        ):
+        elif self.node1_position[0] > self.node2_position[0] and self.node1_position[1] == self.node2_position[1]:
             bounding_shape = QRectF(
                 self.node2_position[0],
-                self.node2_position[1]
-                - 0.5 * abs(self.node2_position[0] - self.node1_position[0]),
+                self.node2_position[1] - 0.5 * abs(self.node2_position[0] - self.node1_position[0]),
                 (abs(self.node2_position[0] - self.node1_position[0])),
                 (abs(self.node2_position[0] - self.node1_position[0])),
             )
-        elif (
-            self.node1_position[0] < self.node2_position[0]
-            and self.node1_position[1] == self.node2_position[1]
-        ):
+        elif self.node1_position[0] < self.node2_position[0] and self.node1_position[1] == self.node2_position[1]:
             bounding_shape = QRectF(
                 self.node1_position[0],
-                self.node1_position[1]
-                - 0.5 * abs(self.node1_position[0] - self.node2_position[0]),
+                self.node1_position[1] - 0.5 * abs(self.node1_position[0] - self.node2_position[0]),
                 (abs(self.node2_position[0] - self.node1_position[0])),
                 (abs(self.node2_position[0] - self.node1_position[0])),
             )
@@ -188,48 +152,24 @@ class ArcItem(QGraphicsEllipseItem):
         #     math.atan(self.node2_position[1] / self.node2_position[0]) / math.pi
         # ) * 180
 
-        if (
-            self.node1_position[0] < self.node2_position[0]
-            and self.node1_position[1] < self.node2_position[1]
-        ):
+        if self.node1_position[0] < self.node2_position[0] and self.node1_position[1] < self.node2_position[1]:
             painter.drawArc(boundingRect, 0, 90 * 16)
 
-        elif (
-            self.node1_position[0] > self.node2_position[0]
-            and self.node1_position[1] < self.node2_position[1]
-        ):
+        elif self.node1_position[0] > self.node2_position[0] and self.node1_position[1] < self.node2_position[1]:
             painter.drawArc(boundingRect, 90 * 16, 90 * 16)
 
-        elif (
-            self.node1_position[0] < self.node2_position[0]
-            and self.node1_position[1] > self.node2_position[1]
-        ):
+        elif self.node1_position[0] < self.node2_position[0] and self.node1_position[1] > self.node2_position[1]:
             painter.drawArc(boundingRect, 180 * 16, -90 * 16)
 
-        elif (
-            self.node1_position[0] > self.node2_position[0]
-            and self.node1_position[1] > self.node2_position[1]
-        ):
+        elif self.node1_position[0] > self.node2_position[0] and self.node1_position[1] > self.node2_position[1]:
             painter.drawArc(boundingRect, 0, 90 * 16)
-        elif (
-            self.node1_position[0] == self.node2_position[0]
-            and self.node1_position[1] < self.node2_position[1]
-        ):
+        elif self.node1_position[0] == self.node2_position[0] and self.node1_position[1] < self.node2_position[1]:
             painter.drawArc(boundingRect, 90 * 16, 180 * 16)
-        elif (
-            self.node1_position[0] == self.node2_position[0]
-            and self.node1_position[1] > self.node2_position[1]
-        ):
+        elif self.node1_position[0] == self.node2_position[0] and self.node1_position[1] > self.node2_position[1]:
             painter.drawArc(boundingRect, -90 * 16, -180 * 16)
-        elif (
-            self.node1_position[0] > self.node2_position[0]
-            and self.node1_position[1] == self.node2_position[1]
-        ):
+        elif self.node1_position[0] > self.node2_position[0] and self.node1_position[1] == self.node2_position[1]:
             painter.drawArc(boundingRect, 0, 180 * 16)
-        elif (
-            self.node1_position[0] < self.node2_position[0]
-            and self.node1_position[1] == self.node2_position[1]
-        ):
+        elif self.node1_position[0] < self.node2_position[0] and self.node1_position[1] == self.node2_position[1]:
             painter.drawArc(boundingRect, 180 * 16, -180 * 16)
         return
 
@@ -437,7 +377,7 @@ class GraphEditorMainWindow(QMainWindow, QDialog):
         # copyaction.triggered.connect()
 
         # Excute the pop menu at all the graph area, but won't conflit with node pop meun
-        action = contextmenu.exec_(self.mapToGlobal(event.pos()))
+        # action = contextmenu.exec_(self.mapToGlobal(event.pos()))
 
     # Trigger Fcuntions =========================================================
     def on_open_action(self):

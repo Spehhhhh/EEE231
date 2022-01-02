@@ -124,9 +124,7 @@ class Insert_Remove_Component(Counter):
                 valid1 = 1  # source node does not have an arc yet
         else:
             if node1 in self.arc_counter:  # if they have at least 1 arc
-                if (
-                    self.arc_counter[node1] > 49
-                ):  # for any node it cannot have more than 50 arcs.
+                if self.arc_counter[node1] > 49:  # for any node it cannot have more than 50 arcs.
                     return "Each node cannot have more than 5 arcs"
                 else:
                     valid1 = 1

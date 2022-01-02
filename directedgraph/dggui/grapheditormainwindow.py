@@ -21,14 +21,7 @@ sys.path.append(str(ROOT_FOLDER))
 
 from directedgraph.dgapp import GraphController
 from directedgraph.dgcore import Arc, Graph, GroundNode, Node, SourceNode
-from directedgraph.dggui import (
-    ArcItem,
-    GraphEditorScene,
-    GroundNodeItem,
-    InputDialogArc,
-    NodeItem,
-    SourceNodeItem,
-)
+from directedgraph.dggui import ArcItem, GraphEditorScene, GroundNodeItem, InputDialogArc, NodeItem, SourceNodeItem
 from directedgraph.dgutils import FileManager, GraphSimulator
 
 

@@ -35,14 +35,8 @@ class ArcItem(QGraphicsPathItem):
         self.start_point.setY(self.arc.nodes[0].position[1])
 
         self.mid_point = QPointF()
-        self.mid_point.setX(
-            (self.arc.nodes[0].position[0] + self.arc.nodes[1].position[0]) / 2
-            - self.curvature * 6
-        )
-        self.mid_point.setY(
-            (self.arc.nodes[0].position[1] + self.arc.nodes[1].position[1]) / 2
-            - self.curvature * 6
-        )
+        self.mid_point.setX((self.arc.nodes[0].position[0] + self.arc.nodes[1].position[0]) / 2 - self.curvature * 6)
+        self.mid_point.setY((self.arc.nodes[0].position[1] + self.arc.nodes[1].position[1]) / 2 - self.curvature * 6)
 
         self.end_point = QPointF()
         self.end_point.setX(self.arc.nodes[1].position[0])
@@ -67,14 +61,8 @@ class ArcItem(QGraphicsPathItem):
         self.start_point.setX(self.arc.nodes[0].position[0])
         self.start_point.setY(self.arc.nodes[0].position[1])
 
-        self.mid_point.setX(
-            (self.arc.nodes[0].position[0] + self.arc.nodes[1].position[0]) / 2
-            - self.curvature * 4
-        )
-        self.mid_point.setY(
-            (self.arc.nodes[0].position[1] + self.arc.nodes[1].position[1]) / 2
-            - self.curvature * 4
-        )
+        self.mid_point.setX((self.arc.nodes[0].position[0] + self.arc.nodes[1].position[0]) / 2 - self.curvature * 4)
+        self.mid_point.setY((self.arc.nodes[0].position[1] + self.arc.nodes[1].position[1]) / 2 - self.curvature * 4)
 
         self.end_point.setX(self.arc.nodes[1].position[0])
         self.end_point.setY(self.arc.nodes[1].position[1])
@@ -96,9 +84,7 @@ class ArcItem(QGraphicsPathItem):
         painter.drawText(
             self.mid_point.x() + self.curvature * 2 + 14,
             self.mid_point.y() + self.curvature * 2 + 14,
-            str(self.arc.user_defined_arc_type)
-            + ": "
-            + str(self.arc.user_defined_attribute),
+            str(self.arc.user_defined_arc_type) + ": " + str(self.arc.user_defined_attribute),
         )
 
     def contextMenuEvent(self, event):

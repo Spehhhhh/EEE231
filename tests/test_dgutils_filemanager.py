@@ -32,7 +32,9 @@ class TestFileManager(unittest.TestCase):
     def setUp(self):
         self.file_name = "test_rc"
         self.file_extension = ".xml"
-        self.path = Path(os.path.dirname(__file__)).joinpath(self.file_name + self.file_extension)
+        self.path = Path(os.path.dirname(__file__)).joinpath(
+            self.file_name + self.file_extension
+        )
 
     def tearDown(self):
         pass

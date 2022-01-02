@@ -58,9 +58,7 @@ class Graph:
                 }
                 if isinstance(component, SourceNode):
                     component_dict["type"] = "SourceNode"
-                    component_dict["user_defined_attribute"] = str(
-                        component.user_defined_attribute
-                    )
+                    component_dict["user_defined_attribute"] = str(component.user_defined_attribute)
                 if isinstance(component, GroundNode):
                     component_dict["type"] = "GroundNode"
                 graph_components.append(component_dict)
