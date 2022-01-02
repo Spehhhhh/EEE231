@@ -1,0 +1,21 @@
+[flake8]
+ignore = E402,E501,W503
+select =
+    W, # pycodestyle
+    E, # pycodestyle
+    C, # mccabe
+    F, # pyflakes
+exclude =
+    .git,
+    .vscode,
+    .venv,
+    __pycache__,
+    .pytest_cache,
+    .mypy_cache,
+    .nox,
+    .tox
+import-order-style = google
+max-line-length = 120
+max-complexity = 10
+per-file-ignores = 
+    __init__.py: F401
