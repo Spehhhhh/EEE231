@@ -17,9 +17,8 @@ requires = ["poetry>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = ">=3.6.2,<3.11"
+python = ">=3.7,<3.11"
 PySide6 = "^6.2.2"
-pyinstaller = "^4.7"
 
 [tool.poetry.dev-dependencies]
 # Static Type Checker
@@ -37,8 +36,11 @@ isort = "^5.10.1"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 coverage = {version = "^6.2", extras = ["toml"]}
-# Test automation
+# Automation
 nox = "^2021.10.1"
+nox-poetry = "^0.9.0"
+# Build
+pyinstaller = "^4.7"
 # Other dependencies
 loguru = "^0.5.3"
 
