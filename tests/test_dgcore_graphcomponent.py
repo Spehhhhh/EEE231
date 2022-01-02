@@ -55,9 +55,7 @@ class TestGraphComponent(unittest.TestCase):
     def test_groundnode_sourcenode(self):
         groundnode1 = GroundNode()
         self.assertEqual(groundnode1.get("user_defined_attribute"), "0")
-        sourcenode1 = SourceNode(
-            None, name="sourcenode1", position=[2, 3], user_defined_attribute="foo"
-        )
+        sourcenode1 = SourceNode(None, name="sourcenode1", position=[2, 3], user_defined_attribute="foo")
         self.assertEqual(sourcenode1.get("user_defined_attribute"), "foo")
 
     # @logger.catch

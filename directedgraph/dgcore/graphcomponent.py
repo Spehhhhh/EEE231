@@ -236,8 +236,10 @@ class GroundNode(Node):
 
 
 if __name__ == "__main__":
-    import unittest
+    # import unittest
 
-    from tests import TestGraphComponent
+    # from tests import TestGraphComponent
 
-    unittest.main()
+    # unittest.main()
+
+    pass

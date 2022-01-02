@@ -178,8 +178,10 @@ class FileManager:
 
 
 if __name__ == "__main__":
-    import unittest
+    # import unittest
 
-    from tests import TestFileManager
+    # from tests import TestFileManager
 
-    unittest.main()
+    # unittest.main()
+
+    pass

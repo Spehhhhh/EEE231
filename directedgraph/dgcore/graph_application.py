@@ -8,8 +8,10 @@ sys.path.append(str(ROOT_FOLDER))
 
 
 if __name__ == "__main__":
-    import unittest
+    # import unittest
 
-    from tests import TestDirectedGraphApplication
+    # from tests import TestDirectedGraphApplication
 
-    unittest.main()
+    # unittest.main()
+
+    pass

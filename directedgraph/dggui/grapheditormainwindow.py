@@ -19,7 +19,6 @@ CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dgapp import GraphController
 from directedgraph.dgcore import Arc, Graph, GroundNode, Node, SourceNode
 from directedgraph.dggui import ArcItem, GraphEditorScene, GroundNodeItem, InputDialogArc, NodeItem, SourceNodeItem
 from directedgraph.dgutils import FileManager, GraphSimulator
@@ -30,7 +29,7 @@ class GraphEditorMainWindow(QMainWindow):
         super().__init__()
 
         self.connected_graph = Graph()
-        self.connected_graphcontroller = GraphController()
+        # self.connected_graphcontroller = GraphController()
         self.scene_position = QtCore.QPointF(0, 0)
         self.file_path = ""
 
@@ -372,7 +371,7 @@ class GraphEditorMainWindow(QMainWindow):
         for item in self.scene.items():
             if isinstance(item, NodeItem):  # Arc will be deleted with the Node
                 item.on_delete_action()
-        self.connected_graphcontroller = GraphController()
+        # self.connected_graphcontroller = GraphController()
 
 
 if __name__ == "__main__":

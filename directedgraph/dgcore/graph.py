@@ -281,8 +281,10 @@ class Graph:
 
 
 if __name__ == "__main__":
-    import unittest
+    # import unittest
 
-    from tests import TestGraph  # Import test
+    # from tests import TestGraph  # Import test
 
-    unittest.main()  # Run Unit tests
+    # unittest.main()  # Run Unit tests
+
+    pass

@@ -8,7 +8,7 @@ CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dgcore import Arc, Graph, GroundNode, Node, SourceNode
+from directedgraph.dgcore import Arc, GroundNode, Node, SourceNode
 from directedgraph.dgutils import FileManager
 
 
