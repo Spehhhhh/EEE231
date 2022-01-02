@@ -1,38 +1,43 @@
-import sys
 import math
 from pathlib import Path
+import sys
 
-from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QAction, QPainter, QPainterPath, QBrush
+from PySide6 import QtWidgets
+from PySide6.QtCore import QRectF, Qt
+from PySide6.QtGui import QAction, QBrush, QPainter, QPainterPath
 from PySide6.QtWidgets import (
     QApplication,
-    QMainWindow,
-    QVBoxLayout,
-    QWidget,
-    QLineEdit,
-    QPushButton,
     QDialog,
-)
-from PySide6 import QtWidgets
-from PySide6.QtWidgets import QMenu
-from PySide6.QtWidgets import QFileDialog, QMessageBox
-from PySide6.QtWidgets import (
-    QGraphicsScene,
-    QGraphicsView,
+    QFileDialog,
     QGraphicsEllipseItem,
     QGraphicsRectItem,
+    QGraphicsScene,
+    QGraphicsView,
+    QLineEdit,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dgcore import Node, GroundNode, SourceNode, Arc, Graph, graph
-from directedgraph.dgcore import GroundNodeNumberError
+from directedgraph.dgcore import (
+    Arc,
+    Graph,
+    GroundNode,
+    GroundNodeNumberError,
+    Node,
+    SourceNode,
+    graph,
+)
+from directedgraph.dggui import GroundNodeItem, NodeItem, SourceNodeItem
 from directedgraph.dgutils import FileManager
-from directedgraph.dggui import NodeItem, SourceNodeItem, GroundNodeItem
 
 
 class ArcItem(QGraphicsEllipseItem):
@@ -57,8 +62,7 @@ class ArcItem(QGraphicsEllipseItem):
             and self.node1_position[1] < self.node2_position[1]
         ):
             bounding_shape = QRectF(
-                self.node1_position[0]
-                - (self.node2_position[0] - self.node1_position[0]),
+                self.node1_position[0] - (self.node2_position[0] - self.node1_position[0]),
                 self.node1_position[1],
                 2 * (abs(self.node1_position[0] - self.node2_position[0])),
                 2 * (abs(self.node1_position[1] - self.node2_position[1]))
@@ -70,8 +74,7 @@ class ArcItem(QGraphicsEllipseItem):
         ):
             bounding_shape = QRectF(
                 self.node2_position[0],
-                self.node2_position[1]
-                - abs(self.node2_position[1] - self.node1_position[1]),
+                self.node2_position[1] - abs(self.node2_position[1] - self.node1_position[1]),
                 2 * (abs(self.node1_position[0] - self.node2_position[0])),
                 2 * (abs(self.node1_position[1] - self.node2_position[1]))
                 # 2*(abs(self.node1_position[1] - self.node2_position[1])),
@@ -82,8 +85,7 @@ class ArcItem(QGraphicsEllipseItem):
         ):
             bounding_shape = QRectF(
                 self.node1_position[0],
-                self.node1_position[1]
-                - abs(self.node1_position[1] - self.node2_position[1]),
+                self.node1_position[1] - abs(self.node1_position[1] - self.node2_position[1]),
                 2 * (abs(self.node2_position[0] - self.node1_position[0])),
                 2 * (abs(self.node2_position[1] - self.node1_position[1]))
                 # 2*(abs(self.node1_position[1] - self.node2_position[1])),
@@ -93,8 +95,7 @@ class ArcItem(QGraphicsEllipseItem):
             and self.node1_position[1] > self.node2_position[1]
         ):
             bounding_shape = QRectF(
-                self.node2_position[0]
-                - (self.node1_position[0] - self.node2_position[0]),
+                self.node2_position[0] - (self.node1_position[0] - self.node2_position[0]),
                 self.node2_position[1],
                 2 * (abs(self.node2_position[0] - self.node1_position[0])),
                 2 * (abs(self.node2_position[1] - self.node1_position[1])),
@@ -180,12 +181,12 @@ class ArcItem(QGraphicsEllipseItem):
         painter.setPen(Qt.black)
         # painter.drawText(boundingRect,Qt.AlignCenter,self.arc_inst.name)
         # painter.drawText(boundingRect, Qt.AlignCenter, self.arc_inst.uid)
-        degree1 = (
-            math.atan(self.node1_position[1] / self.node1_position[0]) / math.pi
-        ) * 180
-        degree2 = (
-            math.atan(self.node2_position[1] / self.node2_position[0]) / math.pi
-        ) * 180
+        # degree1 = (
+        #     math.atan(self.node1_position[1] / self.node1_position[0]) / math.pi
+        # ) * 180
+        # degree2 = (
+        #     math.atan(self.node2_position[1] / self.node2_position[0]) / math.pi
+        # ) * 180
 
         if (
             self.node1_position[0] < self.node2_position[0]
@@ -485,9 +486,7 @@ class GraphEditorMainWindow(QMainWindow, QDialog):
             msg.exec_()
             raise GroundNodeNumberError("oops!!")
         else:
-            self.scene.addItem(
-                GroundNodeItem(GroundNode(None, None, "G1", None, [500, 300]))
-            )
+            self.scene.addItem(GroundNodeItem(GroundNode(None, None, "G1", None, [500, 300])))
 
     def on_sourcenode_action(self):
         form = InputFormSourceNode()
@@ -495,9 +494,7 @@ class GraphEditorMainWindow(QMainWindow, QDialog):
         form.exec_()
         value = str(form.confirm())
         print("value:", value)
-        self.scene.addItem(
-            SourceNodeItem(SourceNode(None, None, value, None, [250, 300]))
-        )
+        self.scene.addItem(SourceNodeItem(SourceNode(None, None, value, None, [250, 300])))
 
     def on_arc_action(self):
         input_arc = Arc_Input()

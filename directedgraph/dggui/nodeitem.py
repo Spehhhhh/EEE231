@@ -1,17 +1,16 @@
-import sys
 from pathlib import Path
+import sys
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QAction
-from PySide6.QtGui import QColor, QBrush
+from PySide6.QtCore import QRectF, Qt
+from PySide6.QtGui import QAction, QBrush, QColor
 from PySide6.QtWidgets import (
     QApplication,
-    QInputDialog,
     QColorDialog,
-    QMenu,
     QGraphicsEllipseItem,
     QGraphicsRectItem,
+    QInputDialog,
+    QMenu,
     QMessageBox,
 )
 

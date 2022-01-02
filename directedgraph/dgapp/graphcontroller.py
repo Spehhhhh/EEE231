@@ -1,5 +1,5 @@
-import sys
 from pathlib import Path
+import sys
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 CURRENT_DIRECTORY = Path(__file__).absolute()

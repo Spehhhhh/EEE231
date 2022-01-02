@@ -1,12 +1,12 @@
-import sys
 from pathlib import Path
+import sys
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc
+from directedgraph.dgcore import Arc, GroundNode, Node, SourceNode
 
 
 class Graph:
@@ -284,6 +284,7 @@ class Graph:
 
 if __name__ == "__main__":
     import unittest
+
     from tests import TestGraph  # Import test
 
     unittest.main()  # Run Unit tests

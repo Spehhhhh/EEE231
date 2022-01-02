@@ -1,5 +1,5 @@
-import sys
 from pathlib import Path
+import sys
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 CURRENT_DIRECTORY = Path(__file__).absolute()
@@ -17,15 +17,11 @@ class Arc(GraphComponent):
         self.update_position(kwargs["node1_uid"], kwargs["node2_uid"])
 
         self.user_defined_attribute = (
-            kwargs["user_defined_attribute"]
-            if kwargs.get("user_defined_attribute", None)
-            else "0"
+            kwargs["user_defined_attribute"] if kwargs.get("user_defined_attribute", None) else "0"
         )
 
         self.user_defined_arc_type = (
-            kwargs["user_defined_arc_type"]
-            if kwargs.get("user_defined_arc_type", None)
-            else None
+            kwargs["user_defined_arc_type"] if kwargs.get("user_defined_arc_type", None) else None
         )
 
         # self.function = {}

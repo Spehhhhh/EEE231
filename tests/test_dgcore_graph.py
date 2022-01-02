@@ -11,12 +11,8 @@ CURRENT_FOLDER_PATH = str(CURRENT_FOLDER)
 sys.path.append(CURRENT_FOLDER_PATH)
 
 from directedgraph.dgcore import (
-    GraphComponent,
     Graph,
     Node,
-    SourceNode,
-    GroundNode,
-    Arc,
 )
 from directedgraph.dgutils import FileManager
 
@@ -45,9 +41,7 @@ class TestGraph(unittest.TestCase):
     def setUp(self):
         self.file_name = "test_rc"
         self.file_extension = ".xml"
-        self.path = Path(os.path.dirname(__file__)).joinpath(
-            self.file_name + self.file_extension
-        )
+        self.path = Path(os.path.dirname(__file__)).joinpath(self.file_name + self.file_extension)
 
     def tearDown(self):
         pass
@@ -173,18 +167,14 @@ class TestGraph(unittest.TestCase):
                 "user_defined_arc_type": None,
             }
         )
-        self.assertEqual(
-            graph1.get_component("9a2812").get_position(), ([50, 50], [400, 500])
-        )
+        self.assertEqual(graph1.get_component("9a2812").get_position(), ([50, 50], [400, 500]))
 
     # @logger.catch
     def test_generate_component_uid(self):
         graph1 = Graph("graph1")
         graph1.create_component({"type": "Node", "name": "Node without UID 1"})
         graph1.create_component({"type": "Node", "name": "Node without UID 2"})
-        graph1.create_component(
-            {"type": "Node", "name": "Node with UID", "uid": "7778da"}
-        )
+        graph1.create_component({"type": "Node", "name": "Node with UID", "uid": "7778da"})
         graph1.create_component(
             {"type": "Node", "name": "Node with duplicate UID", "uid": "7778da"}
         )

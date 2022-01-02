@@ -1,11 +1,4 @@
-from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QLineEdit,
-    QPushButton,
-    QDialog,
-    QLabel,
-    QMessageBox,
-)
+from PySide6.QtWidgets import QDialog, QLabel, QLineEdit, QMessageBox, QPushButton, QVBoxLayout
 
 
 class InputDialogNode(QDialog):

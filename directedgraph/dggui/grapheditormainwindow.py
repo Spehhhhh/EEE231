@@ -1,21 +1,17 @@
-import sys
 from pathlib import Path
+import sys
 
-from PySide6 import QtWidgets
-from PySide6 import QtCore
+from PySide6 import QtCore, QtWidgets
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
+    QFileDialog,
+    QGraphicsView,
     QInputDialog,
     QMainWindow,
+    QMenu,
+    QMessageBox,
     QVBoxLayout,
     QWidget,
-)
-
-from PySide6.QtWidgets import (
-    QMenu,
-    QFileDialog,
-    QMessageBox,
-    QGraphicsView,
 )
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
@@ -23,17 +19,17 @@ CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dgcore import Node, SourceNode, GroundNode, Arc, Graph
+from directedgraph.dgapp import GraphController
+from directedgraph.dgcore import Arc, Graph, GroundNode, Node, SourceNode
 from directedgraph.dggui import (
+    ArcItem,
+    GraphEditorScene,
+    GroundNodeItem,
+    InputDialogArc,
     NodeItem,
     SourceNodeItem,
-    GroundNodeItem,
-    ArcItem,
-    InputDialogArc,
-    GraphEditorScene,
 )
 from directedgraph.dgutils import FileManager, GraphSimulator
-from directedgraph.dgapp import GraphController
 
 
 class GraphEditorMainWindow(QMainWindow):
@@ -142,6 +138,7 @@ class GraphEditorMainWindow(QMainWindow):
         self.scene_position = self.view.mapFromGlobal(self.mapToGlobal(event.pos()))
 
         action = contextmenu.exec_(self.mapToGlobal(event.pos()))
+        type(action)
 
     # Trigger Function
 

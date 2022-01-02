@@ -1,6 +1,6 @@
-import uuid
-import sys
 from pathlib import Path
+import sys
+import uuid
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 CURRENT_DIRECTORY = Path(__file__).absolute()
@@ -239,6 +239,7 @@ class GroundNode(Node):
 
 if __name__ == "__main__":
     import unittest
+
     from tests import TestGraphComponent
 
     unittest.main()

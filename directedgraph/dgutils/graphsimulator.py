@@ -1,14 +1,14 @@
-import sys
+import csv
 import os
 from pathlib import Path
-import csv
+import sys
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
 CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dgcore import Graph, Node, SourceNode, GroundNode, Arc
+from directedgraph.dgcore import Arc, Graph, GroundNode, Node, SourceNode
 from directedgraph.dgutils import FileManager
 
 
@@ -70,7 +70,7 @@ class GraphSimulator:
 
             f_csv.writerow(
                 [
-                    f"VS",  # VS
+                    f'{"VS"}',  # VS
                     uid_map[sourcenode_list[0].uid],
                     uid_map[groundnode_list[0].uid],
                     sourcenode_list[0].user_defined_attribute,
@@ -190,16 +190,10 @@ class GraphSimulator:
 
 
 if __name__ == "__main__":
-    path = (
-        Path(os.path.dirname(__file__))
-        .parent.parent.joinpath("tests")
-        .joinpath("test_rlc.xml")
-    )
+    path = Path(os.path.dirname(__file__)).parent.parent.joinpath("tests").joinpath("test_rlc.xml")
 
     path_out = (
-        Path(os.path.dirname(__file__))
-        .parent.parent.joinpath("tests")
-        .joinpath("test_rlc.cir")
+        Path(os.path.dirname(__file__)).parent.parent.joinpath("tests").joinpath("test_rlc.cir")
     )
 
     fm = FileManager()

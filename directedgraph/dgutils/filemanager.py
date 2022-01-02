@@ -1,5 +1,5 @@
-import sys
 from pathlib import Path
+import sys
 from xml.dom import minidom
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
@@ -216,6 +216,7 @@ class FileManager:
 
 if __name__ == "__main__":
     import unittest
+
     from tests import TestFileManager
 
     unittest.main()

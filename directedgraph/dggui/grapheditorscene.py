@@ -1,8 +1,7 @@
-import sys
 from pathlib import Path
+import sys
 
-from PySide6 import QtCore
-from PySide6 import QtGui
+from PySide6 import QtCore, QtGui
 from PySide6.QtWidgets import QGraphicsScene
 
 print("Running" if __name__ == "__main__" else "Importing", Path(__file__).resolve())
@@ -10,11 +9,7 @@ CURRENT_DIRECTORY = Path(__file__).absolute()
 ROOT_FOLDER = CURRENT_DIRECTORY.parent.parent.parent
 sys.path.append(str(ROOT_FOLDER))
 
-from directedgraph.dggui import (
-    NodeItem,
-    SourceNodeItem,
-    GroundNodeItem,
-)
+from directedgraph.dggui import GroundNodeItem, NodeItem, SourceNodeItem
 
 
 class GraphEditorScene(QGraphicsScene):
