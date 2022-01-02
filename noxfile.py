@@ -17,16 +17,21 @@ def install_with_constraints(session, *args, **kwargs):
         session.install(f"--constraint={requirements.name}", *args, **kwargs)
 
 
+@nox.session
+def typing(session):
+    install_with_constraints(session, "mypy")
+    session.run("mypy", ".")
+
+
 @nox.session(python=["3.9"])
-def tests(session):
-    session.install("poetry")
-    session.run("poetry", "install")
+def testing(session):
+    install_with_constraints(session, "pytest", "pytest-cov", "coverage[toml]", "loguru")
     session.run("coverage", "run", "-m", "pytest")
     session.run("coverage", "report")
 
 
 @nox.session
-def lint(session):
+def linting(session):
     install_with_constraints(session, "flake8")
     session.run("flake8", ".")
 
@@ -35,19 +40,3 @@ def lint(session):
 def black(session):
     install_with_constraints(session, "black")
     session.run("black", "--check", ".")
-
-
-# @nox.session
-# def lint(session):
-#     args = session.posargs or locations
-#     session.install("poetry")
-#     session.run("poetry", "install")
-#     session.run("black", "--check", ".")
-#     session.run("flake8", *args)
-
-
-# @nox.session
-# def typing(session):
-#     session.install("poetry")
-#     session.run("poetry", "install")
-#     session.run("mypy", ".")

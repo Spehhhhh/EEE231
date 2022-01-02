@@ -25,6 +25,7 @@ isort = "^5.10.1"
 # Unit Testing
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
+coverage = {version = "^6.2", extras = ["toml"]}
 # Test automation
 nox = "^2021.10.1"
 # Other dependencies
