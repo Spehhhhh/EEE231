@@ -2,6 +2,8 @@ import tempfile
 
 import nox
 
+src = "directedgraph", "tests"
+
 
 def install_with_constraints(session, *args, **kwargs):
     with tempfile.NamedTemporaryFile() as requirements:
@@ -18,12 +20,12 @@ def install_with_constraints(session, *args, **kwargs):
 
 
 @nox.session
-def typing(session):
-    install_with_constraints(session, "mypy")
-    session.run("mypy", ".")
+def black(session):
+    install_with_constraints(session, "black")
+    session.run("black", "--check", ".")
 
 
-@nox.session(python=["3.9"])
+@nox.session(python=["3.9.9"])
 def testing(session):
     install_with_constraints(session, "pytest", "pytest-cov", "coverage[toml]", "loguru")
     session.run("coverage", "run", "-m", "pytest")
@@ -33,10 +35,16 @@ def testing(session):
 @nox.session
 def linting(session):
     install_with_constraints(session, "flake8")
-    session.run("flake8", ".")
+    session.run("flake8", ".", "--exit-zero")
 
 
 @nox.session
-def black(session):
-    install_with_constraints(session, "black")
-    session.run("black", "--check", ".")
+def linting_pylint(session):
+    install_with_constraints(session, "pylint")
+    session.run("pylint", "--fail-under=9", *src)
+
+
+@nox.session
+def typing(session):
+    install_with_constraints(session, "mypy")
+    session.run("mypy", *src)
