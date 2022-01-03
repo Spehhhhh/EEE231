@@ -2,6 +2,8 @@ import tempfile
 
 import nox
 
+# from nox_poetry import session
+
 src = "directedgraph", "tests"
 
 
@@ -22,10 +24,11 @@ def install_with_constraints(session, *args, **kwargs):
 @nox.session
 def black(session):
     install_with_constraints(session, "black")
+    # session.install("black")
     session.run("black", "--check", ".")
 
 
-@nox.session(python=["3.9.9"])
+@nox.session(python=["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"])
 def testing(session):
     install_with_constraints(session, "pytest", "pytest-cov", "coverage[toml]", "loguru")
     session.run("coverage", "run", "-m", "pytest")
