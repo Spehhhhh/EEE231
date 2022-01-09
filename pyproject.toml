@@ -12,10 +12,6 @@ keywords = [
     "Directed Graph Editor",
 ]
 
-[build-system]
-requires = ["poetry>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.poetry.dependencies]
 python = ">=3.7,<3.11"
 PySide6 = "^6.2.2"
@@ -67,3 +63,7 @@ extend_skip_glob=[".*", "*/site-packages/*","*/__init__.py", "*/__main__.py","*/
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+
+[build-system]
+requires = ["poetry>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
