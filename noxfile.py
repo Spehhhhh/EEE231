@@ -22,8 +22,8 @@ def install_with_constraints(session, *args, **kwargs):
 
 
 @nox.session
-def black(session):
-    install_with_constraints(session, "black")
+def formatting(session):
+    install_with_constraints(session, "black", "isort")
     # session.install("black")
     session.run("black", ".")
     session.run("isort", ".")
