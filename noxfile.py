@@ -25,7 +25,8 @@ def install_with_constraints(session, *args, **kwargs):
 def black(session):
     install_with_constraints(session, "black")
     # session.install("black")
-    session.run("black", "--check", ".")
+    session.run("black", ".")
+    session.run("isort", ".")
 
 
 @nox.session(python=["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"])
