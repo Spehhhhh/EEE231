@@ -17,7 +17,8 @@ jobs:
         uses: excitedleigh/setup-nox@v2.0.0
       - name: Formatting
         run: |
-          nox -rs formatting
+          black --check .
+          isort . -c
       - name: If needed, commit black changes to the pull request
         if: failure()
         run: |
@@ -25,7 +26,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git checkout $GITHUB_HEAD_REF
-          black .
+          nox -rs formatting
           git add .
           git commit -m "fixup: Format Python code with Black"
           git push
