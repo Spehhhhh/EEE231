@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.9.7
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9.9
@@ -15,11 +15,10 @@ jobs:
           poetry-version: 1.1.12
       - name: Setup Nox
         uses: excitedleigh/setup-nox@v2.0.0
-      - name: Formatting
+      - name: Check
         run: |
-          black --check .
-          isort . -c
-      - name: If needed, commit black changes to the pull request
+          nox -rs formatting_check
+      - name: If needed, commit changes
         if: failure()
         run: |
           git config --global user.name 'autoblack'
@@ -28,5 +27,5 @@ jobs:
           git checkout $GITHUB_HEAD_REF
           nox -rs formatting
           git add .
-          git commit -m "fixup: Format Python code with Black"
+          git commit -m "fixup: Format Python code with Black & isort"
           git push
