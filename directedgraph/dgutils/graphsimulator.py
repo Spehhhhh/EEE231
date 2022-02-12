@@ -150,8 +150,8 @@ class GraphSimulator:
             f_csv.writerow([".end"])
 
             # 批量替换 UID
-            # 先把所有的UID按照顺序（先R 再C）输出一下，再把每个UID替换成0 1 2 ……
-            # Eg. (a-f 代指每个Arc的两个不同的uid) (这只是一个例子，最后程序应该能根据输入的Arc来输出相对应的电路规格文本.cir)
+            # 先把所有的 UID 按照顺序（先 R 再 C）输出一下，再把每个 UID 替换成 0 1 2 ……
+            # Eg. (a-f 代指每个 Arc 的两个不同的 uid) (这只是一个例子，最后程序应该能根据输入的 Arc 来输出相对应的电路规格文本.cir)
             #   R1 a b
             #   R2 b c
             #   R3 b c
@@ -162,20 +162,20 @@ class GraphSimulator:
             #   C1 d f
             #   C2 f g
             # 如果全部列出来即 ab bc bc cd cd cd de df fg eg gh
-            # 在Spice输出规范里面不直接考虑单独的groundnode和sourcenode
-            # 那么在这个输出规范里面我们应该认为在groundnode和sourcenode有一个Vdd等效为一个电源的输入
-            # 在这个例子里，R1的node1没有重合的UID,R9的node2没有重合的UID，所以这两个node可以被认为和单独的
-            # groundnode和sourcenode相连结，并通过算法将node1等效于sourcenode，node2等效于groundnode
-            # 然后依次替换,uid=> 01 12 12 23 23 23 34 35 56 46 67
-            # 这个可能储存在[0,1,1,2,1,2,2,3,2,3,2,3,3,4,3,5,5,6,4,7,6,7]
-            # 最后读取输出 Vdd 1 22 value （1 22 指的是位置）
+            # 在 Spice 输出规范里面不直接考虑单独的 groundnode 和 sourcenode
+            # 那么在这个输出规范里面我们应该认为在 groundnode 和 sourcenode 有一个 Vdd 等效为一个电源的输入
+            # 在这个例子里，R1 的 node1 没有重合的 UID,R9 的 node2 没有重合的 UID，所以这两个 node 可以被认为和单独的
+            # groundnode 和 sourcenode 相连结，并通过算法将 node1 等效于 sourcenode，node2 等效于 groundnode
+            # 然后依次替换，uid=> 01 12 12 23 23 23 34 35 56 46 67
+            # 这个可能储存在 [0,1,1,2,1,2,2,3,2,3,2,3,3,4,3,5,5,6,4,7,6,7]
+            # 最后读取输出 Vdd 1 22 value（1 22 指的是位置）
             #             R1 1 2 value
             #             R2 3 4 value
             #             ……
             #             R9 21 22 valu
             #
             # 最后输出到文本里应该是
-            #   Vdd 0 7 x（代指value）
+            #   Vdd 0 7 x（代指 value）
             #   C1 3 5 x
             #   C2 5 6 x
             #   R1 0 1 x

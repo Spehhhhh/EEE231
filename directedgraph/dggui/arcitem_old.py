@@ -35,11 +35,11 @@
 #     def __init__(self, arc_inst, graph=None):
 #         self.arc_inst = arc_inst
 #         self.graph = graph
-#         # 根据两端的uid获取查询所在图中两个node对象
+#         # 根据两端的 uid 获取查询所在图中两个 node 对象
 #         self.node1 = self.arc_inst.nodes[0]
 #         self.node2 = self.arc_inst.nodes[1]
 
-#         # 再根据两个node对象得到两个node对象的位置
+#         # 再根据两个 node 对象得到两个 node 对象的位置
 #         self.node1_position = self.node1.get_position()
 #         self.node2_position = self.node2.get_position()
 
@@ -391,7 +391,7 @@
 #     def on_save_as_action(self):
 #         name = QtWidgets.QFileDialog.getSaveFileName(self, "Save File")
 #         file = open(name[0], "w")
-#         # 传输xml格式，使用filemanager
+#         # 传输 xml 格式，使用 filemanager
 #         text = "sasd"
 #         file.write(text)
 #         file.close()
