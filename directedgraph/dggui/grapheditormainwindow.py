@@ -253,23 +253,23 @@ class GraphEditorMainWindow(QMainWindow):
                 "Enter User Defined Attribute",
                 QtWidgets.QLineEdit.Normal,
             )
-            if result is True:
-                user_defined_attribute = str(text)
+        if result is True:
+            user_defined_attribute = str(text)
 
-                self.scene.addItem(
-                    SourceNodeItem(
-                        self.connected_graph.create_component(
-                            {
-                                "type": "SourceNode",
-                                "name": name,
-                                "position_x": self.scene_position.x(),
-                                "position_y": self.scene_position.y(),
-                                "user_defined_attribute": user_defined_attribute,
-                            }
-                        ),
-                        self,
-                    )
+            self.scene.addItem(
+                SourceNodeItem(
+                    self.connected_graph.create_component(
+                        {
+                            "type": "SourceNode",
+                            "name": name,
+                            "position_x": self.scene_position.x(),
+                            "position_y": self.scene_position.y(),
+                            "user_defined_attribute": user_defined_attribute,
+                        }
+                    ),
+                    self,
                 )
+            )
 
     def on_groundnode_action(self):
         text, result = QInputDialog.getText(

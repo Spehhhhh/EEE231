@@ -27,14 +27,12 @@ class FileManager:
 
     def create_graph_raw_data(self, filepath):
         dom1 = minidom.parse(filepath)
-        graph_attribute = []
         graph_components = []
         type_list = ["Node", "SourceNode", "GroundNode", "Arc"]
 
         # Get Graph Name
         graph_name = dom1.getElementsByTagName("Graph")[0].getElementsByTagName("name")[0].childNodes[0].data
-        graph_attribute.append({"name": graph_name})
-
+        graph_attribute = [{"name": graph_name}]
         # Get Graph components
         for component_type in type_list:
             components = dom1.getElementsByTagName(component_type)
@@ -42,7 +40,11 @@ class FileManager:
                 temp = {"type": component_type, "uid": component.getAttribute("uid")}
                 self.parse_attribute(component, temp, ["name", "colour"])
 
-                if component_type == "Node":
+                if (
+                    component_type == "Node"
+                    or component_type != "SourceNode"
+                    and component_type == "GroundNode"
+                ):
                     self.parse_attribute(component, temp, ["position_x", "position_y"])
 
                 elif component_type == "SourceNode":
@@ -51,9 +53,6 @@ class FileManager:
                         temp,
                         ["position_x", "position_y", "user_defined_attribute"],
                     )
-
-                elif component_type == "GroundNode":
-                    self.parse_attribute(component, temp, ["position_x", "position_y"])
 
                 elif component_type == "Arc":
                     self.parse_attribute(
@@ -69,9 +68,7 @@ class FileManager:
 
                 graph_components.append(temp)
 
-        # Return Data as Tuple
-        graph = (graph_attribute, graph_components)
-        return graph
+        return graph_attribute, graph_components
 
     def create_graph(self, graph_raw_data):
         # Creating Graph Instances
@@ -90,8 +87,7 @@ class FileManager:
     # External
 
     def open_graph(self, filepath):
-        new_graph = self.create_graph(self.create_graph_raw_data(filepath))
-        return new_graph
+        return self.create_graph(self.create_graph_raw_data(filepath))
 
     def export_graph_xml(self, filepath, import_graph):
         graph_raw_data = import_graph.get()
@@ -126,7 +122,7 @@ class FileManager:
             component_node_colour_value = doc.createTextNode(component["colour"])
             component_node_colour.appendChild(component_node_colour_value)
 
-            if component["type"] == "Node" or component["type"] == "GroundNode" or component["type"] == "SourceNode":
+            if component["type"] in ["Node", "GroundNode", "SourceNode"]:
                 component_node_position_x = doc.createElement("position_x")
                 component_node.appendChild(component_node_position_x)
                 component_node_position_x_value = doc.createTextNode(component["position_x"])
@@ -166,9 +162,8 @@ class FileManager:
 
             components_node.appendChild(component_node)
 
-        f = open(filepath, "w")
-        f.write(doc.toprettyxml(indent="    "))
-        f.close()
+        with open(filepath, "w") as f:
+            f.write(doc.toprettyxml(indent="    "))
 
     def export_graph_png(self, filepath, import_graph):
         pass
@@ -177,11 +172,4 @@ class FileManager:
         pass
 
 
-if __name__ == "__main__":
-    # import unittest
-
-    # from tests import TestFileManager
-
-    # unittest.main()
-
-    pass
+pass

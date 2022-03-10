@@ -44,7 +44,7 @@ class Arc(GraphComponent):
 
         if node2 is not None:
             if isinstance(node2, str) and self.connected_graph is not None:
-                if len(node2) == 6 and self.connected_graph is not None:
+                if len(node2) == 6:
                     self.nodes[1] = self.connected_graph.get_component(node2)
             elif isinstance(node2, Node):
                 self.nodes[1] = node2
@@ -55,13 +55,14 @@ class Arc(GraphComponent):
     def update_user_defined_attribute(self, new_user_defined_attribute):
         str_can_be_used = ["p", "u", "k", "n", "m"]
         if new_user_defined_attribute.isdigit() is True:
-            if self.user_defined_arc_type.lower() == "resistor":
-                if (
+            if self.user_defined_arc_type.lower() == "resistor" and (
+                (
                     len(new_user_defined_attribute) > 1
                     and new_user_defined_attribute[0] == "0"
                     or new_user_defined_attribute == "-"
-                ):
-                    raise ValueError("wrong input!!!")
+                )
+            ):
+                raise ValueError("wrong input!!!")
         elif new_user_defined_attribute.isdigit() is False:
             if new_user_defined_attribute[0] == "0":
                 raise ValueError("wrong input!!!")
@@ -69,10 +70,9 @@ class Arc(GraphComponent):
                 if j.isdigit() is False:
                     if j.lower() not in str_can_be_used:
                         raise ValueError("wrong input!!!")
-                    else:
-                        index = new_user_defined_attribute.index(j)
-                        if len(new_user_defined_attribute[index:]) > 1:
-                            raise ValueError("wrong input!!!")
+                    index = new_user_defined_attribute.index(j)
+                    if len(new_user_defined_attribute[index:]) > 1:
+                        raise ValueError("wrong input!!!")
         else:
             self.user_defined_attribute = new_user_defined_attribute
 

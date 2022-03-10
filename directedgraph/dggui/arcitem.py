@@ -52,7 +52,6 @@ class ArcItem(QGraphicsPathItem):
 
         super().__init__(self.arc_PainterPath)
         self.setZValue(-1)
-        pass
 
     def paint(self, painter, QStyleOptionGraphicsItem, QWidget_widget=None):
         painter.setPen(Qt.black)
@@ -79,12 +78,14 @@ class ArcItem(QGraphicsPathItem):
         painter.drawText(
             self.mid_point.x() + self.curvature * 2,
             self.mid_point.y() + self.curvature * 2,
-            "    Name: " + self.arc.name,
+            f"    Name: {self.arc.name}",
         )
+
         painter.drawText(
             self.mid_point.x() + self.curvature * 2 + 14,
             self.mid_point.y() + self.curvature * 2 + 14,
-            str(self.arc.user_defined_arc_type) + ": " + str(self.arc.user_defined_attribute),
+            f'{str(self.arc.user_defined_arc_type)}: '
+            + str(self.arc.user_defined_attribute),
         )
 
     def contextMenuEvent(self, event):

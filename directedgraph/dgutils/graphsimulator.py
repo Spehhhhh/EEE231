@@ -81,27 +81,6 @@ class GraphSimulator:
             )
 
             for arc in arc_list:
-                if arc.user_defined_arc_type == "Resistor":
-                    print(
-                        "R"
-                        + str(resistor_count)
-                        + f" {uid_map[arc.nodes[0].uid]}"
-                        + f" {uid_map[arc.nodes[1].uid]}"
-                        + f" {arc.user_defined_attribute}"
-                    )
-                    f_csv.writerow(
-                        [
-                            f"R{resistor_count}",
-                            uid_map[arc.nodes[0].uid],
-                            uid_map[arc.nodes[1].uid],
-                            arc.user_defined_attribute,
-                            ";",
-                            arc.nodes[0].uid,
-                            arc.nodes[1].uid,
-                        ]
-                    )
-                    resistor_count = resistor_count + 1
-                    pass
                 if arc.user_defined_arc_type == "Capacitor":
                     print(
                         "C"
@@ -122,8 +101,7 @@ class GraphSimulator:
                         ]
                     )
                     capacitor_count = capacitor_count + 1
-                    pass
-                if arc.user_defined_arc_type == "Inductor":
+                elif arc.user_defined_arc_type == "Inductor":
                     print(
                         "L"
                         + str(inductor_count)
@@ -143,9 +121,26 @@ class GraphSimulator:
                         ]
                     )
                     inductor_count = inductor_count + 1
-                    pass
-                if arc.user_defined_arc_type == "None":
-                    pass
+                elif arc.user_defined_arc_type == "Resistor":
+                    print(
+                        "R"
+                        + str(resistor_count)
+                        + f" {uid_map[arc.nodes[0].uid]}"
+                        + f" {uid_map[arc.nodes[1].uid]}"
+                        + f" {arc.user_defined_attribute}"
+                    )
+                    f_csv.writerow(
+                        [
+                            f"R{resistor_count}",
+                            uid_map[arc.nodes[0].uid],
+                            uid_map[arc.nodes[1].uid],
+                            arc.user_defined_attribute,
+                            ";",
+                            arc.nodes[0].uid,
+                            arc.nodes[1].uid,
+                        ]
+                    )
+                    resistor_count = resistor_count + 1
             f_csv.writerow([".TRAN", "0.1M", "30M", "UIC"])
             f_csv.writerow([".end"])
 
