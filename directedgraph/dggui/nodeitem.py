@@ -213,7 +213,7 @@ class NodeItem(QGraphicsEllipseItem):
                 self.node.connected_graph.create_component(
                     {
                         "type": "Node",
-                        "name": f'{self.node.name} Copy',
+                        "name": f"{self.node.name} Copy",
                         "colour": self.node.colour,
                         "position_x": self.node.position[0],
                         "position_y": self.node.position[1],
@@ -269,7 +269,7 @@ class SourceNodeItem(NodeItem):
                 self.node.connected_graph.create_component(
                     {
                         "type": "SourceNode",
-                        "name": f'{self.node.name} Copy',
+                        "name": f"{self.node.name} Copy",
                         "colour": self.node.colour,
                         "position_x": self.node.position[0],
                         "position_y": self.node.position[1],

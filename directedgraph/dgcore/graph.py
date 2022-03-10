@@ -105,10 +105,7 @@ class Graph:
         components_values = self.components.values()
         self.arc_counter = 0
 
-        self.groundnode_counter = sum(
-            isinstance(component_inst, GroundNode)
-            for component_inst in components_values
-        )
+        self.groundnode_counter = sum(isinstance(component_inst, GroundNode) for component_inst in components_values)
 
         if self.groundnode_counter == 0:
             return_list.append("You need at least one GroundNode")
@@ -120,8 +117,7 @@ class Graph:
         return_list.extend(
             "Source only allows single arcs"
             for component_inst in components_values
-            if isinstance(component_inst, SourceNode)
-            and len(component_inst.arcs) > 1
+            if isinstance(component_inst, SourceNode) and len(component_inst.arcs) > 1
         )
 
         if self.arc_counter > 50:

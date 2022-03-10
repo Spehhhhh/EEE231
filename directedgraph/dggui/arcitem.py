@@ -84,8 +84,7 @@ class ArcItem(QGraphicsPathItem):
         painter.drawText(
             self.mid_point.x() + self.curvature * 2 + 14,
             self.mid_point.y() + self.curvature * 2 + 14,
-            f'{str(self.arc.user_defined_arc_type)}: '
-            + str(self.arc.user_defined_attribute),
+            f"{str(self.arc.user_defined_arc_type)}: " + str(self.arc.user_defined_attribute),
         )
 
     def contextMenuEvent(self, event):

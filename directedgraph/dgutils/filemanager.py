@@ -40,11 +40,7 @@ class FileManager:
                 temp = {"type": component_type, "uid": component.getAttribute("uid")}
                 self.parse_attribute(component, temp, ["name", "colour"])
 
-                if (
-                    component_type == "Node"
-                    or component_type != "SourceNode"
-                    and component_type == "GroundNode"
-                ):
+                if component_type == "Node" or component_type != "SourceNode" and component_type == "GroundNode":
                     self.parse_attribute(component, temp, ["position_x", "position_y"])
 
                 elif component_type == "SourceNode":
