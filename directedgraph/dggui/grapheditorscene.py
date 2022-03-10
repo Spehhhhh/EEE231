@@ -19,13 +19,10 @@ class GraphEditorScene(QGraphicsScene):
 
     def mousePressEvent(self, event):
         if event.modifiers() & QtCore.Qt.ShiftModifier:
-            item = self.itemAt(event.scenePos(), QtGui.QTransform())
-            if item:
+            if item := self.itemAt(event.scenePos(), QtGui.QTransform()):
                 if type(item) in [NodeItem, SourceNodeItem, GroundNodeItem]:
                     item.selectionRectangle.setVisible(True)
-                    if item in self.selected_items:
-                        pass
-                    else:
+                    if item not in self.selected_items:
                         self.selected_items.append(item)
                         print(self.selected_items)
         else:

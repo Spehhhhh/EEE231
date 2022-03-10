@@ -140,14 +140,7 @@ class GraphEditorMainWindow(QMainWindow):
         self.connected_graph = fm.open_graph(self.file_path)
 
         for component in self.connected_graph.components.values():
-            if type(component) == Node:
-                self.scene.addItem(NodeItem(component, self))
-            if type(component) == SourceNode:
-                self.scene.addItem(SourceNodeItem(component, self))
-            if type(component) == GroundNode:
-                self.scene.addItem(GroundNodeItem(component, self))
-            if type(component) == Arc:
-                self.scene.addItem(ArcItem(component, self))
+            self._add_component(component)
 
     def on_open_action(self):
         file_name = QFileDialog.getOpenFileName(self, "Open File", ".", "*.xml")
@@ -159,14 +152,18 @@ class GraphEditorMainWindow(QMainWindow):
         self.connected_graph = fm.open_graph(str(file_name[0]))
 
         for component in self.connected_graph.components.values():
-            if type(component) == Node:
-                self.scene.addItem(NodeItem(component, self))
-            if type(component) == SourceNode:
-                self.scene.addItem(SourceNodeItem(component, self))
-            if type(component) == GroundNode:
-                self.scene.addItem(GroundNodeItem(component, self))
-            if type(component) == Arc:
-                self.scene.addItem(ArcItem(component, self))
+            self._add_component(component)
+
+    # TODO Rename this here and in `on_reload_action` and `on_open_action`
+    def _add_component(self, component):
+        if type(component) == Node:
+            self.scene.addItem(NodeItem(component, self))
+        if type(component) == SourceNode:
+            self.scene.addItem(SourceNodeItem(component, self))
+        if type(component) == GroundNode:
+            self.scene.addItem(GroundNodeItem(component, self))
+        if type(component) == Arc:
+            self.scene.addItem(ArcItem(component, self))
 
     def on_save_action(self):
         alert = self.connected_graph.verify_graph_integrity()
@@ -253,23 +250,23 @@ class GraphEditorMainWindow(QMainWindow):
                 "Enter User Defined Attribute",
                 QtWidgets.QLineEdit.Normal,
             )
-            if result is True:
-                user_defined_attribute = str(text)
+        if result is True:
+            user_defined_attribute = str(text)
 
-                self.scene.addItem(
-                    SourceNodeItem(
-                        self.connected_graph.create_component(
-                            {
-                                "type": "SourceNode",
-                                "name": name,
-                                "position_x": self.scene_position.x(),
-                                "position_y": self.scene_position.y(),
-                                "user_defined_attribute": user_defined_attribute,
-                            }
-                        ),
-                        self,
-                    )
+            self.scene.addItem(
+                SourceNodeItem(
+                    self.connected_graph.create_component(
+                        {
+                            "type": "SourceNode",
+                            "name": name,
+                            "position_x": self.scene_position.x(),
+                            "position_y": self.scene_position.y(),
+                            "user_defined_attribute": user_defined_attribute,
+                        }
+                    ),
+                    self,
                 )
+            )
 
     def on_groundnode_action(self):
         text, result = QInputDialog.getText(
@@ -296,10 +293,7 @@ class GraphEditorMainWindow(QMainWindow):
             )
 
     def on_arc_action(self):
-        input_dialog_arc = InputDialogArc()
-        input_dialog_arc.show()
-        input_dialog_arc.exec_()
-        uid_list = input_dialog_arc.confirm()
+        uid_list = self._show_input_dialog()
         if uid_list[0] in self.connected_graph.components:
             if uid_list[1] in self.connected_graph.components:
                 self.scene.addItem(
@@ -325,10 +319,7 @@ class GraphEditorMainWindow(QMainWindow):
             )
 
     def on_arc_shift_action(self):
-        input_dialog_arc = InputDialogArc()
-        input_dialog_arc.show()
-        input_dialog_arc.exec_()
-        uid_list = input_dialog_arc.confirm()
+        uid_list = self._show_input_dialog()
         if len(self.scene.selected_items) == 2:
             self.scene.addItem(
                 ArcItem(
@@ -351,6 +342,12 @@ class GraphEditorMainWindow(QMainWindow):
                 "Error",
                 "You need to select two Node",
             )
+
+    def _show_input_dialog(self):
+        input_dialog_arc = InputDialogArc()
+        input_dialog_arc.show()
+        input_dialog_arc.exec_()
+        return input_dialog_arc.confirm()
 
     def on_simulate_action(self):
         alert = self.connected_graph.verify_graph_integrity()
