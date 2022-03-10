@@ -1,9 +1,9 @@
-import sys
 import os
-import unittest
 from pathlib import Path
-from loguru import logger
+import sys
+import unittest
 
+from loguru import logger
 
 CURRENT_FOLDER = Path(__file__).absolute().parent.parent
 CURRENT_FOLDER_PATH = str(CURRENT_FOLDER)

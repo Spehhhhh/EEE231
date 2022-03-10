@@ -1,19 +1,17 @@
-import sys
-import os
-import time
 import itertools
-import unittest
+import os
 from pathlib import Path
+import sys
+import time
+import unittest
+
 from loguru import logger
 
 CURRENT_FOLDER = Path(__file__).absolute().parent.parent
 CURRENT_FOLDER_PATH = str(CURRENT_FOLDER)
 sys.path.append(CURRENT_FOLDER_PATH)
 
-from directedgraph.dgcore import (
-    Graph,
-    Node,
-)
+from directedgraph.dgcore import Graph, Node
 from directedgraph.dgutils import FileManager
 
 logger.add(

@@ -1,18 +1,14 @@
+from pathlib import Path
 import sys
 import unittest
-from pathlib import Path
+
 from loguru import logger
 
 CURRENT_FOLDER = Path(__file__).absolute().parent.parent
 CURRENT_FOLDER_PATH = str(CURRENT_FOLDER)
 sys.path.append(CURRENT_FOLDER_PATH)
 
-from directedgraph.dgcore import (
-    GraphComponent,
-    Node,
-    SourceNode,
-    GroundNode,
-)
+from directedgraph.dgcore import GraphComponent, GroundNode, Node, SourceNode
 
 logger.add(
     "logs/test_dgcore_graphcomponent.py.log",
