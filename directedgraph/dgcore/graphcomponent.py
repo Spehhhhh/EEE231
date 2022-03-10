@@ -16,7 +16,7 @@ class GraphComponent:
     """
 
     def __init__(self, connected_graph=None, **kwargs):
-        self.connected_graph = connected_graph if connected_graph else None
+        self.connected_graph = connected_graph or None
         self.connected_window = None
         self.connected_gui = None
 
@@ -24,6 +24,13 @@ class GraphComponent:
         self.generate_uid(kwargs.get("uid", None))
         self.name = kwargs["name"] if kwargs.get("name", None) else "Untitled"
         self.colour = kwargs["colour"] if kwargs.get("colour", None) else "#000000"
+
+    def _generate_unduplicated_uid(self):
+        uid_new = uuid.uuid4().hex[:UID_LENGTH]
+        while uid_new in self.connected_graph.components:
+            uid_new = uuid.uuid4().hex[:UID_LENGTH]
+            self.uid = uid_new
+        self.uid = uid_new
 
     def generate_uid(self, uid_old=None):
         """
@@ -33,24 +40,13 @@ class GraphComponent:
 
         if self.connected_graph is None:
             self.uid = uuid.uuid4().hex[:UID_LENGTH]
+        elif uid_old is None:
+            self._generate_unduplicated_uid()
+        elif uid_old not in self.connected_graph.components:
+            self.uid = uid_old
         else:
-            if uid_old is None:
-                uid_new = uuid.uuid4().hex[:UID_LENGTH]
-                while uid_new in self.connected_graph.components:
-                    uid_new = uuid.uuid4().hex[:UID_LENGTH]
-                    self.uid = uid_new
-                self.uid = uid_new
-            else:
-                if uid_old not in self.connected_graph.components:
-                    self.uid = uid_old
-                else:
-                    print("Error: Duplicate uid occurs", uid_old)
-                    # Try to reassign UID...
-                    uid_new = uuid.uuid4().hex[:UID_LENGTH]
-                    while uid_new in self.connected_graph.components:
-                        uid_new = uuid.uuid4().hex[:UID_LENGTH]
-                        self.uid = uid_new
-                    self.uid = uid_new
+            print("Error: Duplicate uid occurs", uid_old)
+            self._generate_unduplicated_uid()
         return self.uid
 
     def get(self, element_attribute=None):
@@ -150,12 +146,12 @@ class Node(GraphComponent):
         update(position, [10, 10])
         """
 
-        if element_attribute == "position":
-            self.position[0] = element_attribute_new_value[0]
-            self.position[1] = element_attribute_new_value[1]
-            return True
-        else:
+        if element_attribute != "position":
             return super().update(element_attribute, element_attribute_new_value)
+
+        self.position[0] = element_attribute_new_value[0]
+        self.position[1] = element_attribute_new_value[1]
+        return True
 
     def update_position(self, position):
         """
@@ -236,10 +232,8 @@ class GroundNode(Node):
 
 
 if __name__ == "__main__":
-    # import unittest
+    import unittest
 
-    # from tests import TestGraphComponent
+    from tests import TestGraphComponent
 
-    # unittest.main()
-
-    pass
+    unittest.main()

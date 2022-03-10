@@ -20,14 +20,15 @@ class GraphEditor:
         Run
         """
 
-        print("Running")
-        self.mainwindow.show()  # .showMaximized()
-        sys.exit(self.application.exec_())
+        self._run("Running")
 
     def run_debug(self):
         """
         Debug
         """
-        print("Running Debug Mode")
+        self._run("Running Debug Mode")
+
+    def _run(self, arg0):
+        print(arg0)
         self.mainwindow.show()
         sys.exit(self.application.exec_())

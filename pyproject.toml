@@ -1,69 +1,81 @@
 [tool.poetry]
-name = "directedgraph"
-version = "0.1.0"
-description = "EEE231 Directed Graph Editor"
-authors = ["Alex <30626291+Spehhhhh@users.noreply.github.com>"]
-maintainers = ["Alex <30626291+Spehhhhh@users.noreply.github.com>"]
-license = "GNU"
-readme = "README.md"
-homepage = ""
-documentation = ""
-keywords = [
-    "Directed Graph Editor",
-]
+    name          = "directedgraph"
+    version       = "0.1.0"
+    description   = "EEE231 Directed Graph Editor"
+    authors       = ["Alex <30626291+Spehhhhh@users.noreply.github.com>"]
+    maintainers   = ["Alex <30626291+Spehhhhh@users.noreply.github.com>"]
+    license       = "GNU"
+    readme        = "README.md"
+    homepage      = ""
+    documentation = ""
+    keywords      = ["Directed Graph Editor"]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<3.11"
-PySide6 = "^6.2.2"
+    python  = ">=3.7,<3.11"
+    PySide6 = "^6.2.2"
 
 [tool.poetry.dev-dependencies]
-# Static Type Checker
-mypy = "^0.930"
-# Linter
-pylint = "^2.12.2"
-flake8 = "^4.0.1"
-pep8-naming = "^0.12.1"
-mccabe = "^0.6.1"
-pyflakes = "^2.4.0"
-# Formatter
-black = "^21.12b0"
-isort = "^5.10.1"
-# Unit Testing
-pytest = "^6.2.5"
-pytest-cov = "^3.0.0"
-coverage = {version = "^6.2", extras = ["toml"]}
-# Automation
-nox = "^2021.10.1"
-nox-poetry = "^0.9.0"
-# Build
-pyinstaller = "^4.7"
-# Other dependencies
-loguru = "^0.5.3"
+    # Static Type Checker
+    mypy = "^0.930"
+    # Linter
+    pylint      = "^2.12.2"
+    flake8      = "^4.0.1"
+    pep8-naming = "^0.12.1"
+    mccabe      = "^0.6.1"
+    pyflakes    = "^2.4.0"
+    # Formatter
+    black = "^21.12b0"
+    isort = "^5.10.1"
+    # Unit Testing
+    pytest     = "^6.2.5"
+    pytest-cov = "^3.0.0"
+    coverage   = { version = "^6.2", extras = ["toml"] }
+    # Automation
+    nox        = "^2021.10.1"
+    nox-poetry = "^0.9.0"
+    # Build
+    pyinstaller = "^4.7"
+    # Other dependencies
+    loguru = "^0.5.3"
 
 [tool.mypy]
-ignore_missing_imports = true
-strict = true
+    ignore_missing_imports = true
+    strict                 = true
 
 [tool.coverage.run]
-omit = [".*", "*/site-packages/*","*/__init__.py", "*/__main__.py","*/tests", "*/excp.py"]
+    omit = [
+        ".*",
+        "*/site-packages/*",
+        "*/__init__.py",
+        "*/__main__.py",
+        "*/tests",
+        "*/excp.py",
+    ]
 
 [tool.coverage.report]
-show_missing = true
-fail_under = 70
+    show_missing = true
+    fail_under   = 70
 
 [tool.black]
-line_length = 120
+    line_length = 120
 
 [tool.isort]
-profile = "black"
-line_length = 120
-force_sort_within_sections = true
-extend_skip_glob=[".*", "*/site-packages/*","*/__init__.py", "*/__main__.py","*/tests", "*/excp.py"]
+    profile = "black"
+    line_length = 120
+    force_sort_within_sections = true
+    extend_skip_glob = [
+        ".*",
+        "*/site-packages/*",
+        "*/__init__.py",
+        "*/__main__.py",
+        "*/tests",
+        "*/excp.py",
+    ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
+    testpaths    = ["tests"]
+    python_files = ["test_*.py"]
 
 [build-system]
-requires = ["poetry>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+    requires      = ["poetry>=1.0.0"]
+    build-backend = "poetry.core.masonry.api"

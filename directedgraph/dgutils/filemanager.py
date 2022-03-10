@@ -90,8 +90,7 @@ class FileManager:
     # External
 
     def open_graph(self, filepath):
-        new_graph = self.create_graph(self.create_graph_raw_data(filepath))
-        return new_graph
+        return self.create_graph(self.create_graph_raw_data(filepath))
 
     def export_graph_xml(self, filepath, import_graph):
         graph_raw_data = import_graph.get()
@@ -126,7 +125,7 @@ class FileManager:
             component_node_colour_value = doc.createTextNode(component["colour"])
             component_node_colour.appendChild(component_node_colour_value)
 
-            if component["type"] == "Node" or component["type"] == "GroundNode" or component["type"] == "SourceNode":
+            if component["type"] in ["Node", "GroundNode", "SourceNode"]:
                 component_node_position_x = doc.createElement("position_x")
                 component_node.appendChild(component_node_position_x)
                 component_node_position_x_value = doc.createTextNode(component["position_x"])
@@ -166,9 +165,8 @@ class FileManager:
 
             components_node.appendChild(component_node)
 
-        f = open(filepath, "w")
-        f.write(doc.toprettyxml(indent="    "))
-        f.close()
+        with open(filepath, "w") as f:
+            f.write(doc.toprettyxml(indent="    "))
 
     def export_graph_png(self, filepath, import_graph):
         pass
@@ -178,10 +176,8 @@ class FileManager:
 
 
 if __name__ == "__main__":
-    # import unittest
+    import unittest
 
-    # from tests import TestFileManager
+    from tests import TestFileManager
 
-    # unittest.main()
-
-    pass
+    unittest.main()

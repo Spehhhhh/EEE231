@@ -19,7 +19,7 @@ class Graph:
         self.groundnode_counter = 0
         self.arc_counter = 0
 
-        self.name = name if name else "Untitled"
+        self.name = name or "Untitled"
         self.components = {}
 
     """
@@ -62,9 +62,7 @@ class Graph:
                 if isinstance(component, GroundNode):
                     component_dict["type"] = "GroundNode"
                 graph_components.append(component_dict)
-            else:
-                pass
-        return graph_attribute, graph_components
+        return graph_attribute, graph_components  # return tuple
 
     def get_name(self):
         """
@@ -105,27 +103,22 @@ class Graph:
         return_list = []
         return_list.clear()
         components_values = self.components.values()
-        self.groundnode_counter = 0
         self.arc_counter = 0
 
-        # Only one Ground Node is allowed
-        for component_inst in components_values:
-            if isinstance(component_inst, GroundNode):
-                self.groundnode_counter += 1
+        self.groundnode_counter = sum(isinstance(component_inst, GroundNode) for component_inst in components_values)
+
         if self.groundnode_counter == 0:
             return_list.append("You need at least one GroundNode")
         elif self.groundnode_counter != 1:
             return_list.append("Only one Ground Node is allowed")
-        else:
-            pass
-
         # Source only allows single arcs
         self.update_component_node_arcs()
 
-        for component_inst in components_values:
-            if isinstance(component_inst, SourceNode):
-                if len(component_inst.arcs) > 1:
-                    return_list.append("Source only allows single arcs")
+        return_list.extend(
+            "Source only allows single arcs"
+            for component_inst in components_values
+            if isinstance(component_inst, SourceNode) and len(component_inst.arcs) > 1
+        )
 
         if self.arc_counter > 50:
             return_list.append("Too many Arcs")
@@ -281,10 +274,8 @@ class Graph:
 
 
 if __name__ == "__main__":
-    # import unittest
+    import unittest
 
-    # from tests import TestGraph  # Import test
+    from tests import TestGraph  # Import test
 
-    # unittest.main()  # Run Unit tests
-
-    pass
+    unittest.main()  # Run Unit tests
