@@ -1,8 +1,8 @@
-# EEE231 group B
+# EEE231 Directed Graph Editor
 
 ## 0. Table of Contents
 
-- [EEE231 group B](#eee231-group-b)
+- [EEE231 Directed Graph Editor](#eee231-directed-graph-editor)
   - [0. Table of Contents](#0-table-of-contents)
   - [1. Background](#1-background)
     - [1.0 Install](#10-install)
